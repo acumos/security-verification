@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "901025b5_587134f1",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-16T19:37:48Z",
+      "side": 1,
+      "message": "You don\u0027t need a parent POM.  Can simplify and do less work here.",
+      "revId": "99b8842683781a6e85e61aa8e7355255645c5a5f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "acec9a36_216aefb0",
+        "filename": "security-verification-service/.gitignore",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-16T19:37:48Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to bury this in a subdirectory; make your project structure simple to reduce your effort.",
+      "revId": "99b8842683781a6e85e61aa8e7355255645c5a5f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ea1df42_0454011b",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-16T19:37:48Z",
+      "side": 1,
+      "message": "This file can be your top-level POM",
+      "revId": "99b8842683781a6e85e61aa8e7355255645c5a5f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d1ab4743_e82706a2",
+        "filename": "security-verification-service/src/main/java/org/acumos/secver/SecurityVerificationApplication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-16T19:37:48Z",
+      "side": 1,
+      "message": "You\u0027ve cut this down too far.  It\u0027s important to check the JSON-based config",
+      "revId": "99b8842683781a6e85e61aa8e7355255645c5a5f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
