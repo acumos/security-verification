@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "00b865ca_aa469ed7",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-07-16T19:45:39Z",
+      "side": 1,
+      "message": "This file has been pruned down far FAR too much.  It\u0027s not going to build anything!",
+      "revId": "99b8842683781a6e85e61aa8e7355255645c5a5f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1ab4743_e82706a2",
         "filename": "security-verification-service/src/main/java/org/acumos/secver/SecurityVerificationApplication.java",
         "patchSetId": 1
