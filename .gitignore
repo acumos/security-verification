@@ -1,0 +1,8 @@
+.classpath
+.project
+/.settings/
+/bin/
+/logs/
+/target/
+/security-verification-service/target/
+/security-verification-service/logs/
