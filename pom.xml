@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-===============LICENSE_START=======================================================
-Acumos Apache-2.0
-===================================================================================
-Copyright (C) 2018 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
-===================================================================================
-This Acumos software file is distributed by AT&T and Tech Mahindra
-under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-  http://www.apache.org/licenses/LICENSE-2.0
-This file is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-===============LICENSE_END=========================================================
--->
+<!-- ===============LICENSE_START======================================================= 
+	Acumos Apache-2.0 =================================================================================== 
+	Copyright (C) 2018 AT&T Intellectual Property & Tech Mahindra. All rights 
+	reserved. =================================================================================== 
+	This Acumos software file is distributed by AT&T and Tech Mahindra under 
+	the Apache License, Version 2.0 (the "License"); you may not use this file 
+	except in compliance with the License. You may obtain a copy of the License 
+	at http://www.apache.org/licenses/LICENSE-2.0 This file is distributed on 
+	an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express 
+	or implied. See the License for the specific language governing permissions 
+	and limitations under the License. ===============LICENSE_END========================================================= -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -39,7 +33,7 @@ limitations under the License.
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<!-- Stand-alone RESTFul application -->
-		<start-class>org.acumos.secver.SecurityVerificationApplication</start-class>
+		<start-class>org.acumos.securityverification.SecurityVerificationApplication</start-class>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
 		<skipTests>false</skipTests>
@@ -73,34 +67,34 @@ limitations under the License.
 			<!-- spring sets the <version>${slf4j.version}</version> -->
 		</dependency>
 		<dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <!-- spring sets the <version>${logback.version}</version> -->
-        </dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<!-- spring sets the <version>${logback.version}</version> -->
+		</dependency>
 		<!-- Test classes need a logger implementation -->
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <scope>test</scope>
-        </dependency>
-		
 		<dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.6.1</version>
-        </dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.6.1</version>
+		</dependency>
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -118,232 +112,149 @@ limitations under the License.
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
-	
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <!-- spring sets the <version>3.0</version> -->
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <!-- Add the build number to the jar manifest. Spring-Boot uses a complex 
-                packaging process that makes access to the original Manifest.MF very difficult. 
-                However, Java provides access to the implementation version for a package, 
-                so cram the build number into there. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Implementation-Version>${project.version}-b${build.number}</Implementation-Version>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.10</version>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/deps</outputDirectory>
-                            <overWriteReleases>true</overWriteReleases>
-                            <overWriteSnapshots>true</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- No need to deploy Spring super-boot -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <!-- Spring sets the <version>2.8</version> -->
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.23.0</version>
-                <configuration>
-                    <verbose>true</verbose>
-                    <dockerHost>${docker.host.url}</dockerHost>
-                    <registry>${docker.registry.url}</registry>
-                    <authConfig>
-                        <username>${docker.registry.login}</username>
-                        <password>${docker.registry.password}</password>
-                    </authConfig>
-                    <images>
-                        <image>
-                            <!-- Specify a tag to avoid default tag "latest" -->
-                            <name>federation-gateway:${project.version}</name>
-                            <build>
-                                <from>frolvlad/alpine-oraclejdk8:slim</from>
-                                <tags>
-                                    <!-- Add tag with build number -->
-                                    <tag>${project.version}-b${build.number}</tag>
-                                </tags>
-                                <assembly>
-                                    <inline>
-                                        <files>
-                                            <file>
-                                                <source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
-                                                <outputDirectory />
-                                            </file>
-                                        </files>
-                                    </inline>
-                                </assembly>
-                                <!-- This is the same CMD used in a Dockerfile -->
-                                <cmd>
-                                    <!-- CDATA prevents Eclipse formatter from breaking line -->
-                                    <shell><![CDATA[cd /maven; java -Xms128m -Xmx512m -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
-                                </cmd>
-                            </build>
-                        </image>
-                        <image>
-                            <name>federation-gateway-test:${project.version}</name>
-                            <build>
-                                <from>frolvlad/alpine-oraclejdk8:slim</from>
-                                <tags>
-                                    <tag>${project.version}-b${build.number}</tag>
-                                </tags>
-                                <assembly>
-                                    <inline>
-                                        <files>
-                                            <file>
-                                                <source>target/${project.artifactId}-${project.version}.${project.packaging}.original</source>
-                                                <outputDirectory />
-                                                <!-- <destName>target/${project.artifactId}-${project.version}.${project.packaging}</destName> -->
-                                            </file>
-                                            <file>
-                                                <source>target/${project.artifactId}-${project.version}-tests.${project.packaging}</source>
-                                                <outputDirectory />
-                                            </file>
-                                        </files>
-                                        <fileSets>
-                                            <fileSet>
-                                                <!-- <directory>${project.build.directory}/deps/</directory> -->
-                                                <directory>target/deps/</directory>
-                                                <outputDirectory>/libs/</outputDirectory>
-                                                <includes>
-                                                    <include>*</include>
-                                                </includes>
-                                                <fileMode>0755</fileMode>
-                                            </fileSet>
-                                        </fileSets>
-                                    </inline>
-                                </assembly>
-                                <cmd>
-                                    <!-- CDATA prevents Eclipse formatter from breaking line -->
-                                    <shell><![CDATA[cd /maven; java -Xms128m -Xmx512m -cp ${project.artifactId}-${project.version}.${project.packaging}.original:${project.artifactId}-${project.version}-tests.${project.packaging}:/libs/* -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.PropertiesLauncher]]></shell>
-                                </cmd>
-                            </build>
-                        </image>
-                    </images>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <!-- build is bound to install phase -->
-                            <goal>build</goal>
-                            <!-- push is bound to deploy phase -->
-                            <goal>push</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>1.14</version>
-                <configuration>
-                    <licenseName>acumos</licenseName>
-                    <licenseResolver>${project.baseUri}/src/license</licenseResolver>
-                    <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-                    <processStartTag>===============LICENSE_START=======================================================</processStartTag>
-                    <processEndTag>===============LICENSE_END=========================================================</processEndTag>
-                    <sectionDelimiter>===================================================================================</sectionDelimiter>
-                    <inceptionYear>2017</inceptionYear>
-                    <organizationName>AT&amp;T Intellectual Property &amp; Tech
-                        Mahindra. All rights reserved.</organizationName>
-                    <projectName>Acumos</projectName>
-                    <canUpdateCopyright>true</canUpdateCopyright>
-                    <canUpdateDescription>true</canUpdateDescription>
-                    <canUpdateLicense>true</canUpdateLicense>
-                    <emptyLineAfterHeader>true</emptyLineAfterHeader>
-                    <includes>
-                        <include>**/*.java</include>
-                    </includes>
-                </configuration>
-                <!-- <executions> <execution> <id>first</id> <goals> <goal>update-file-header</goal> 
-                    </goals> <phase>process-sources</phase> </execution> </executions> -->
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
-                <executions>
-                    <execution>
-                        <id>default-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>default-report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
 
-        </plugins>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- spring sets the <version>3.0</version> -->
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<!-- Add the build number to the jar manifest. Spring-Boot uses a complex 
+				packaging process that makes access to the original Manifest.MF very difficult. 
+				However, Java provides access to the implementation version for a package, 
+				so cram the build number into there. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Build-Number>${project.version}.${build.number}</Build-Number>
+							<Build-Time>${maven.build.timestamp}</Build-Time>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Skip the jar deployment step -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>org.acumos.securityverification.SecurityVerificationApplication</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.9</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.21.0</version>
+				<configuration>
+					<verbose>true</verbose>
+					<!-- docker runs on the LF build minion so the default value is ok -->
+					<pullRegistry>${docker.pull.registry}</pullRegistry>
+					<pushRegistry>${docker.push.registry}</pushRegistry>
+					<!-- LF credentials are not supplied here -->
+					<images>
+						<image>
+							<!--Specify a tag to avoid default tag "latest" -->
+							<name>onboarding-app:${project.version}</name>
+							<build>
+								<from>openjdk:8-jdk</from>
+								<tags>
+									<!--Add tag with build number -->
+									<tag>${project.version}-b${build.number}</tag>
+								</tags>
+								<assembly>
+									<inline>
+										<files>
+											<file>
+												<source>application.properties.template</source>
+												<outputDirectory />
+												<destName>application.properties</destName>
+											</file>
+											<file>
+												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
+												<outputDirectory />
+											</file>
+										</files>
+									</inline>
+								</assembly>
+								<cmd>
+									<!--CDATA prevents Eclipse formatter from breaking line -->
+									<shell><![CDATA[cd /maven; java -Xms256m -Xmx2048m -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
+								</cmd>
+							</build>
+						</image>
+					</images>
+				</configuration>
+				<!-- build Docker image in install phase, push in deploy phase -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>build</goal>
+							<goal>push</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
