@@ -24,3 +24,4 @@ Security Verification
        :maxdepth: 2
 
        release-notes.rst
+       design.rst
