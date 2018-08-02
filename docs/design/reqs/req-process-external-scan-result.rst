@@ -16,12 +16,12 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-=====================
-Security Verification
-=====================
+============================
+Process External Scan Result
+============================
 
-.. toctree::
-       :maxdepth: 2
+** THIS IS PRETTY MUCH THE SAME AS :ref:`process-scan-results`. THE EXTERNAL TOOLS WILL ALL GENERATE SCAN RESULTS THAT ARE DIFFERENT, SO THE S-V COMPONENT'S TOOL WRAPPER OBJECTS WOULD PROCESS THE RESULTS ACCORDINGLY. **
 
-       release-notes.rst
-       design/index
+The service exposes the :ref:`scan-result` API to allow optional external scan
+functions/processes to report back on the status of scans. Tools that have Web Hooks configured can call this API with results from a scan.
+
