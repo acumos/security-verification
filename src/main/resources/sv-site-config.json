@@ -1,0 +1,98 @@
+
+{
+	"fields": [
+		{
+			"type": "text",
+			"name": "siteInstanceName",
+			"label": "Site Instance Name",
+			"required": "true",
+			"data": "Acumos"
+		},
+		{
+			"type": "file",
+			"name": "headerLogo",
+			"label": "Header Logo",
+			"data": {
+				"lastModified": 1510831880727,
+				"lastModifiedDate": "2017-11-16T11:31:20.727Z",
+				"name": "acumos_logo_white.png",
+				"size": 3657,
+				"type": "image/png"
+			},{
+			"type": "file",
+			"name": "footerLogo",
+			"label": "Footer Logo",
+			"data": {
+				"lastModified": 1510831874776,
+				"lastModifiedDate": "2017-11-16T11:31:14.776Z",
+				"name": "footer_logo.png",
+				"size": 3127,
+				"type": "image/png"
+			}
+		},
+		{
+			"type": "heading",
+			"name": "ConnectionConfig",
+			"label": "Connection Configuration",
+			"required": "true",
+			"subFields": [
+				{
+					"type": "text",
+					"name": "socketTimeout",
+					"label": "Socket Timeout",
+					"required": "true",
+					"data": "300"
+				},
+				{
+					"type": "text",
+					"name": "connectionTimeout",
+					"label": "Connection Timeout",
+					"required": "true",
+					"data": "10"
+				}
+			]
+		},
+		{
+			"type": "select",
+			"name": "enableOnBoarding",
+			"label": "Enable On-Boarding",
+			"options": [
+				{
+					"name": "Enabled"
+				},
+				{
+					"name": "Disabled"
+				}
+			],
+			"required": true,
+			"data": {
+				"name": "Enabled"
+			}
+		},
+		{
+			"type": "textarea",
+			"name": "validationText",
+			"label": "Model Validation Keyword Scan Entries (CSV)",
+			"required": "false",
+			"data": "test"
+		},
+		{
+			"type": "select",
+			"name": "EnableDCAE",
+			"label": "Enable DCAE",
+			"options": [
+				{
+					"name": "Enabled"
+				},
+				{
+					"name": "Disabled"
+				}
+			],
+			"required": true,
+			"data": {
+				"name": "Enabled"
+			}
+		}
+	]
+}
+
