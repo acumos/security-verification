@@ -16,12 +16,19 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-=====================
-Security Verification
-=====================
-
+=============================================
+Security-Verification Requirements and Design
+=============================================
 .. toctree::
        :maxdepth: 2
 
-       release-notes.rst
-       design/index
+       scope.rst
+       impl-approach-considerations.rst
+       features.rst
+       high-level-arch.rst
+       reqs/index
+       api.rst
+       detailed-design.rst
+       deployment.rst
+       impact-other-components.rst
+
