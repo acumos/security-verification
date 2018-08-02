@@ -16,12 +16,29 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-=====================
-Security Verification
-=====================
+=======================
+High-Level Architecture
+=======================
 
-.. toctree::
-       :maxdepth: 2
+The following diagram illustrates the integration of S-V into an Acumos platform:
 
-       release-notes.rst
-       design/index
+.. image:: ../images/security-verification-arch.png
+
+
+Functional Components
+.....................
+
+
+* Security-Verification Service:
+
+  * provides APIs
+
+    * to serve requests to perform scanning jobs as required (per site admin)
+
+  * uses CDS site-config data to determine when to invoke scanning
+  * uses CDS site-config data, solution data, and scan result to determine the verification statuses for a solution/revision and updates CDS database
+  * allows Acumos operators to use a default set of scan tool or to integrate other tools via a plugin-style interface
+  * runs as an always-on service under docker or kubernetes
+
+
+
