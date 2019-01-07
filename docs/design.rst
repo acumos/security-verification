@@ -148,8 +148,8 @@ design however may not be achievable in a single release or in full, since:
     signatures for compiled ML models
 
 Thus alternate/fallback implementation approaches are described below, so that
-as much of the goals as possible can be delivered in the Athena release, or as
-soon as possible after Athena. These alternate approaches are based upon the
+as much of the goals as possible can be delivered in the Boreas release, or as
+soon as possible afterward. These alternate approaches are based upon the
 following assessments of how the bylaws goals related to potential implementation
 approaches, such as:
 
@@ -201,11 +201,11 @@ Current Release Features
 
 The features planned for delivery in the current release ("Boreas") are:
 
-* scanning for license/vulnerability issues in all models and related artifacts
-* a default set of open source license/vulnerability scan tools, which can be
+* scanning for license/vulnerability issues in all models and related data
+* a default set of open source license/security scan tools, which can be
   replaced in a "plug and play" manner with tools as preferred by Acumos
   platform operators
-* a default set of success criteria for license/vulnerability scans, which can
+* a default set of success criteria for license/security scans, which can
   be easily customized by Acumos platform operators
 * integration of scanning at various points in Acumos platform workflows
 * integration of scan result checking gates at various points in Acumos
@@ -242,7 +242,7 @@ The features planned for delivery in the current release ("Boreas") are:
     * what must have been checked, and what are the acceptable results
 
       * license scan successful: yes, no (default)
-      * vulnerability scan successful: yes, no (default)
+      * security scan successful: yes, no (default)
 
 The combination of the two admin options enables the platform to support
 customization and optimization of S-V processes for an Acumos instance.
@@ -273,9 +273,9 @@ Functional Components
 
 The S-V service will include two components, and one component microservice:
 
-* Security Verification Library: implemented as a Java library that Acumos
-  components include in their build processes, this library provides an
-  interface that abstracts the status checking and scan invocation processes,
+* Security Verification Library ("S-V Library"): implemented as a Java library
+  that Acumos components include in their build processes, this library provides
+  an interface that abstracts the status checking and scan invocation processes,
   and determines for the current workflow:
 
     * whether a scan process needs to be invoked, and invoking it if so
@@ -287,7 +287,6 @@ The S-V service will include two components, and one component microservice:
   * uses CDS site-config data and solution data to determine if workflows are
     allowed
   * runs as a always-on service under docker-ce or kubernetes
-
 
 * Scanning Service: this is the backend to the S-V service, which
 
@@ -366,7 +365,7 @@ The base URL for this API is: http://<scanning-service-host>:<port>, where
 Acumos platform deployment, and port is the assigned port where the service is
 listening for API requests.
 
-* URL resource: /scan/{solutionId}/{revisionId}/{workflowId}
+* URL resource: /scan/{solutionId}/{revisionId}
 
   * {solutionId}: ID of a solution present in the CDS
   * {revisionId}: ID of a version for a solution present in the CDS
@@ -460,7 +459,11 @@ The following data model elements are defined/used by the S-V service:
 
     * artifact: the Scanning Service will retrieve all solution artifacts in the
       process of scanning or verifying status of earlier scans, and create one
-      new artifact named "scanresult.json" as a record of scan results.
+      new type SR artifact named scanresult.json, as a record of scan results
+
+    * a new artifact type is needed as below, with a related artifact type
+
+      * Scan Result, attribue type SR, by convention named "scanresult.json"
 
     * new revision attributes are needed as below, and a new API is needed to
       retrieve and set values for these attributes
@@ -472,10 +475,10 @@ The following data model elements are defined/used by the S-V service:
 Security Verification Library
 .............................
 
-The Security Verification will be integrated as a callable library function by
-Java-based components, through reference in their pom.xml files. The S-V
-library has the following dependencies, which must be specified in the
-template used to create the calling component:
+The Security Verification Library ("S-V Library") will be integrated as a
+callable library function by Java-based components, through reference in their
+pom.xml files. The S-V library has the following dependencies, which must be
+specified in the template used to create the calling component:
 
 * environment
 
@@ -486,62 +489,144 @@ Acumos components will call the S-V library function when they need to check
 if a workflow should proceed, based upon the admin requirements for verification
 related to that workflow, and the status of verification for a solution/revision.
 
-The S-V library will use the following process to determine the result:
+In addition to checking if the requested workflow should proceed the S-V library
+will invoke scan operations as needed, as described below.
 
-* retrieve the "verification" site-config key from via the CDS
-  site-config-controller, and
+The S-V library first:
 
- * if the key is non-existing, create the key and initialize all values defined
-   under `Site-Config Data`_ to "false"
- * deserialize the JSON structure of the key into an object for use below
+* retrieves and deserializes the verification site-config key via the CDS
+  site-config-controller
+* retrieves the solutionId details from the CDS
+* if the modelTypeCode is PR (predictor) and the toolkitTypeCode is CP
+  (composite solution)
 
-* set "workflow allowed" and "reason" to null values
+  * retrieves the CD (CDUMP) artifact for the revisionId
+  * deserializes the CDUMP artifact and for each member of the nodes array
+    included in the CDUMP object
+
+    * using the member nodeSolutionId, retrieves the list of revisions for the
+      solutionId
+    * for the revision that matches the nodeVersion for the member of the nodes
+      array, executes the rest of this process, using its revisionId
+
+If either of the verification securityScan or licenseScan attribute
+array members for the workflowId value is "true", the S-V library invokes a
+scan as required:
+
+* if the CDS revisionId attributes verified-vulnerability or verified-license are
+  "unrequested", invoke the Scan Invocation API with the solutionId and
+  revisionId, and continue
+
+The S-V library then will use the following process to determine whether the
+requested workflow is allowed:
+
+* as local variables, set "workflow allowed"="true" and "reason"=""
 * If the requested workflowId is invalid set "workflow allowed"="false"
   and reason="invalid workflowId"
 * If the requested solutionId or revisionId are not found in the CDS set
   "workflow allowed"="false" and reason="solution/revision not found"
-* If the CDS config license-verify attribute array member for the request
-  workflowId value is "false" and the CDS config vulnerability-verify attribute
-  array member for the request workflowId value is "false", set
-  "workflow allowed"="true"
-* If the CDS config vulnerability-verify attribute array member for the request
-  workflowId value is "true" and the CDS attribute verified-vulnerability
-  for the solutionId/revisionId is "unrequested", "in-progress", or "failure",
-  set "workflow allowed"="false" and "reason"="vulnerability scan
-  incomplete|vulnerability scan failure" as appropriate
-* If the CDS config license-verify attribute array member for workflowId
-  value is "true" and  and the CDS attribute verified-license
-  for the solutionId/revisionId is "unrequested", "in-progress", or "failure",
-  set "workflow allowed"="false" and "reason"="license scan
-  incomplete|license scan failure" as appropriate
-* If none of the preceding checks applied, set "workflow allowed"="true"
-* If either of the CDS config vulunerability-scan or license-scan attribute
-  array members for the workflowId value is "true", invoke the Scan Invocation
-  API with the supplier solutionId and revisionId, and continue
+* If the CDS site-config verification.licenseVerify attribute array member for
+  the request workflowId value is "false" and the CDS site-config
+  verification.securityVerify attribute array member for the request workflowId
+  value is "false", set "workflow allowed"="true"
+* If the CDS site-config verification.securityVerify attribute array member for
+  the request workflowId value is "true" and the revision attribute securityScan
+  is "unrequested", "in-progress", or "failure", set "workflow allowed"="false"
+  and "reason"="security scan incomplete|security scan failure" as appropriate
+* If the CDS site-config verification.licenseVerify attribute array member for
+  the request workflowId value is "true" and revision attribute licenseScan
+  is "unrequested", "in-progress", or "failure", set "workflow allowed"="false"
+  and "reason"="license scan incomplete|license scan failure" as appropriate
 * Return the values for "workflow allowed" and "reason"
+
+................
+Scanning Service
+................
+
+The Scanning Service will be deployed as an always-running platform
+service under docker or a on-demand job under kubernetes. It has the following
+dependencies, which must be specified in the service template used to create the
+service:
+
+* environment
+
+  * common-data-svc API endpoint and credentials
+  * nexus-service API endpoint and credentials
+  * docker-service API endpoint and credentials
+  * optional API endpoint of external scanning service to be integrated
+  * site-config verification key default
+
+* ports: Acumos platform-internal port used for serving APIs (NOTE: this must
+  also be mapped to an externally-accessible port so that the service can
+  provide the /scanresult API to external scanning services)
+
+* logs volume: persistent store where the service will save logs. Internal to
+  the service, this is mapped to folder /var/acumos/scanning, and will
+  contain the distinct log files: application.log, debug.log, and error.log.
+  NOTE: logging details here need to be aligned with the common logging design
+  based upon log delivery to the ELK component.
+
+The Scanning Service provides a default set of scanning tools and optionally
+integrates with an external scanning service. See the `External Scan`_
+description below for details on external scanning service integration.
+
+The Scanning Service will record and use the results of scans in a new artifact
+type as described in `Scan Result`_, associated with the scanned revision. This
+artifact is central to various design goals of the S-V service, e.g.:
+
+* maintaining a semantic, human-readable, and easily exportable record of scans
+  related to a revision
+* preserving the history of scan results for previous solution revisions, by
+  versioning the Scan Result artifacts and creating a new Scan Result artifact
+  for each scan.
+* making the history of scan results available to those who obtain the solution
+  though sharing, downloading, or federated subscription
+* optimizing the overhead for scanning by only scanning previously unscanned
+  artifacts/metadata
 
 ++++++++++++++++
 Site-Config Data
 ++++++++++++++++
 
-The S-V library will use the CDS site-config-controller API "/config" to create
-and maintain a site-config key which contains a serialized JSON structre,
-representing a set of flags that control the four main features of the S-V
-service per the needs of the Acumos platform operator. These flags can be
-updated by a platform admin through UI screens described in `Portal-Marketplace`_.
+The S-V Service leverages a new site-config key "verification", which as
+a serialized JSON object defines the related policies for the platform, as a set
+of flags that control the four main features of the S-V service per the needs of
+the Acumos platform operator:
 
-The S-V library will provide a function via which the Portal-FE can obtain a
-deserialized structure for the config key, which is used to present a Site Admin
-UI screen where the values can be reviewed and updated.
+  * workflow gates, i.e. when evidence of successful license and vulnerability
+    scans is required, for a workflow to be allowed
+  * at which workflows license and security scans should be invoked
+  * whether an internal or external license scanning service should be used
+  * which license types are pre-approved for use with solutions
+
+Default values for these options are set through the component configuration data
+for the Scanning Service, and can be customized by the platform operator prior
+to deployment of the S-V Service. When the S-V Scanning Service starts, if the
+verification site-config key is not present, it will be initialized:
+
+* via the CDS site-config-controller API "/config", check for existence of the
+  site-config "verification" key, and create it as needed using the
+  Spring environment variable "siteConfig.verification"
+
+Additionally, the workflow-related flags can be updated by a platform admin
+through Portal UI screens described in `Portal-Marketplace`_. The S-V library
+will provide a function via which the Portal-FE can obtain a deserialized
+structure for the config key, which is used to present a Site Admin UI screen
+where the values can be reviewed and updated.
 
 The key structure is described below:
 
-* verification: serialized JSON structure as defined below, initialized by
-  the S-V library upon startup, if not already present as a CDS site-config key.
-  This element defines all the options for the configuration of the S-V
-  service. It is used by the Portal-FE service in presenting options for admin
-  users, and updated by the Portal-BE service based upon any changes to the
-  options by an admin.
+* verification
+
+  * allowedLicense: array of attributes that can be used to recognize licenses
+    that are pre-approved for use with models in the platform
+
+    * type: SPDX | <other type identifiers, e.g. "VendorX">
+    * value: a unique string that can be used to identify the license in
+      LICENSE.txt files associated with models as a document, or in other files
+      (e.g. source code or other documents). Examples include
+      `SPDX license identifiers <https://spdx.org/licenses/>`_ and other values
+      e.g. identifying a vendor-specific license.
 
   * externalScan: boolean indicating whether the Scanning Service should use an
     external scan process as described in `External Scan`_. Defaults to "false".
@@ -561,10 +646,10 @@ The key structure is described below:
     * publishPublic: true | false (default)
     * subscribe: true | false (default)
 
-  * vulnerabilityScan: vulnerability scanning requirements for workflows. See
+  * securityScan: security scanning requirements for workflows. See
     the definition of workflowId above for explanation of the workflow names.
     Each workflow is associated with a boolean value, which if "true" indicates
-    that a vulnerability scan should be invoked at this workflow point.
+    that a security scan should be invoked at this workflow point.
 
     * created: true | false (default)
     * updated: true | false (default)
@@ -590,10 +675,10 @@ The key structure is described below:
     * publishPublic: true | false (default)
     * subscribe: true | false (default)
 
-  * vulnerabilityVerify: vulnerability scanning verification requirements
+  * securityVerify: security scanning verification requirements
     for workflows. See the definition of workflowId above for explanation of
     the workflow names. Each workflow is associated with a boolean value,
-    which if "true" indicates that a successful vulnerability scan must have
+    which if "true" indicates that a successful security scan must have
     been completed before the workflow begins.
 
     * deployPrivate: true | false (default)
@@ -604,179 +689,446 @@ The key structure is described below:
     * publishPublic: true | false (default)
     * subscribe: true | false (default)
 
-................
-Scanning Service
-................
-
-The Scanning Service will be deployed as an always-running platform
-service under docker or a on-demand job under kubernetes. It has the following
-dependencies, which must be specified in the service template used to create the
-service:
-
-* environment
-
-  * common-data-svc API endpoint and credentials
-  * nexus-service API endpoint and credentials
-  * docker-service API endpoint and credentials
-  * optional API endpoint of external scanning service to be integrated
-
-* ports: Acumos platform-internal port used for serving APIs (NOTE: this must
-  also be mapped to an externally-accessible port so that the service can
-  provide the /scanresult API to external scanning services)
-
-* logs volume: persistent store where the service will save logs. Internal to
-  the service, this is mapped to folder /var/acumos/scanning, and will
-  contain the distinct log files: application.log, debug.log, and error.log.
-  NOTE: logging details here need to be aligned with the common logging design
-  based upon log delivery to the ELK component.
-
-The Scanning Service encapsulates a default set of scanning tools and optionally
-integrates with an external scanning service. See the `External Scan`_
-description below for details on external scanning service integration.
-
-The Scanning Service will record and use the results of scans in a new artifact
-"scanresult.json" that is associated with the scanned solution/revision. This
-artifact is central to various design goals of the S-V service, e.g.:
-
-* maintaining an easily exportable record of every type of scan executed on
-  every artifact or metadata item related to a solution/revision
-* preserving the history of scan results for previous solution revisions, by
-  copying the earlier revision scan result upon creation of a new solution
-  version, and extending it with scan results on the current revision
-* making the history of scan results available to those who obtain the solution
-  though sharing, downloading, or federated subscription
-* optimizing the overhead for scanning by only scanning previously unscanned
-  artifacts/metadata
-
-+++++++++++++++
-Scan Invocation
-+++++++++++++++
-
-The S-V library will call the Scan Execution API when a scan is required per
-the admin options for the S-V service. The Scanning Service will use the
-following process to determine the API result:
-
-* Retrieve (GET) the set of artifact records from the CDS for the solutionId and
-  revisionId
-* If there is no scanresult.json artifact present,
-
-  * If an earlier revision of the solution is found in the CDS for the
-    solutionId, retrieve the set of artifacts for that revision, and
-
-    * If there is a scanresult.json artifact in the list, create a new artifact
-      for the current revisionId upon that scanresult.json
-    * Else create a new, default scanresult.json artifact as shown below
+An example serialized value for the site-config verification key is shown below.
 
 .. code-block:: text
 
-  { "solutionId" : "<solutionId>",
-    "revisions" : [
-      { "revisionId" : "<solutionId>",
-        "licenseScan" : "in-progress",
-        "vulnerabilityScan" : "in-progress",
-        "artifacts" : [
-          { "id" : "<artifactId>",
-            "version" : "<artifactVersion>",
-            "uri" : "<artifactUri>",
-            "nexusChecksum" : "<nexusSha1Checksum>",
-            "lastScanned" : "null",
-            "licenseScan" : "unrequested",
-            "vulnerabilityScan" : "unrequested"
-          }, ...
-        ]
+  'siteConfig':'{
+    "externalScan":"false",
+    "verification": {
+      "allowedLicense": [
+        { "type":"SPDX", "value":"Apache-2.0" },
+        { "type":"SPDX", "value":"CC-BY-4.0" },
+        { "type":"SPDX", "value":"BSD-3-Clause" },
+        { "type":"VendorA", "value":"VendorA-OSS" },
+        { "type":"CompanyB", "value":"CompanyB-Proprietary" }
+      ]
+      "licenseScan": {
+        "created":"true",
+        "updated":"true",
+        "deploy":"false",
+        "download":"false",
+        "share":"false",
+        "publishCompany":"false",
+        "publishPublic":"false"
+      },
+      "securityScan": {
+        "created":"true",
+        "updated":"true",
+        "deploy":"false",
+        "download":"false",
+        "share":"false",
+        "publishCompany":"false",
+        "publishPublic":"false"
+      },
+      "licenseVerify": {
+        "deploy":"true",
+        "download":"false",
+        "share":"false",
+        "publishCompany":"true",
+        "publishPublic":"true"
+      },
+      "securityVerify": {
+        "deploy":"true",
+        "download":"false",
+        "share":"false",
+        "publishCompany":"true",
+        "publishPublic":"true"
       }
-    ]
-  }
-
+    }
+  }'
 ..
 
++++++++++++
+Scan Result
++++++++++++
 
-      * where:
+Revision artifacts of type SR (scanresult.json, referred to here as the
+"Scan Result") will record the result of scanning for a revision. For each scan,
+a new Scan Result version will be created, so that the history of scanning
+is preserved. This or later releases will provide admins with the ability to
+limit the number of Scan Result versions maintained for a revision.
 
-        * <solutionId> is the solutionId from the API request
-        * <revisionId> is the revisionId from the API request
-        * revisions is an array (initially of length 1) to contain information
-          about this and all subsequent revisions of the solutionId
-        * artifacts is an array of all artifacts for the solutionId/revisionId
-          found in the CDS
-        * <id> is the ID of each artifact of the solutionId/revisionId
-        * <artifactVersion> is the version attribute of the artifact
-        * <uri> is the uri attribute of the artifact
-        * <nexusSha1Checksum> is the sha1 checksum attribute of the artifact
-        * <sha1Checksum> is the computed SHA1 checksum of the metadata item
-        * lastScanned is the last time the artifact or metadata item was
-          scanned (initially null)
+The Scan Result will be initialized at the start of a scan, and will look like:
 
-     * using the copied or generated scanresults.json file, create a new
-       artifact and associate it with a new artifact entry for the
-       solutionId/revisionId in the CDS
+.. code-block:: text
 
-  * Else (no earlier revision exists), create a new scanresults.json artifact
-    and update the CDS artifact version as above
+  { "solutionId" : "<solutionId from the API request>",
+    "revisionId" : "<revisionId from the API request>",
+    "scanTime" : "<epoch time value when the scan was started>"
+    "licenseScan" : "in-progress",
+    "securityScan" : "in-progress",
+      "license" : {
+        "type" : "",
+        "value" : "",
+        "approved" : "",
+        "reason" : []
+      },
+    "description" : {
+      "checksum" : "<sha1 checksum of the current description>",
+      "licenseScan" : "in-progress",
+      "license" : {
+        "type" : "",
+        "value" : "",
+        "approved" : "",
+        "reason" : []
+      }
+    },
+    "documents" : [],
+    "artifacts" : []
+  }
+..
 
-* Else (scanresult.json file is present)
+where:
 
-  * For each artifactId found in the CDS for the solutionId/revisionId, if there
-    is no corresponding artifact entry in the scanresult.json file for the
-    solutionId/revisionId, add an entry at the start of the artifacts for the
-    solutionId/revisionId, with intitial attribute values as described above.
+* solutionId and revisionId identify the scanned model
+* scanTime records the epoch time when the scan was started
+* licenseScan hold the result of scanning
 
-* For each artifact entry in the scanresult.json file (pre-existing or as
-  created/updated above) for the solutionId/revisionId, if any one of the
-  following are true, initiate a scan for the artifact (see "Scan Process"
-  below for details), and set the set the scanresult.json licenseScan and
-  vulnerabilityScan attributes to "in-progress":
+  * in-progress: scanning has started
+  * success: scanning has completed and succeeded
+  * failure: scanning has completed and failed
+  * skipped: scan was not performed, e.g. as it is not required for the type
+    of object
 
-  * lastScanned = null AND licenseScan = "unrequested"
-  * lastScanned = null AND vulnerabilityScan = "unrequested"
-  * uri != the current uri attribute of the artifact in the CDS
-  * nexusChecksum != the current sha1 checksum attribute of the artifact
+* securityScan hold the result of scanning (in-progress|success|failure|skipped)
+* license is an object that records the details of the identified/derived license
 
-* update the scanresult.json artifact, and update the CDS (if required) for the
-  new artifact version for the solutionId/revisionId
-* if either of the CDS licenseScan and vulnerabilityScan attributes for the
-  solutionId/revisionId are set to "unrequested", update the attribute to
-  "in-progress"
+  * type is the type of recognized license identifier, and is either "SPDX" or
+    one of the provisioned approvedLicense types from the site-admin
+    verification key
+  * value is the recognized license identifier string that was found
+  * approved (true|false) indicates whether the license meets the admin policy
+    and Scanning Service criteria for approving a license, at the time of scan
+  * reason is an array of strings which further disclose why the license was
+    determined to be approved or not. Examples:
 
-++++++++++++
-Scan Process
-++++++++++++
+    * "In approved list"
+    * "Not in approved list"
+    * "artifact <artifactId> license incompatible with revision": used when
+      an artifact taints the overall approval for the revision, due to license
+      incompatibility
+    * "document <documentId> license incompatible with revision": used when
+      a document taints the overall approval for the revision, due to license
+      incompatibility
+    * "file <file path> license not approved": used when a file contained in an
+      archive taints the overall approval for the document or artifact, because
+      the license for that file is not in the approved list
+    * "file <file path> in document <documentId> license incompatible with
+       revision": used when a file contained in a document taints the overall
+       approval for the revision, due to an incompatible license
+    * "file <file path> in artifact <artifactId> license incompatible with
+      revision": used when a file contained in an archive taints the overall
+      approval for the revision, due to an incompatible license
+    * "Warning: model.zip license.txt does not match revision document
+      license.txt": used to indicate a potential inconsistency in the license
+    * "No recognized license found": used to indicate failure to recognize any
+      license
+
+* documents is an array (initially null) to hold the results of document scans
+* artifacts is an array (initially null) to hold the results of artifact scans
+
+As document scan records are added to the Scan Result, they will look like:
+
+.. code-block:: text
+
+  { "id" : "<ID attribute of the document>",
+    "version" : "<version attribute of the document>",
+    "uri" : "<uri attribute of the document>",
+    "checksum" : "<checksum attribute of the document>",
+    "licenseScan" : "in-progress",
+    "securityScan" : "in-progress",
+    "license" : {
+      "type" : "",
+      "value" : "",
+      "approved" : "",
+      "reason" : []
+    }
+  }
+..
+
+As artifact scan records are added to the Scan Result as array members of the
+"artifact" attribute, they will look like:
+
+.. code-block:: text
+
+  { "id" : "<artifactId>",
+    "version" : "<artifactVersion>",
+    "uri" : "<artifactUri>",
+    "checksum" : "<nexusSha1Checksum>",
+    "licenseScan" : "in-progress",
+    "securityScan" : "in-progress",
+    "license" : {
+      "type" : "",
+      "value" : "",
+      "approved" : "",
+      "reason" : []
+    }
+  }
+..
+
+++++++++++++++
+Scan Execution
+++++++++++++++
+
+The S-V library will call the Scan Invocation API when a scan is required per
+the admin options for the S-V service.
 
 Two types of scan processes are supported by the S-V service: internal and
-external. The first step in the scan process is for the Scanning Service to
-check the site-config key "verification.externalScan", and if it is set to
-"false", use the scan process described under `Internal Scan`_, otherwise
-use the scan process described under `External Scan`_.
+external. In both cases, the first step in the scan process is to check whether
+a new scan is required. A new scan will not be required if a prior Scan Result
+exists and no relevant revision data has changed since the last scan. The
+following process is used to check if a scan is required, and to invoke it if
+needed:
 
-In both cases, the processes will be designed to support subsequent scan
-invocations when a scan is already in progress. This can happen for example when
-a new artifact has been created, and the "created" attribute is set to "true" in
-the site-admin "verification" key for either licenseScan or vulnerabilityScan.
-In these cases, the Scanning Service will update the scanresult.json file and
-include any new/updated artifacts as needed, per the steps described below. 
+* retrieve the revision data for use here and later
+
+  * retrieve the array of revisions for the solutionId, find the entry for the
+    revisionId being scanned, and save the accessTypeCode value for later use
+    (GET /solution/{solutionId}/revision)
+  * retrieve the description for the revisionId/accessTypeCode
+    (GET /revision/{revisionId}/access/{accessTypeCode}/descr)
+  * retrieve the array of documents for the revisionId/accessTypeCode
+    (GET /revision/{revisionId}/access/{accessTypeCode}/document)
+  * retrieve the array of artifacts for the revisionId
+    (GET /revision/{revisionId}/artifact)
+
+* search the artifact array for an artifact type SR (Scan Result)
+* if no Scan Result artifact was found, select the type of scan and invoke it
+  as described below
+* else retrieve the latest Scan Result artifact revision
+* if any one of the following tests are true, select the type of scan and invoke
+  it as described below
+
+  * the SHA1 checksum of the current description does not match the description
+    checksum in the Scan Result
+  * for each document in the document array
+
+    * the document ID is not found in the Scan Result documents array, OR
+    * the SHA1 checksum of the current document does not match the document
+      checksum in the Scan Result
+
+  * for each artifact of type MI (model.zip), DI (docker image), or MD
+    (metadata.json), in the document array
+
+    * the artifact ID is not found in the Scan Result artifacts array, OR
+    * the SHA1 checksum of the current artifact does not match the artifact
+      checksum in the Scan Result
+
+* if a scan is required, and the site-config key "verification.externalScan" is
+  "false", invoke an `Internal Scan`_, otherwise invoke an `External Scan`_.
+
+Internal scans will be designed to complete quickly, so that for a specific
+solution revision, no subsequent request queuing is required.
+
+From the perspective of the Scanning Service, external scans will take an
+unknown amount of time, thus multiple external scans can be invoked for the
+same revision.
 
 ,,,,,,,,,,,,,
 Internal Scan
 ,,,,,,,,,,,,,
 
-Beyond the following design notes, details of the internal scan process are TBD.
+Where noted below, details of the internal scan process are TBD.
 
-During the scan process, as scanning is completed for each artifact or metadata
-item in the scanresult.json artifact, the Scanning Service:
+The CDS holds three types of data for revisions: a description, a set of
+documents, and a set of artifacts. Notes on the approach to scanning these types
+of data objects:
 
-* updates the corresponding scanresult.json licenseScan or vulnerabilityScan
-  attribute per the result of the scan, i.e. as "success" or "failure"
-* if the result of the scan is "failure", updates the corresponding CDS
-  solution/revision licenseScan or vulnerabilityScan attribute to "failure"
-* updates the scanresult.json artifact for the scanned artifact, and updates
-  the CDS (if required) for the new version of the scanresult.json artifact 
+* The description is a text object that is used in the UI presentation of the
+  model on the Portal. It will only be scanned for license notices.
+* Documents may be of any arbitrary type, e.g. media (images, video), archives
+  (e.g. training data, source code, documentation), or rich/plain text
+  documents. Documents uploaded as a single text file and text files inside
+  archive documents will be scanned. Files that are recognized as code will be
+  scanned for license and vulnerability, and other text documents will be
+  scanned for license only.
+* artifacts are the modeler-onboarded or platform-generated files which make up
+  the model revision. Of these, only the type MI (model.zip), DI (docker image),
+  and MD (metadata.json) will be scanned. As an archive, the model.zip will be
+  scanned using the same approach as described for archive documents.
 
-Once all artifact entries in the new scanresult.json file have had scan results
-updated in the scanresult.json artifact, the Scanning Service completes the
-scan process:
+The overall process for scanning these revision data types is:
 
-* if either of the CDS solution/revision licenseScan or vulnerabilityScan
-  attributes is set to "in-progress", set the attribute to "success"
+* initialize a new `Scan Result`_ object with the solutionId and revisionId
+  being scanned
+* `License Scan`_ the description for the revisionId/accessTypeCode
+* for each document of the revisionId/accessTypeCode
+
+  * add a new array member to the Scan Result documents attribute, setting the
+    id, version, and uri attributes per the document array member
+  * if the document name is "license.txt" (ignoring case), `License Scan`_ it
+  * if the document is an archive, `License Scan`_ and `Security Scan`_ it
+  * if the document is a recognized source file type, `License Scan`_ and
+    `Security Scan`_ it
+  * if the document is a plain text file, `License Scan`_ it
+  * if the document is a rich text file, `License Scan`_ it if supported by this
+    version of S-V
+
+* for each artifact of the revisionId
+
+  * if the artifactTypeCode is LG (log), CD (CDUMP), TG (TGIF), PJ (protobuf
+    specification), or SR (scanresult.json), ignore the artifact
+  * add a new array member to the Scan Result artifacts attribute, setting the
+    id, version, and uri attributes per the artifact array member
+  * For artifactTypeCode MI (model zip file)
+
+    * if there is a file named "license.txt" (ignoring case) in the root folder,
+      `License Scan`_ it, and
+
+      * if there is no current revisionId document named "license.txt", save the
+        file as a new revisionId document named "license.txt"
+      * else if the license.txt file from the archive does not match exactly the
+        current license.txt document, add "Warning: model.zip license.txt does
+        not match revision document license.txt" to the Scan Result
+        license.reason array
+
+    * if there are other files in the /scripts/user_provided/ folder or its
+      subfolders, `License Scan`_ and `Security Scan`_ each file
+
+  * For artifact type DI (docker image)
+  * For artifact type MD (metadata.json)
+
+When all documents and artifacts have been scanned, the Scanning Service:
+
+* updates the revision licenseScan attribute to match the Scan Result
+* updates the revision securityScan attribute to match the Scan Result
+* adds a new version of type SR artifact "scanresult.json" to the revision
+
+''''''''''''
+License Scan
+''''''''''''
+
+The "License Scan" process refers to scanning a file for well-known strings
+that identify the type of license, using the list of
+`SPDX license identifiers <https://spdx.org/licenses/>`_, and the set of
+approvedLicense values from the site-config verification key.
+
+The overall process for license scanning for licenses is to assess licenses using a
+hierarchical approach in which all objects are expected to have approved
+licenses (in some cases derived from child objects), and child object licenses
+(where found) are expected to be compatible with their parent object(s) license.
+The result of these checks "roll up" to the parent object and ultimately to the
+revision, for which any unapproved or incompatible licenses will cause an overall
+license check failure result. The process includes these steps:
+
+* assess licenses against a set of well-known types, and their status as approved
+  licenses from the site-config verification key
+* assess the license that applies to the revisionId overall, which is expected to
+  be provided in (and will be derived from) a "license.txt" document associated
+  with the revisionId
+* assess licenses for other associated documents
+* assess the license for the model.zip artifact
+* where an item (artifact, document, or file contained in one of them contains
+  a recognized license, assess the compatibility of that license with the
+  license associated with the parent object
+* for the revision overall, verify that
+
+  * at least one of the description, license.txt document (if present),
+    documents, or MI (mode.zip) artifact contain an approved license, AND
+  * none of the items above contain an unapproved license
+
+The hierarchy of objects is:
+
+* revision: the overall parent object, for which at least one child object must
+  have an approved license, and for which no child objects contain an
+  unapproved license
+
+  * document named "license.txt"
+  * other plain/rich text documents with embedded license
+  * archive documents (e.g. a zip archive with source files, or documentation)
+
+    * "license.txt" file in a folder (and hierarchy of subfolders)
+
+      * file in a folder
+
+  * MI (model.zip) type artifact
+
+    * "license.txt" file in a folder (and hierarchy of subfolders)
+
+      * file in a folder
+
+In general, the License Scan process for a specific file will involve the
+following steps, with specific variations noted where applicable:
+
+* If a match is found
+
+  * if the result applies to the revision, description, a document, or artifact
+
+    * if the identified license is included as an approvedLicense value,
+      update the associated license attribute
+
+      * set license.type to the approvedLicense.type
+      * set license.value to the recognized string
+      * set license.approved=true
+      * add "In approved list" to the license.reason array
+
+    * otherwise if the identified license is included in the list of well-known
+      SPDX license identifiers, update the associated license attribute
+
+      * set license.type to "SPDX"
+      * set license.value to the recognized string
+      * set license.approved=false
+      * add "Not in approved list" to the license.reason array
+
+  * else if the result applies to a file contained in a document or the MI
+    (model.zip) artifact
+
+    * if the license is not included as an approvedLicense value, update the
+      associated license attribute for the containing item
+
+      * set license.approved=false
+      * add "file <file path> license not approved" to the license.reason array
+
+    * else if the license is determined to be incompatible (criteria TBD) with
+      the license of the parent object, update the license attribute for the
+      parent and its parent if any
+
+      * set license.approved=false
+      * add a reason string to the license.reason array, as applicable
+
+        * for an artifactId: "artifact <artifactId> license incompatible with
+          revision"
+        * for a documentId: "document <documentId> license incompatible with
+          revision"
+        * for a file contained in a document (archive):
+          "file <file path> in document <documentId> license incompatible with
+          revision"
+        * for a file contained in a MI (model.zip) artifact: "file <file path>
+          in artifact <artifactId> license incompatible with revision"
+
+* If a match was not found
+
+  * if the result applies to the revision, description, a document, or artifact,
+    update the associated license attribute
+
+    * set license.type to "unknown"
+    * set license.approved=false
+    * add "No recognized license found" to the license.reason array
+
+Note that the lack of licenses in source files, documents, or folders in source
+archives is not a critical issue, since parent object licenses will apply to the
+child objects. If there are no approved licenses in any parent object, that will
+still result in scan failure.
+
+'''''''''''''
+Security Scan
+'''''''''''''
+
+Goals and methods for security scans are TBD.
+
+'''''''''''''
+Code Scanning
+'''''''''''''
+
+Beyond simple scanning for internally declared licenses, scanning code involves
+special requirements for license and security. In summary any "closely linked"
+code must be free from serious security vulnerabilities, and clearly/compatibly
+licensed. This is a complex process that requires use of other tools which can
+assess the license and security of any code that is directly embedded (e.g.
+"imported" in python) in the software as built into an application.
+
+Tools that support such scan requirements are TBD.
 
 ,,,,,,,,,,,,,
 External Scan
@@ -786,18 +1138,27 @@ External scans will depend upon unspecified tools and processes that are
 provided by the Acumos platform operator. The role of the Acumos platform in
 this case is only to support:
 
-* the export of all model artifacts to be scanned as a set, that can be
+* the export of all relevant revision data as an archive, that can be
   processed externally
 * the importing of a scan results file that will be stored as a
-  solution/revision artifact, at some later point
+  revision artifact, at some later point
 
 For external scans, the Scanning Service:
 
-* retrieves all artifacts and metadata for the solution/revision, for which
-  the scanresult.json licenseScan or vulnerabilityScan attribute is
-  "in-progress"
-* places the artifacts into a folder named for the solution/revision, in an
-  external-user-accessible volume
+* retrieves the revision description, documents per the revision accessTypeCode,
+  and revision artifacts of type MI (model.zip), DI (docker image),
+  MD (metadata.json), and SR (scanresult.json)
+* creates a scanresult.json described in `Scan Result`_ as a template for later
+  completion and return by the external scan process
+* creates a zip archive named sol-<solutionId-rev-<revisionId>.zip with
+
+  * the description in a file named "description.txt" in the root folders
+  * the scanresult.json file in the root folder
+  * the documents in a "documents" folder
+  * the artifacts in an artifacts folder
+
+* places the archive into an external-user-accessible persistent volume, in a
+  folder "/var/acumos/security-verification/external-scan"
 
 At that point, admins or automated systems can access the archive for offline
 scan execution.
@@ -806,26 +1167,16 @@ At some later time, the API described in `External Scan Result`_ will be called
 by admins/systems external to the Acumos platform, to report the scan results.
 The scan result reports may be partial, or complete.
 
-After receiving a scanresult.json file via the `External Scan Result`_ API,
-for each artifact that was scanned (as indicated by an entry in the
-scanresult.json file), the Scanning Service takes the following actions:
+After receiving a scanresult.json file via the `External Scan Result`_ API, the
+Scanning Service:
 
-* if the "lastScanned" value in the scanresult.json file is later than the
-  value in the scanresult.json artifact
+* checks if the solution/revision referenced in the Scan Result still exists,
+  and if not, returns a 404 NOT FOUND response.
+* if the solution/revision is found, the Scanning Service
 
-  * updates the corresponding scanresult.json licenseScan or vulnerabilityScan
-    attribute per the result of the scan, i.e. as "success" or "failure"
-  * if the result of the scan is "failure", updates the corresponding CDS
-    licenseScan or vulnerabilityScan attribute for the solution/revision to
-    "failure"
-  * updates the scanresult.json artifact for the scanned artifact, and updates
-    the CDS (if required) for the new version of the scanresult.json artifact 
-
-Once all artifact entries in the scanresult.json artifact have had scan results
-updated, the Scanning Service completes the scan process:
-
-* if either of the CDS solution/revision licenseScan or vulnerabilityScan
-  attributes is set to "in-progress", set the attribute to "success"
+  * updates the revision licenseScan attribute to match the Scan Result
+  * updates the revision securityScan attribute to match the Scan Result
+  * adds a new version of type SR artifact "scanresult.json" to the revision
 
 ----------------------------------
 Impacts to other Acumos Components
@@ -866,11 +1217,11 @@ The impacts will be described here, and are expected to include at a high level:
     "[NA]" represents a greyed-out box
 
 .. csv-table::
-    :header: "Workflow", "licenseScan", "vulnerabilityScan", "licenseVerify", "vulnerabilityVerify"
+    :header: "Workflow", "licenseScan", "securityScan", "licenseVerify", "securityVerify"
     :widths: 60, 10, 10, 10, 10
     :align: left
 
-    "created", "[ ]", "[ ]", "[NA]", "[NA]" 
+    "created", "[ ]", "[ ]", "[NA]", "[NA]"
     "updated", "[ ]", "[ ]", "[NA]", "[NA]"
     "deployPrivate", "[ ]", "[ ]", "[ ]", "[ ]"
     "deployPublic", "[ ]", "[ ]", "[ ]", "[ ]"
