@@ -1,8 +1,10 @@
+.DS_Store
 .classpath
 .project
-/.settings/
-/bin/
-/logs/
-/target/
-/security-verification-service/target/
-/security-verification-service/logs/
+.settings/
+.factorypath
+.python-version
+.vscode
+bin
+logs
+target
