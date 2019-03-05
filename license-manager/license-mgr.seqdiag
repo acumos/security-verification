@@ -1,0 +1,6 @@
+Title: Library Manager Component Library
+Note left of LicenseMgr: Provide RTU to\n Security Verification
+
+LicenseMgr-> CDS: verifyRTU(context, action): RTUInfo
+
+Note left of LicenseMgr: How do we get header/context?\n will it be passed in or available through environment?
