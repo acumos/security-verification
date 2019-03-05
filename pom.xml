@@ -1,284 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+	<!--
+	===============LICENSE_START=======================================================
+	Acumos
+	===================================================================================
+	Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+	===================================================================================
+	This Acumos software file is distributed by AT&T and Tech Mahindra
+	under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
 
+	http://www.apache.org/licenses/LICENSE-2.0
+
+	This file is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+	===============LICENSE_END=========================================================
+	-->
+	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>security-verification</name>
+	<version>0</version>
+	<packaging>pom</packaging>
+	<name>Security Verification Project</name>
 	<description>Acumos security verification service for artifacts uploaded with a model</description>
-
-	<!-- <packaging>jar</packaging> -->
+	<modules>
+		<!-- Child modules do NOT name this parent. -->
+		<module>security-verification</module>
+		<module>license-manager</module>
+	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<!-- Supplied by Jenkins -->
-		<build.number>${env.BUILD_NUMBER}</build.number>
-		<httpclient.version>4.5.6</httpclient.version>
-		<jackson.version>2.9.7</jackson.version>
-		<javax-validation.version>1.1.0.Final</javax-validation.version>
-		<slf4j.version>1.7.25</slf4j.version>
-		<spring.version>5.1.2.RELEASE</spring.version>
-		<hibernate-jpamodelgen.version>5.3.7.Final</hibernate-jpamodelgen.version>
-		<!-- End extract of POM file spring-boot-dependencies -->
-		<!-- These versions come from spring-data-releasetrain.version -->
-		<spring-data-jpa.version>2.1.2.RELEASE</spring-data-jpa.version>
-		<spring-data-commons.version>2.1.2.RELEASE</spring-data-commons.version>
-		<wagonVersion>3.1.0</wagonVersion>
-		<!-- End extract of spring-data-releasetrain.version -->
 	</properties>
-	<!-- No repositories section. Only needs Maven central, aka public. -->
-	<dependencies>
-		<dependency>
-			<groupId>org.acumos.common-dataservice</groupId>
-			<artifactId>cmn-data-svc-client</artifactId>
-			<version>2.0.7</version>
-		</dependency>
-		<dependency>
-			<groupId>org.acumos.acumos-nexus-client</groupId>
-			<artifactId>acumos-nexus-client</artifactId>
-			<version>2.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-			<artifactId>owasp-java-html-sanitizer</artifactId>
-			<version>20180219.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.att.eelf</groupId>
-			<artifactId>eelf-core</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-file</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-provider-api</artifactId>
-			<version>${wagonVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-ftp</artifactId>
-			<version>${wagonVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-file</artifactId>
-			<version>${wagonVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-http-lightweight</artifactId>
-			<version>${wagonVersion}</version>
-		</dependency>
-
-
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<!-- Handle Java 8 dates and times -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${javax-validation.version}</version>
-		</dependency>
-		<!-- For using HTTP Basic Auth in uService REST client -->
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>${httpclient.version}</version>
-		</dependency>
-		<!-- JPA annotations -->
-		<dependency>
-			<groupId>javax.persistence</groupId>
-			<artifactId>persistence-api</artifactId>
-			<version>1.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>${hibernate-jpamodelgen.version}</version>
-			<scope>provided</scope> <!-- don't package -->
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-			<version>${spring-data-commons.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-jpa</artifactId>
-			<version>${spring-data-jpa.version}</version>
-		</dependency>
-		<!-- Test dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.12</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Test classes need a logger implementation -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.2.3</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 	<build>
 		<plugins>
+			<!-- support sonar in multi-module project -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.14</version>
-				<configuration>
-					<licenseName>acumos</licenseName>
-					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
-					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-					<processStartTag>===============LICENSE_START=======================================================</processStartTag>
-					<processEndTag>===============LICENSE_END=========================================================</processEndTag>
-					<sectionDelimiter>===================================================================================</sectionDelimiter>
-					<inceptionYear>2017</inceptionYear>
-					<organizationName><![CDATA[AT&T Intellectual Property & Tech Mahindra. All rights reserved.]]></organizationName>
-					<projectName>Acumos</projectName>
-					<canUpdateCopyright>true</canUpdateCopyright>
-					<canUpdateDescription>true</canUpdateDescription>
-					<canUpdateLicense>true</canUpdateLicense>
-					<emptyLineAfterHeader>true</emptyLineAfterHeader>
-				</configuration>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.4.0.905</version>
 			</plugin>
-			<!-- Require Java 1.8 -->
+			<!-- do not install the root pom, only needed for build -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>2.5.2</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<compilerArguments>
-						<processor>org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor</processor>
-					</compilerArguments>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<!-- add build information to manifest. Java provides access to the implementation 
-				version for a package, so cram the build number into there. -->
+			<!-- do not deploy the root pom, only needed for build -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.5</version>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8</version>
 				<configuration>
-					<archive>
-						<manifest>
-							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-						</manifest>
-						<manifestEntries>
-							<Implementation-Version>${project.version}-b${build.number}</Implementation-Version>
-						</manifestEntries>
-					</archive>
-					<!-- exclude logback.xml -->
-					<excludes>
-						<exclude>**/logback.xml</exclude>
-					</excludes>
+					<skip>true</skip>
 				</configuration>
 			</plugin>
-
-			<!-- Generate javadoc jar; see profile for Java 8 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- Generate source jar -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
 				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
+				<configuration>
+					<!-- Silence error javax.interceptor.InterceptorBinding not found -->
+					<additionalDependencies>
+						<additionalDependency>
+							<groupId>javax.interceptor</groupId>
+							<artifactId>javax.interceptor-api</artifactId>
+							<version>1.2</version>
+						</additionalDependency>
+					</additionalDependencies>
+				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.9</version>
-				<executions>
-					<execution>
-						<id>default-prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>default-report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 		</plugins>
 	</build>
 </project>
