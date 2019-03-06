@@ -1,0 +1,44 @@
+{  
+   "verification":{  
+      "externalScan":"false",
+      "allowedLicense":[  
+        { "type":"SPDX", "value":"Apache-2.0" },
+      { "type":"SPDX", "value":"CC-BY-4.0" },
+      { "type":"SPDX", "value":"BSD-3-Clause" },
+      { "type":"VendorA", "value":"VendorA-OSS" },
+      { "type":"CompanyB", "value":"CompanyB-Proprietary" }
+      ],
+      "licenseScan":{  
+         "created":"true",
+         "updated":"true",
+         "deploy":"false",
+         "download":"false",
+         "share":"false",
+         "publishCompany":"false",
+         "publishPublic":"false"
+      },
+      "securityScan":{  
+         "created":"true",
+         "updated":"true",
+         "deploy":"false",
+         "download":"false",
+         "share":"false",
+         "publishCompany":"false",
+         "publishPublic":"false"
+      },
+      "licenseVerify":{  
+         "deploy":"true",
+         "download":"false",
+         "share":"false",
+         "publishCompany":"true",
+         "publishPublic":"true"
+      },
+      "securityVerify":{  
+         "deploy":"true",
+         "download":"false",
+         "share":"false",
+         "publishCompany":"true",
+         "publishPublic":"true"
+      }
+   }
+}
