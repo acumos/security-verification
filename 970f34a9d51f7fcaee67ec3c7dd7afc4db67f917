@@ -1,0 +1,214 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "767ce92e_b59e8d70",
+        "filename": "license-manager/.classpath",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "What is the purpose of this file? This is file not required.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "486d8c8b_9be83c2c",
+        "filename": "license-manager/.project",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "What is the purpose of this file? This is file not required.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2865eb75_c89c5a87",
+        "filename": "license-manager/license-mgr.seqdiag",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "What is the purpose of this file? This is file not required.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "83ebcd3b_5e5abd94",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseClientProperties.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "License text is missing in the header of the file.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0e7e22c_ba9e2475",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "License text is missing in the header of the file.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0511927f_d756c5ad",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseResponse.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "License text is missing in the header of the file.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "acc3cec5_c7e42c3f",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "License text is missing in the header of the file.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f453fcb_279e60a0",
+        "filename": "license-manager/src/test/java/org/acumos/licensemanager/service/LicenseClientTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "License text is missing in the header of the file.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e624bfba_e4ffc64d",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "Invalid group id",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9bfca2ab_f3c50519",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "group id and artifact id should not CCDS related. Amiee suggested security-verification, I think we can go with this.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bffef695_6f77d36e",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "Add details related to security verification.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14d5e567_ab4fb281",
+        "filename": "security-verification/.factorypath",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-06T14:41:09Z",
+      "side": 1,
+      "message": "What is the purpose of this file? This is file not required.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
