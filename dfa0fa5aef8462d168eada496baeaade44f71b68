@@ -1,0 +1,164 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4d88adf_23c4035b",
+        "filename": ".gitignore",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "Don\u0027t remove the .gitignore!",
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5bab147d_b6168709",
+        "filename": "license-manager/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "This change set is labeled \"library\" which suggests to me that it is NOT a spring-boot server.  If that is correct, then this should not inherit from spring-boot.",
+      "range": {
+        "startLine": 24,
+        "startChar": 2,
+        "endLine": 24,
+        "endChar": 8
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50125426_719f9a54",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseClientProperties.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "Please add license header.  I can send example.",
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6387ae5_22c7dd78",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "Very generic class name, can you be more specific?",
+      "range": {
+        "startLine": 3,
+        "startChar": 13,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "36b42c90_4eece03f",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "do this in one line: this.workflow \u003d new String [] { workflow};",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab9f3c13_16684bdc",
+        "filename": "license-manager/src/test/java/org/acumos/licensemanager/service/LicenseClientTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "This is a spring-boot app?",
+      "range": {
+        "startLine": 37,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 26
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25c22b23_e4b0d510",
+        "filename": "security-verification/docs/design.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "It\u0027s ok to have multiple files in a top-level docs subdir, but you do what works best for you",
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97c49c1c_46a6663c",
+        "filename": "security-verification/src/main/java/org/acumos/securityverification/utils/EELFLoggerDelegate.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-07T18:57:55Z",
+      "side": 1,
+      "message": "Remove this class if at all possible, EELF is not required and most have moved away from it",
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
