@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2740bcaa_2768b5ec",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseClientProperties.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-07T11:27:23Z",
+      "side": 1,
+      "message": "License text is missing.",
+      "revId": "13ab301f83a832fabbbe31b0e2bda719fcb4bd98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ad8eec2_c1ad02b0",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-07T11:27:23Z",
+      "side": 1,
+      "message": "License text is missing.",
+      "revId": "13ab301f83a832fabbbe31b0e2bda719fcb4bd98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2906b57_9df831e2",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseResponse.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-07T11:27:23Z",
+      "side": 1,
+      "message": "License text is missing.",
+      "revId": "13ab301f83a832fabbbe31b0e2bda719fcb4bd98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba555bf9_f6cc3690",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-07T11:27:23Z",
+      "side": 1,
+      "message": "License text is missing.",
+      "revId": "13ab301f83a832fabbbe31b0e2bda719fcb4bd98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "87f044a0_d4e76b50",
+        "filename": "license-manager/src/test/java/org/acumos/licensemanager/service/LicenseClientTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 25
+      },
+      "writtenOn": "2019-03-07T11:27:23Z",
+      "side": 1,
+      "message": "License text is missing.",
+      "revId": "13ab301f83a832fabbbe31b0e2bda719fcb4bd98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
