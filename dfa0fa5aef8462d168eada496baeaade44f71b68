@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "b2e2c8e0_73c7c60a",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T21:58:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac91aea0_d532c07d",
+      "range": {
+        "startLine": 3,
+        "startChar": 13,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36b42c90_4eece03f",
         "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
         "patchSetId": 3
@@ -201,6 +225,30 @@
       "side": 1,
       "message": "good catch",
       "parentUuid": "36b42c90_4eece03f",
+      "range": {
+        "startLine": 10,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 32
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fcfddc76_42f401c1",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseRequest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T21:58:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "634eda07_af6d229c",
       "range": {
         "startLine": 10,
         "startChar": 4,
@@ -260,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "3315de3e_b71a872a",
+        "filename": "license-manager/src/test/java/org/acumos/licensemanager/service/LicenseClientTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T21:58:10Z",
+      "side": 1,
+      "message": "Test fails to run without this annotation",
+      "parentUuid": "1f663405_486d60b2",
+      "range": {
+        "startLine": 37,
+        "startChar": 3,
+        "endLine": 37,
+        "endChar": 26
+      },
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "25c22b23_e4b0d510",
         "filename": "security-verification/docs/design.rst",
         "patchSetId": 3
@@ -288,6 +360,24 @@
       "writtenOn": "2019-03-07T18:57:55Z",
       "side": 1,
       "message": "Remove this class if at all possible, EELF is not required and most have moved away from it",
+      "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "162343c3_852d2644",
+        "filename": "security-verification/src/main/java/org/acumos/securityverification/utils/EELFLoggerDelegate.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T21:58:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97c49c1c_46a6663c",
       "revId": "dfa0fa5aef8462d168eada496baeaade44f71b68",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
