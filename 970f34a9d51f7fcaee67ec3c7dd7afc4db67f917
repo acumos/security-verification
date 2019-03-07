@@ -42,6 +42,30 @@
     },
     {
       "key": {
+        "uuid": "49c9ac0a_143794e5",
+        "filename": "license-manager/.project",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T14:56:39Z",
+      "side": 1,
+      "message": "I will remove this because I am no longer using Eclipse as IDE",
+      "parentUuid": "486d8c8b_9be83c2c",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 1
+      },
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2865eb75_c89c5a87",
         "filename": "license-manager/license-mgr.seqdiag",
         "patchSetId": 1
@@ -59,6 +83,24 @@
     },
     {
       "key": {
+        "uuid": "79ad9487_fab6d513",
+        "filename": "license-manager/license-mgr.seqdiag",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T14:56:39Z",
+      "side": 1,
+      "message": "Will move it to wiki",
+      "parentUuid": "2865eb75_c89c5a87",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "83ebcd3b_5e5abd94",
         "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseClientProperties.java",
         "patchSetId": 1
@@ -70,6 +112,24 @@
       "writtenOn": "2019-03-06T14:41:09Z",
       "side": 1,
       "message": "License text is missing in the header of the file.",
+      "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6fc1ca98_10737cfe",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseClientProperties.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-03-07T14:56:39Z",
+      "side": 1,
+      "message": "I need to check what license text should be added here.",
+      "parentUuid": "83ebcd3b_5e5abd94",
       "revId": "970f34a9d51f7fcaee67ec3c7dd7afc4db67f917",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
