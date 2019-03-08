@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2f3681d8_6ee8e013",
+        "filename": "license-manager/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-08T19:39:22Z",
+      "side": 1,
+      "message": "Is this the license manager, or the license manager client library?",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "903a5e921042447f45d386fdeb4b2e058b7abc22",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48a9e1fc_7a40a370",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-08T19:39:22Z",
+      "side": 1,
+      "message": "Why sleep?",
+      "range": {
+        "startLine": 47,
+        "startChar": 20,
+        "endLine": 47,
+        "endChar": 39
+      },
+      "revId": "903a5e921042447f45d386fdeb4b2e058b7abc22",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdd875c6_77b5ab11",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-08T19:39:22Z",
+      "side": 1,
+      "message": "Never, ever catch and discard.  Makes the program impossible to debug.  At the very least please log the exception.",
+      "range": {
+        "startLine": 50,
+        "startChar": 19,
+        "endLine": 50,
+        "endChar": 40
+      },
+      "revId": "903a5e921042447f45d386fdeb4b2e058b7abc22",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "97f3826b_ce6b3971",
+        "filename": "license-manager/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-08T19:39:22Z",
+      "side": 1,
+      "message": "Remove, don\u0027t comment out",
+      "range": {
+        "startLine": 68,
+        "startChar": 8,
+        "endLine": 71,
+        "endChar": 12
+      },
+      "revId": "903a5e921042447f45d386fdeb4b2e058b7abc22",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
