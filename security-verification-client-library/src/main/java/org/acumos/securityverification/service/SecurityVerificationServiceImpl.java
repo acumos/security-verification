@@ -32,19 +32,26 @@ import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.domain.LicenseVerify;
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
-import org.acumos.securityverification.domain.SecurityVerify;
 import org.acumos.securityverification.domain.Verification;
 import org.acumos.securityverification.domain.Workflow;
+import org.acumos.securityverification.transport.SVResonse;
+import org.acumos.securityverification.transport.SecurityVerificationRequest;
 import org.acumos.securityverification.utils.Configurations;
 import org.acumos.securityverification.utils.SVConstants;
 import org.acumos.securityverification.utils.SecurityVerificationJsonParser;
+import org.acumos.securityverification.utils.ServiceCallDelegate;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-public class SecurityVerificationServiceImpl implements ISecurityVerificationService {
+
+public class SecurityVerificationServiceImpl extends AbstractServiceImpl implements ISecurityVerificationService  {
+	
+	Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
 	 
-	 Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
+	@Autowired
+	ServiceCallDelegate serviceCallDelegate;
 
 	public Workflow securityVerificationScan(String solutionId)throws Exception {
  
@@ -53,6 +60,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 		String datasource = Configurations.getConfig("cdms.client.url");
 		String userName = Configurations.getConfig("cdms.client.username");
 		String dataPd = Configurations.getConfig("cdms.client.pwd");
+		
 		String nexusUrl = Configurations.getConfig("nexus.client.url");
 		String nexusUserName = Configurations.getConfig("nexus.client.username");
 		String nexusPd = Configurations.getConfig("nexus.client.pwd");
@@ -60,6 +68,8 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 		logger.debug("nexusUrl"+nexusUrl);
 		
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
+//		ICommonDataServiceRestClient client = getClient();
+		
 		if (client != null) {
 			logger.debug("CCDS CALL GET /solution/{solutionId} ");
 			MLPSolution mlpSolution = client.getSolution(solutionId);
@@ -92,8 +102,9 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 								logger.debug("mlpArtifact nexusURI::--" + nexusURI);
 
 								ByteArrayOutputStream byteArrayOutputStream = null;
-								NexusArtifactClient nexusArtifactClient = nexusArtifactClient(nexusUrl, nexusUserName,
-										nexusPd);
+								NexusArtifactClient nexusArtifactClient = nexusArtifactClient(nexusUrl, nexusUserName,nexusPd);
+//								NexusArtifactClient nexusArtifactClient = getNexusClient();
+								
 								byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
 								logger.debug("getBluePrintNexus: byteArrayOutputStream length:--"+ byteArrayOutputStream.size());
 								logger.debug("byteArrayOutputStream.toString():::---> " + byteArrayOutputStream.toString());
@@ -132,21 +143,20 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 												workflow.setWorkflowAllowed(true); 
 												
 												LicenseVerify licenseVerify = siteConfigVerificationObj.getLicenseVerify();
-												if (licenseVerify.isDeploy() && licenseVerify.isDownload()
-														&& licenseVerify.isPublishCompany()
-														&& licenseVerify.isPublishPublic() && licenseVerify.isShare()) {
-													//TBD not found "validationStatusCode" is "IP"
-													workflow.setWorkflowAllowed(false); 
-													workflow.setReason(SVConstants.LICENSE_SCAN_INCOMPLETE);
+												if (licenseVerify.isDeploy() || licenseVerify.isDownload()) {
+													
+													//TODO Need to be tested once getting serve access.
+													//workflow.setWorkflowAllowed(false); 
+													//workflow.setReason(SVConstants.LICENSE_SCAN_INCOMPLETE);
+													logger.debug("Call to SV Server");
+													SecurityVerificationRequest securityVerificationRequest = new SecurityVerificationRequest();
+													securityVerificationRequest.setSolutionId(securityVerificationCdumpNode.getNodeSolutionId());
+													securityVerificationRequest.setRevisionId(mlpCdumpSolutionRevision.getRevisionId());
+													SVResonse svResonse = serviceCallDelegate.callDelegate("http://localhost:9082/scan",securityVerificationRequest,SVResonse.class);
+													logger.debug("getScanSucess result {}",svResonse.getScanSucess());
 												}
-												SecurityVerify securityVerify = siteConfigVerificationObj.getSecurityVerify();
-												if (securityVerify.isDeploy() && securityVerify.isDownload()
-														&& securityVerify.isPublishCompany()
-														&& securityVerify.isPublishPublic() && securityVerify.isShare()) {
-													//TBD not found "validationStatusCode" is "IP"
-													workflow.setWorkflowAllowed(false); 
-													workflow.setReason(SVConstants.LICENSE_SCAN_INCOMPLETE);
-												}
+													
+//												}
 												
 											}
 										}
@@ -156,6 +166,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 							logger.debug(" executes the Scan: TRUE it is a simple model and the S-V library executes the Scan Invocation Logic");
 							//TODO scan invocation logic
 							workflow.setWorkflowAllowed(true); 
+
 						}
 						
 					} else {
@@ -184,6 +195,9 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 		SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
 		//CDS call
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
+//		ICommonDataServiceRestClient client = getClient();
+		
+		
 		JSONObject siteConfigDataJsonObj = new JSONObject();
 		if(client != null) {
 			MLPSiteConfig mlpSiteConfig =client.getSiteConfig(SVConstants.CONFIGKEY);
@@ -194,17 +208,18 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 			} else {
 				//ACUMOS-2555 TODO Need to be discussed "note until the Scanning Service is implemented, the site-config key will need to be provisioned via swagger"
 				//No site config infomation found. Default site_config is picked from configuration file and inserted in database
-				String siteConfigJsonFromConfiguration="";//env.getProperty("siteConfig.verification");  
+				String siteConfigJsonFromConfiguration = Configurations.getConfig("siteConfig.verification");//"";//env.getProperty("siteConfig.verification"); 
+				System.out.println("siteConfigJsonFromConfiguration:::: "+siteConfigJsonFromConfiguration);
 				MLPSiteConfig config = new MLPSiteConfig();
 				config.setConfigKey(SVConstants.CONFIGKEY);
 				config.setConfigValue(siteConfigJsonFromConfiguration);
-//				config.setUserId("26fcd4bf-8819-41c1-b46c-87ec2f7a39f8");
+				config.setUserId("26fcd4bf-8819-41c1-b46c-87ec2f7a39f8");//TODO
+				System.out.println("Before createSiteConfig..." );
 				Object obj = client.createSiteConfig(config);
+				System.out.println("After createSiteConfig..." );
 				siteConfigDataJsonObj = parseJSON.stringToJsonObject(siteConfigJsonFromConfiguration);
 			}
-		
 		}
-		
 		return parseJSON.parseSiteConfigJson(siteConfigDataJsonObj);
 	}
 
@@ -224,3 +239,4 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 	
 	
 }
+

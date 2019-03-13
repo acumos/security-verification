@@ -2,13 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
 	<groupId>org.acumos.security-verification</groupId>
-	<artifactId>security-verification</artifactId>
+	<artifactId>security-verification-client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>security-verification</name>
-	<description>Acumos security verification service for artifacts uploaded with a model</description>
-
+	<name>security-verification-client-library</name>
+	<description>Acumos Security Verification Client Library</description>
+		
 	<!-- <packaging>jar</packaging> -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,7 +32,7 @@
 		<dependency>
 			<groupId>org.acumos.common-dataservice</groupId>
 			<artifactId>cmn-data-svc-client</artifactId>
-			<version>2.0.7</version>
+			<version>2.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.acumos.acumos-nexus-client</groupId>
@@ -148,7 +147,7 @@
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-commons</artifactId>
 			<version>${spring-data-commons.version}</version>
@@ -157,7 +156,7 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 			<version>${spring-data-jpa.version}</version>
-		</dependency>
+		</dependency> -->
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -166,11 +165,23 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- Test classes need a logger implementation -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
 			<scope>test</scope>
+		</dependency> -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.11</version>
+			<!--scope>test</scope -->
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>1.1.11</version>
+			<!-- Spring chooses <version>${logback.version}</version> -->
 		</dependency>
 	</dependencies>
 	<build>

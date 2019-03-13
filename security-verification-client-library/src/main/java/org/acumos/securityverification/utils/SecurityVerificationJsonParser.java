@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 
 public class SecurityVerificationJsonParser {
 
-//	private static final EELFLoggerDelegate logger = EELFLoggerDelegate.getLogger(SecurityVerificationJsonParser.class);
 	 Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
 	 
 	public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) {
@@ -223,8 +222,10 @@ public class SecurityVerificationJsonParser {
 	 */
 	public JSONObject stringToJsonObject(String jsonString) {
 		try {
+			String strTemp1 = jsonString.replaceAll("\\\\\"", "\"");
+			String strTemp2 = strTemp1.substring(1,strTemp1.length()-1);
 			JSONParser parser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+			JSONObject jsonObject = (JSONObject) parser.parse(strTemp2);
 			return jsonObject;
 		} catch (ParseException e) {
 			logger.error("Exception Occurred Json parsing", e);

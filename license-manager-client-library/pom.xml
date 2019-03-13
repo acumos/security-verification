@@ -30,9 +30,6 @@
 	<name>license-manager-client-library</name>
 	<description>Acumos License Manager Client Library</description>
 
-
-
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -63,6 +60,12 @@
 				<version>4.12</version>
 				<scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>com.google.collections</groupId>
+		    <artifactId>google-collections</artifactId>
+		    <version>1.0-rc2</version>
+		</dependency>
+		
 	</dependencies>
 
 

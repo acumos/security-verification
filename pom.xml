@@ -29,8 +29,9 @@
 	<description>Acumos security verification service for artifacts uploaded with a model</description>
 	<modules>
 		<!-- Child modules do NOT name this parent. -->
-		<module>security-verification</module>
+		<module>security-verification-server</module>
 		<module>license-manager-client-library</module>
+		<module>security-verification-client-library</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

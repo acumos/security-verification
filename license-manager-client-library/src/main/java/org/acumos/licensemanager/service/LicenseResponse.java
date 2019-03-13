@@ -21,8 +21,8 @@ package org.acumos.licensemanager.service;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import com.google.common.collect.ImmutableMap;
+
 
 public class LicenseResponse {
 
