@@ -16,54 +16,51 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 * ===============LICENSE_END=========================================================
-*/ 
+*/
 package org.acumos.licensemanager.service;
 
-
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
+
+import org.acumos.cds.client.ICommonDataServiceRestClient;
+import org.acumos.cds.domain.MLPRightToUse;
 
 public class LicenseService {
 
-    private final LicenseClientProperties serviceProperties;
+    private final ICommonDataServiceRestClient dataClient;
 
-    public LicenseService(LicenseClientProperties serviceProperties) {
-        this.serviceProperties = serviceProperties;
+    public LicenseService(ICommonDataServiceRestClient dataClient) {
+        this.dataClient = dataClient;
     }
 
     // TODO use RightToUseController.getRightToUsesForSolAndUser()
     public CompletableFuture<LicenseResponse> verifyRTU(VerifyLicenseRequest request) {
         // currently only using workflow for dummy response
-        if (!this.serviceProperties.getCDS()) {
-
-            // for each workflow requested // need to get rtuid -- TODO cache this later
-            //
-            LicenseResponse response = new LicenseResponse();
-            // Temporary code will be replaced with CDS async all to database in S4
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-               throw new IllegalStateException(e);
-            }
-            // Placeholder work in progress code in S3
-            for (String workflow : request.getWorkflow()) {
-                // processEachWorkflow(workflow);
-                // we will get all rtu for user and solution id from CDS fake that here
-
-                switch (workflow) {
-                    case "download":
-                        response.addWorkflow(workflow, this.serviceProperties.isDownloadAllowed());
-                        break;
-                    case "deploy":
-                        response.addWorkflow(workflow, this.serviceProperties.isDeployAllowed());
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return CompletableFuture.completedFuture(response);
+        boolean rightToUseFlag = false;
+        List<MLPRightToUse> rightToUse = dataClient.getRightToUses(request.getSolutionId(), request.getUserId());
+        // If there is a right to use (any for solution/user both download and deploy
+        // are allowed in Boreas)
+        if (rightToUse != null && !rightToUse.isEmpty()) {
+            rightToUseFlag = true;
         }
-        return null;
+        LicenseResponse response = new LicenseResponse();
+        for (String workflow : request.getWorkflow()) {
+            // we will get all rtu for user and solution id from CDS fake that here
+
+            switch (workflow) {
+            case "download":
+                response.addWorkflow(workflow, rightToUseFlag);
+                break;
+            case "deploy":
+                response.addWorkflow(workflow, rightToUseFlag);
+                break;
+            default:
+                break;
+            }
+        }
+        return CompletableFuture.completedFuture(response);
+
+
 
     }
 
