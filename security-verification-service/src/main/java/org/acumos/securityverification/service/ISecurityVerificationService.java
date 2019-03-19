@@ -17,32 +17,11 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.utils;
+package org.acumos.securityverification.service;
 
-import org.springframework.web.client.RestTemplate;
 
-/**
- * ServiceCallDelegate class used to call the Rest API. 
- */
-public class ServiceCallDelegate {
+public interface ISecurityVerificationService {
 
-	/**
-	 * This method is used to make post method call. 
-	 * @param serviceUrl
-	 * @param jObject
-	 * @param clazz
-	 * @return response, of type T
-	 */
-	public <T> T callDelegate(String serviceUrl,Object jObject, Class<T> clazz) {
-		try {
-			RestTemplate restTemplate = new RestTemplate();
-			return (T) restTemplate.postForObject(serviceUrl, jObject, clazz);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return null;
-	}
-
+	public String securityVerification(String solutionId, String revisionId)  throws Exception; 
+	
 }

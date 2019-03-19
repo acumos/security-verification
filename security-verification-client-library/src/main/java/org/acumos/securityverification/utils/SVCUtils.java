@@ -17,28 +17,31 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.transport;
+package org.acumos.securityverification.utils;
 
-public class SecurityVerificationRequest {
+import java.io.File;
 
-	private String solutionId;
-	private String revisionId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-	public String getSolutionId() {
-		return solutionId;
+public class SVCUtils {
+	
+	private static Logger logger = LoggerFactory.getLogger(SVCUtils.class);
+
+	public static boolean isEmptyOrNullString(String input) {
+		logger.debug("isEmptyOrNullString()"); 
+		boolean isEmpty = false;
+		if (null == input || 0 == input.trim().length()) {
+			isEmpty = true;
+		}
+		return isEmpty;
 	}
-
-	public void setSolutionId(String solutionId) {
-		this.solutionId = solutionId;
-	}
-
-	public String getRevisionId() {
-		return revisionId;
-	}
-
-	public void setRevisionId(String revisionId) {
-		this.revisionId = revisionId;
-	}
-
-
+	
+	public static String getFileExtension(File file) {
+		logger.debug("getFileExtension()"); 
+        String fileName = file.getName();
+        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+        return fileName.substring(fileName.lastIndexOf(".")+1);
+        else return "";
+    }
 }

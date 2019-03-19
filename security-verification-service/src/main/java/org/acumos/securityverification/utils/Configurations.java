@@ -17,27 +17,37 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.service;
+package org.acumos.securityverification.utils;
 
-import org.springframework.stereotype.Service;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-@Service
-public class SecurityVerificationServiceImpl implements ISecurityVerificationService {
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
-	Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
-	
-	@Override
-	public String securityVerification() {
+public class Configurations {
+	public static String getConfig(String key){
+		Properties prop = new Properties();
 
-		logger.debug("securityVerification is called");
-		//TODO Need add logic
-		
-		
-		return null;
+		InputStream input = null;
+		String value ="";
+		try {
+			prop.load(Configurations.class.getClassLoader().getResourceAsStream("application-sv.properties"));
+            value= prop.getProperty(key).toString();
+                
+              
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			if (input != null) {
+				try {
+					input.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return value;
 	}
-	
-	
-	
+
+
 }

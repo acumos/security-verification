@@ -222,6 +222,8 @@ public class SecurityVerificationJsonParser {
 	 */
 	public JSONObject stringToJsonObject(String jsonString) {
 		try {
+			System.out.println("jsonString::: "+jsonString);
+			System.out.println("jsonString.length::: "+jsonString.length());
 			String strTemp1 = jsonString.replaceAll("\\\\\"", "\"");
 			String strTemp2 = strTemp1.substring(1,strTemp1.length()-1);
 			JSONParser parser = new JSONParser();

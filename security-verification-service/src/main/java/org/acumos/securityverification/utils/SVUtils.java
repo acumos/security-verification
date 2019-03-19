@@ -25,7 +25,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SVUtils {
+
+	private static Logger logger = LoggerFactory.getLogger(SVUtils.class);
 
 	public static boolean isEmptyOrNullString(String input) {
 		boolean isEmpty = false;
@@ -44,7 +49,7 @@ public class SVUtils {
 
 	public static byte[] executeScript(String solutionId, String revisionId,String folder) throws Exception {
 
-		System.out.println("executeScript() INSIDE-----");
+		logger.debug("executeScript() INSIDE-----");
 
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
@@ -59,15 +64,15 @@ public class SVUtils {
 			if (processBuilder != null) {
 				process = processBuilder.start();
 				int errCode = process.waitFor();
-				System.out.println("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
 				String line = null;
 				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				while ((line = reader.readLine()) != null) {
-					System.out.println("executeScript() INSIDE 6666-----");
+					logger.debug("executeScript() INSIDE 6666-----");
 					sb.append(line + System.getProperty("line.separator"));
 				}
 
-				System.out.println("sb.toString();>>>>  " + sb.toString());
+				logger.debug("sb.toString();>>>>  " + sb.toString());
 			}
 		} finally {
 			if (null != process) {
@@ -93,7 +98,7 @@ public class SVUtils {
 	/*
 	public static InputStream readScript() throws Exception {
 
-		System.out.println("readScript()::: scancode JSON \n\n");
+		logger.debug("readScript()::: scancode JSON \n\n");
 		byte[] result = null;
 		File scancode_file = new File("/home/cognitaopr/log/security-verification-test/shell-test/output/test/scancode.json");
 		
@@ -103,24 +108,24 @@ public class SVUtils {
 		FileReader fr = new FileReader(scancode_file);
 		BufferedReader br = new BufferedReader(fr);
 		String line;
-		System.out.println("Reading text file using FileReader");
+		logger.debug("Reading text file using FileReader");
 		while ((line = br.readLine()) != null) {
-			System.out.println(line);
+			logger.debug(line);
 		}
 		br.close();
 		fr.close();
 		
 
-		System.out.println("readScript()::: scanresult JSON \n\n");
+		logger.debug("readScript()::: scanresult JSON \n\n");
 		File scanresult_file = new File(
 				"/home/cognitaopr/log/security-verification-test/shell-test/output/test/scanresult.json");
 		FileReader fr1 = new FileReader(scanresult_file);
 		BufferedReader br1 = new BufferedReader(fr1);
 		String line1;
-		System.out.println("Reading text file using FileReader");
+		logger.debug("Reading text file using FileReader");
 		while ((line1 = br1.readLine()) != null) {
 			// process the line
-			System.out.println(line1);
+			logger.debug(line1);
 		}
 		br1.close();
 		fr1.close();

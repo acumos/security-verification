@@ -25,7 +25,7 @@ import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.utils.Configurations;
-import org.acumos.securityverification.utils.SVCUtils;
+import org.acumos.securityverification.utils.SVUtils;
 
 public abstract class AbstractServiceImpl {
 
@@ -43,9 +43,9 @@ public abstract class AbstractServiceImpl {
 		repositoryLocation.setUsername(Configurations.getConfig("nexus.client.username"));
 		repositoryLocation.setPassword(Configurations.getConfig("nexus.client.pwd"));
 
-//		if (!SVCUtils.isEmptyOrNullString(Configurations.getConfig("nexus.proxy"))) {
-//				repositoryLocation.setProxy(Configurations.getConfig("nexus.proxy"));
-//		}
+		if (!SVUtils.isEmptyOrNullString(Configurations.getConfig("nexus.proxy"))) {
+				repositoryLocation.setProxy(Configurations.getConfig("nexus.proxy"));
+		}
 
 		NexusArtifactClient artifactClient = new NexusArtifactClient(repositoryLocation);
 		return artifactClient;

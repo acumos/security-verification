@@ -38,8 +38,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
 import org.apache.maven.wagon.TransferFailedException;
-import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.apache.maven.wagon.authorization.AuthorizationException;
+import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

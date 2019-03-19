@@ -26,6 +26,6 @@ public interface ISecurityVerificationService {
 
 	public Verification verificationSiteConfig();
 
-	public Workflow securityVerificationScan(String solutionId)throws Exception;
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) throws Exception;
 
 }

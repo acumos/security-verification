@@ -21,16 +21,13 @@ package org.acumos.securityverification.controller;
 
 import org.acumos.securityverification.service.ISecurityVerificationService;
 import org.acumos.securityverification.transport.SVResonse;
-import org.acumos.securityverification.transport.SecurityVerificationRequest;
-import org.acumos.securityverification.utils.SVConstants;
-import org.acumos.securityverification.utils.SanitizeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,18 +42,19 @@ public class SecurityVerificationServiceController extends AbstractController {
 	@Autowired
 	ISecurityVerificationService securityVerificationService;
 	
-	@ApiOperation(value = "Security Verification Scan")
-	@RequestMapping(value = SVConstants.SECURITY_SCAN, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SVResonse> securityVerification(@RequestBody SecurityVerificationRequest securityVerificationRequest){
-		logger.debug("Inside security verification scan... ");
-		String solutionId = SanitizeUtils.sanitize(securityVerificationRequest.getSolutionId());
-        String revisionId = SanitizeUtils.sanitize(securityVerificationRequest.getRevisionId());
+	@ApiOperation(value = "Security Verification Service Scan.")
+	@RequestMapping(value = "/scan/{solutionId}/{revisionId}/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<SVResonse> securityVerification(@PathVariable("solutionId") String solutionId,
+			@PathVariable("revisionId") String revisionId, @PathVariable("workflowId") String workflowId) {
+		logger.debug("Inside security verification server scan... ");
+//		String solutionId = SanitizeUtils.sanitize(securityVerificationRequest.getSolutionId());
+//        String revisionId = SanitizeUtils.sanitize(securityVerificationRequest.getRevisionId());
         
         logger.debug("securityVerification solutionId {}  revisionId{}",solutionId,revisionId );
         SVResonse svResonse = new SVResonse();
         try {
         	//TODO Need to add logic. development is in progress
-        	 securityVerificationService.securityVerification();
+        	 securityVerificationService.securityVerification(solutionId,revisionId);
         	 svResonse.setScanSucess("Development is in progress");
         	
         }catch (Exception e) {

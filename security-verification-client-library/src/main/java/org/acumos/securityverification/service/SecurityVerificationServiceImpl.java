@@ -22,53 +22,46 @@ package org.acumos.securityverification.service;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.nexus.client.NexusArtifactClient;
-import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.domain.LicenseVerify;
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
 import org.acumos.securityverification.domain.Verification;
 import org.acumos.securityverification.domain.Workflow;
 import org.acumos.securityverification.transport.SVResonse;
-import org.acumos.securityverification.transport.SecurityVerificationRequest;
 import org.acumos.securityverification.utils.Configurations;
 import org.acumos.securityverification.utils.SVConstants;
 import org.acumos.securityverification.utils.SecurityVerificationJsonParser;
-import org.acumos.securityverification.utils.ServiceCallDelegate;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 
 public class SecurityVerificationServiceImpl extends AbstractServiceImpl implements ISecurityVerificationService  {
 	
 	Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
 	 
-	@Autowired
-	ServiceCallDelegate serviceCallDelegate;
-
-	public Workflow securityVerificationScan(String solutionId)throws Exception {
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId)throws Exception {
  
 		Workflow workflow = new Workflow();
 		
-		String datasource = Configurations.getConfig("cdms.client.url");
-		String userName = Configurations.getConfig("cdms.client.username");
-		String dataPd = Configurations.getConfig("cdms.client.pwd");
+		logger.debug("revisionId:: "+revisionId);
+		logger.debug("worflowId:: "+worflowId);
 		
-		String nexusUrl = Configurations.getConfig("nexus.client.url");
-		String nexusUserName = Configurations.getConfig("nexus.client.username");
-		String nexusPd = Configurations.getConfig("nexus.client.pwd");
-		logger.debug("datasource"+datasource);
-		logger.debug("nexusUrl"+nexusUrl);
-		
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
-//		ICommonDataServiceRestClient client = getClient();
+		ICommonDataServiceRestClient client = getClient();
 		
 		if (client != null) {
 			logger.debug("CCDS CALL GET /solution/{solutionId} ");
@@ -78,14 +71,14 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 				logger.debug("CCDS CALL GET /solution/{solutionId}/revision::--");
 				List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
 				
-				String revisionId = null;
+				String mlpRevisionId = null;
 				for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
 					logger.debug("mlpSolutionRevision.getRevisionId()::-->" + mlpSolutionRevision.getRevisionId());
 					if(mlpSolutionRevision.getRevisionId() != null) {
 						
 						Verification siteConfigVerificationObj = verificationSiteConfig();
 						
-						revisionId = mlpSolutionRevision.getRevisionId();	
+						mlpRevisionId = mlpSolutionRevision.getRevisionId();	
 						logger.debug("mlpSolutionRevision.getVersion():::-->"+mlpSolutionRevision.getVersion());
 						//modelTypeCode is PR (predictor) and the toolkitTypeCode is CP (composite solution) then retrieves the CD (CDUMP) artifact for the revisionId
 						//GET /revision/{revisionId}/artifact
@@ -93,7 +86,7 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 								&& mlpSolution.getToolkitTypeCode().equalsIgnoreCase(SVConstants.TOOL_KIT_TYPE_CODE)) {
 
 							logger.debug("Call CDS to get CDUMP artifact URL..");
-							List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,revisionId);
+							List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,mlpRevisionId);
 							String nexusURI = "";
 								nexusURI = mlpArtifactList.stream()
 										.filter(mlpArt -> mlpArt.getArtifactTypeCode()
@@ -102,8 +95,8 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 								logger.debug("mlpArtifact nexusURI::--" + nexusURI);
 
 								ByteArrayOutputStream byteArrayOutputStream = null;
-								NexusArtifactClient nexusArtifactClient = nexusArtifactClient(nexusUrl, nexusUserName,nexusPd);
-//								NexusArtifactClient nexusArtifactClient = getNexusClient();
+//								NexusArtifactClient nexusArtifactClient = nexusArtifactClient(nexusUrl, nexusUserName,nexusPd);
+								NexusArtifactClient nexusArtifactClient = getNexusClient();
 								
 								byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
 								logger.debug("getBluePrintNexus: byteArrayOutputStream length:--"+ byteArrayOutputStream.size());
@@ -143,19 +136,18 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 												workflow.setWorkflowAllowed(true); 
 												
 												LicenseVerify licenseVerify = siteConfigVerificationObj.getLicenseVerify();
-												if (licenseVerify.isDeploy() || licenseVerify.isDownload()) {
-													
 													//TODO Need to be tested once getting serve access.
 													//workflow.setWorkflowAllowed(false); 
 													//workflow.setReason(SVConstants.LICENSE_SCAN_INCOMPLETE);
-													logger.debug("Call to SV Server");
-													SecurityVerificationRequest securityVerificationRequest = new SecurityVerificationRequest();
-													securityVerificationRequest.setSolutionId(securityVerificationCdumpNode.getNodeSolutionId());
-													securityVerificationRequest.setRevisionId(mlpCdumpSolutionRevision.getRevisionId());
-													SVResonse svResonse = serviceCallDelegate.callDelegate("http://localhost:9082/scan",securityVerificationRequest,SVResonse.class);
-													logger.debug("getScanSucess result {}",svResonse.getScanSucess());
-												}
 													
+													ResponseEntity<SVResonse> svResonse = null;
+													if(worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD) && licenseVerify.isDownload() ) {
+														svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(), mlpCdumpSolutionRevision.getRevisionId(), worflowId);	
+													}
+													if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY) && licenseVerify.isDeploy()) {
+														svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(), mlpCdumpSolutionRevision.getRevisionId(), worflowId);
+													}
+//													
 //												}
 												
 											}
@@ -166,11 +158,12 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 							logger.debug(" executes the Scan: TRUE it is a simple model and the S-V library executes the Scan Invocation Logic");
 							//TODO scan invocation logic
 							workflow.setWorkflowAllowed(true); 
+							ResponseEntity<SVResonse> svResonse = invokesScan(solutionId, revisionId, worflowId);
 
 						}
 						
 					} else {
-					//ACUMOS-2555 return “workflow allowed”=”false” and reason=”solution/revision not found”
+					//ACUMOS-2555 
 					workflow.setWorkflowAllowed(false); 
 					workflow.setReason(SVConstants.REASON_NOT_FOUND);
 					}
@@ -188,32 +181,21 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 	public Verification verificationSiteConfig() {
 
 		logger.debug("verificationSiteConfig ");
-		String datasource = Configurations.getConfig("cdms.client.url");
-		String userName = Configurations.getConfig("cdms.client.username");
-		String dataPd = Configurations.getConfig("cdms.client.pwd");
 		
 		SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-		//CDS call
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
-//		ICommonDataServiceRestClient client = getClient();
-		
-		
+		ICommonDataServiceRestClient client = getClient();
 		JSONObject siteConfigDataJsonObj = new JSONObject();
 		if(client != null) {
 			MLPSiteConfig mlpSiteConfig =client.getSiteConfig(SVConstants.CONFIGKEY);
 			if (mlpSiteConfig != null) {
-				String siteConfigTemp = mlpSiteConfig.getConfigValue().toString().replaceAll("\\\\\"", "\"");
-				String siteConfigData = siteConfigTemp.substring(1, siteConfigTemp.length() - 1);
-				siteConfigDataJsonObj = parseJSON.stringToJsonObject(siteConfigData);
+				siteConfigDataJsonObj = parseJSON.stringToJsonObject(mlpSiteConfig.getConfigValue().toString());
 			} else {
-				//ACUMOS-2555 TODO Need to be discussed "note until the Scanning Service is implemented, the site-config key will need to be provisioned via swagger"
-				//No site config infomation found. Default site_config is picked from configuration file and inserted in database
-				String siteConfigJsonFromConfiguration = Configurations.getConfig("siteConfig.verification");//"";//env.getProperty("siteConfig.verification"); 
+				String siteConfigJsonFromConfiguration = Configurations.getConfig("siteConfig.verification"); 
 				System.out.println("siteConfigJsonFromConfiguration:::: "+siteConfigJsonFromConfiguration);
 				MLPSiteConfig config = new MLPSiteConfig();
 				config.setConfigKey(SVConstants.CONFIGKEY);
 				config.setConfigValue(siteConfigJsonFromConfiguration);
-				config.setUserId("26fcd4bf-8819-41c1-b46c-87ec2f7a39f8");//TODO
+				config.setUserId("26fcd4bf-8819-41c1-b46c-87ec2f7a39f8"); //TODO Need to be discuss 
 				System.out.println("Before createSiteConfig..." );
 				Object obj = client.createSiteConfig(config);
 				System.out.println("After createSiteConfig..." );
@@ -223,20 +205,27 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 		return parseJSON.parseSiteConfigJson(siteConfigDataJsonObj);
 	}
 
-
-	private NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName, String nexusPd) {
-		logger.debug("nexusArtifactClient start");
-		RepositoryLocation repositoryLocation = new RepositoryLocation();
-		repositoryLocation.setId("1");
-		repositoryLocation.setUrl(nexusUrl);
-		repositoryLocation.setUsername(nexusUserName);
-		repositoryLocation.setPassword(nexusPd);
-		NexusArtifactClient nexusArtifactClient = new NexusArtifactClient(repositoryLocation);
-		logger.debug("nexusArtifactClient End");
-		return nexusArtifactClient;
+	private ResponseEntity<SVResonse> invokesScan(String nodeSolutionId, String revisionId, String worflowId) {
+		
+		String apiUrl =Configurations.getConfig("security.verification.apiUrl");
+		logger.debug("apiUrl "+apiUrl);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+		//map.add("solutionId", securityVerificationCdumpNode.getNodeSolutionId());
+		//map.add("revisionId", mlpCdumpSolutionRevision.getRevisionId());
+		map.add("solutionId", nodeSolutionId);
+		map.add("revisionId", revisionId);
+		map.add("workflowId", worflowId);
+		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+		logger.debug("Before Call to SV Service");
+		ResponseEntity<SVResonse> svResonse = restTemplate.exchange(apiUrl, HttpMethod.POST, request, SVResonse.class);
+		logger.debug("getScanSucess result {}",svResonse.getBody());
+		
+		return svResonse;
 	}
-	
-	
+
 	
 }
 
