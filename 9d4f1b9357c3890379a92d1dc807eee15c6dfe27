@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "304dbe44_470fad78",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T18:42:47Z",
+      "side": 1,
+      "message": "Remove all system.out",
+      "range": {
+        "startLine": 225,
+        "startChar": 0,
+        "endLine": 226,
+        "endChar": 67
+      },
+      "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f4c0216_1f9ebfae",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T18:42:47Z",
+      "side": 1,
+      "message": "Don\u0027t catch and discard!",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 54
+      },
+      "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1c460591_715a6461",
         "filename": "security-verification-client-library/src/main/resources/application-sv.properties",
         "patchSetId": 1
