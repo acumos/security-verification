@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aaf21252_5139fed9",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T14:59:35Z",
+      "side": 1,
+      "message": "This client-facing class should be documented with Javadoc\n\nThe word \"Service\" has many connotations in a Spring-enabled webapp.  This is not such a service, this is a client library.  Please consider using a different word in the class name.\n\nIt would be extremely useful if you define an interface and extend this class to implement that interface, then you and others can add a mock implementation for test purposes.",
+      "range": {
+        "startLine": 43,
+        "startChar": 13,
+        "endLine": 43,
+        "endChar": 27
+      },
+      "revId": "3f23574c0552278ab9a07d53763c39f1467bf482",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b64f7bc8_19f395e0",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T14:59:35Z",
+      "side": 1,
+      "message": "This public constructor must be documented with Javadoc",
+      "range": {
+        "startLine": 48,
+        "startChar": 11,
+        "endLine": 48,
+        "endChar": 25
+      },
+      "revId": "3f23574c0552278ab9a07d53763c39f1467bf482",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7baa40b_69fb97de",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T14:59:35Z",
+      "side": 1,
+      "message": "Please provide a full description for clients.",
+      "range": {
+        "startLine": 86,
+        "startChar": 7,
+        "endLine": 86,
+        "endChar": 16
+      },
+      "revId": "3f23574c0552278ab9a07d53763c39f1467bf482",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80d60180_d1261c59",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T14:59:35Z",
+      "side": 1,
+      "message": "What is the request? Any constraints?",
+      "range": {
+        "startLine": 88,
+        "startChar": 14,
+        "endLine": 88,
+        "endChar": 21
+      },
+      "revId": "3f23574c0552278ab9a07d53763c39f1467bf482",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "91faa40b_e95954be",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/service/LicenseService.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T14:59:35Z",
+      "side": 1,
+      "message": "Must document this public API method",
+      "range": {
+        "startLine": 140,
+        "startChar": 11,
+        "endLine": 140,
+        "endChar": 26
+      },
+      "revId": "3f23574c0552278ab9a07d53763c39f1467bf482",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
