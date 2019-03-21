@@ -889,6 +889,30 @@
       "revId": "c4e778f23e283c280b962050f6fb76c8cf6cd88f",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "948ea60f_dc1e2a71",
+        "filename": "license-manager-client-library/src/test/java/org/acumos/licensemanager/service/LicenseClientTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T14:59:35Z",
+      "side": 1,
+      "message": "Hmm yeah I didn\u0027t think this thru clearly.",
+      "parentUuid": "d0ef9398_252a499b",
+      "range": {
+        "startLine": 54,
+        "startChar": 2,
+        "endLine": 54,
+        "endChar": 37
+      },
+      "revId": "c4e778f23e283c280b962050f6fb76c8cf6cd88f",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
