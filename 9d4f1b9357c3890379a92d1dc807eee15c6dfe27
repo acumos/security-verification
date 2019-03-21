@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1c460591_715a6461",
+        "filename": "security-verification-client-library/src/main/resources/application-sv.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T18:40:18Z",
+      "side": 1,
+      "message": "MUST remove this URL, username and password",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 121
+      },
+      "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
