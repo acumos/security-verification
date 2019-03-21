@@ -68,6 +68,52 @@
       "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a26fa956_a82b7abc",
+        "filename": "security-verification-service/application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T18:44:34Z",
+      "side": 1,
+      "message": "Remove all username/password strings from git!",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 27
+      },
+      "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff6433ab_f3801a07",
+        "filename": "security-verification-service/application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T18:44:34Z",
+      "side": 1,
+      "message": "Remove remove remove",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 24
+      },
+      "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
