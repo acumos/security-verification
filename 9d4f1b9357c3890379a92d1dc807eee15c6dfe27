@@ -114,6 +114,23 @@
       "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "766522ef_c95423e9",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/ISecurityVerificationService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-21T18:48:00Z",
+      "side": 1,
+      "message": "Is this the same interface class package and name as is used in the library?  Why would you duplicate things like this??",
+      "revId": "9d4f1b9357c3890379a92d1dc807eee15c6dfe27",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
