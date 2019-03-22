@@ -61,7 +61,7 @@ public class UploadArtifactSVOutput extends AbstractServiceImpl{
 		logger.debug("name "+name);
 		
 		
-		ICommonDataServiceRestClient dataServiceRestClient = getClient();
+		ICommonDataServiceRestClient dataServiceRestClient = getCcdsClient();
 
 		if(SVUtils.isEmptyOrNullString(extension))
 			throw new IllegalArgumentException("Incorrect file extension.");

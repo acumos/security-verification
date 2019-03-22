@@ -17,28 +17,12 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.transport;
+package org.acumos.securityverification.service;
 
-public class SecurityVerificationRequest {
+import org.acumos.securityverification.domain.Workflow;
 
-	private String solutionId;
-	private String revisionId;
+public interface ISecurityVerificationClientService {
 
-	public String getSolutionId() {
-		return solutionId;
-	}
-
-	public void setSolutionId(String solutionId) {
-		this.solutionId = solutionId;
-	}
-
-	public String getRevisionId() {
-		return revisionId;
-	}
-
-	public void setRevisionId(String revisionId) {
-		this.revisionId = revisionId;
-	}
-
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) throws Exception;
 
 }

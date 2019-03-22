@@ -24,29 +24,29 @@ import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
-import org.acumos.securityverification.utils.Configurations;
-import org.acumos.securityverification.utils.SVUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 public abstract class AbstractServiceImpl {
 
+	@Autowired
+	private Environment env;
 	
-	public ICommonDataServiceRestClient getClient() {
-		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(Configurations.getConfig("cdms.client.url"),
-				 Configurations.getConfig("cdms.client.username"), Configurations.getConfig("cdms.client.pwd"), null);
+	public void setEnvironment (Environment env1){
+		env = env1;
+	}
+	
+	public ICommonDataServiceRestClient getCcdsClient() {
+		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(env.getProperty("cdms.client.url"), env.getProperty("cdms.client.username"), env.getProperty("cdms.client.password"), null);
 		return client;
 	}
 	
 	public NexusArtifactClient getNexusClient() {
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
-		repositoryLocation.setUrl(Configurations.getConfig("nexus.client.url"));
-		repositoryLocation.setUsername(Configurations.getConfig("nexus.client.username"));
-		repositoryLocation.setPassword(Configurations.getConfig("nexus.client.pwd"));
-
-		if (!SVUtils.isEmptyOrNullString(Configurations.getConfig("nexus.proxy"))) {
-				repositoryLocation.setProxy(Configurations.getConfig("nexus.proxy"));
-		}
-
+		repositoryLocation.setUrl(env.getProperty("nexus.client.url"));
+		repositoryLocation.setUsername(env.getProperty("nexus.client.username"));
+		repositoryLocation.setPassword(env.getProperty("nexus.client.pwd"));
 		NexusArtifactClient artifactClient = new NexusArtifactClient(repositoryLocation);
 		return artifactClient;
 	}

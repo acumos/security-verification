@@ -24,6 +24,7 @@ import org.acumos.securityverification.transport.SVResonse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,17 +41,25 @@ public class SecurityVerificationServiceController extends AbstractController {
 	Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceController.class);
 	
 	@Autowired
+	private Environment env;
+	
+	public void setEnvironment (Environment env1){
+		env = env1;
+	}
+	
+	@Autowired
 	ISecurityVerificationService securityVerificationService;
 	
 	@ApiOperation(value = "Security Verification Service Scan.")
-	@RequestMapping(value = "/scan/{solutionId}/{revisionId}/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/solutionId/{solutionId}/revisionId/{revisionId}/workflowId/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SVResonse> securityVerification(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @PathVariable("workflowId") String workflowId) {
 		logger.debug("Inside security verification server scan... ");
-//		String solutionId = SanitizeUtils.sanitize(securityVerificationRequest.getSolutionId());
-//        String revisionId = SanitizeUtils.sanitize(securityVerificationRequest.getRevisionId());
+		//TODO Development is in progress, Need to add logic
+		//String solutionId = SanitizeUtils.sanitize(securityVerificationRequest.getSolutionId());
+		//String revisionId = SanitizeUtils.sanitize(securityVerificationRequest.getRevisionId());
         
-        logger.debug("securityVerification solutionId {}  revisionId{}",solutionId,revisionId );
+        logger.debug("securityVerification solutionId  {}  revisionId  {}",solutionId,revisionId );
         SVResonse svResonse = new SVResonse();
         try {
         	//TODO Need to add logic. development is in progress
@@ -61,6 +70,16 @@ public class SecurityVerificationServiceController extends AbstractController {
         	logger.error("Exception Occurred Security Verification :{}" + "solutionId",e);
 		}
 		return new ResponseEntity<SVResonse>(svResonse, null, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Add default SiteConfig Verification.")
+	@RequestMapping(value = "/update/siteConfig/verification", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> siteConfigVerification() throws Exception {
+		logger.debug("Inside adding default SiteConfig Verification Json");
+	
+		String siteConfigJson = securityVerificationService.createSiteConfigCall();
+		
+		return new ResponseEntity<String>(siteConfigJson, null, HttpStatus.OK);
 	}
 
 
