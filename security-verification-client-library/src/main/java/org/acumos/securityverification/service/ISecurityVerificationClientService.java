@@ -19,12 +19,9 @@
  */
 package org.acumos.securityverification.service;
 
-import org.acumos.securityverification.domain.Verification;
 import org.acumos.securityverification.domain.Workflow;
 
-public interface ISecurityVerificationService {
-
-	public Verification verificationSiteConfig();
+public interface ISecurityVerificationClientService {
 
 	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) throws Exception;
 

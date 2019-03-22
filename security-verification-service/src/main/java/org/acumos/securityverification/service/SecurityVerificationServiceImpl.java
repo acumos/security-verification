@@ -19,6 +19,8 @@
  */
 package org.acumos.securityverification.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -29,11 +31,20 @@ import org.acumos.securityverification.utils.Configurations;
 import org.acumos.securityverification.utils.SVUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
 @Service
 public class SecurityVerificationServiceImpl extends AbstractServiceImpl implements ISecurityVerificationService {
 
 	Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
+	
+	@Autowired
+	private Environment env;
+	
+	public void setEnvironment (Environment env1){
+		env = env1;
+	}
 	
 	@Override
 	public String securityVerification(String solutionId, String revisionId) throws Exception {
@@ -41,19 +52,19 @@ public class SecurityVerificationServiceImpl extends AbstractServiceImpl impleme
 		logger.debug("Inside SecurityVerificationServiceImpl");
 			//TODO Need add logic
 		
-			String path=Configurations.getConfig("scan.verification.script.location");
+			String path=env.getProperty("scan.verification.script.location");
 			File file = SVUtils.readScanOutput(path);
 			
-			path=Configurations.getConfig("sv.licensescan.script  ");
-			logger.debug("path sv.licensescan.script"+path);
-			path=Configurations.getConfig("sv.dumpmodel.script");
-			logger.debug("path sv.dumpmodel.script  "+path);
+			path=env.getProperty("sv.script.licensescan  ");
+			logger.debug("path sv.script.licensescan"+path);
+			path=env.getProperty("sv.script.dumpmodel");
+			logger.debug("path sv.script.dumpmodel  "+path);
 			
 			//TODO Need fianalize once script run from SV library
-			path=Configurations.getConfig("sv.licensescan.scancode");
+			path=env.getProperty("sv.licensescan.scancode");
 			logger.debug("path sv.licensescan.scancode  "+path);
 			//file = SVUtils.readScanOutput(path);
-			path=Configurations.getConfig("sv.licensescan.scanresult");
+			path=env.getProperty("sv.licensescan.scanresult");
 			logger.debug("path sv.licensescan.scanresult  "+path);
 			//file = SVUtils.readScanOutput(path);
 			
