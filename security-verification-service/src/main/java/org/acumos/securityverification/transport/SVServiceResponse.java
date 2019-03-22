@@ -18,15 +18,12 @@
  * ===============LICENSE_END=========================================================
  */
 
-package org.acumos.securityverification.utils;
-
-public class SVConstants {
-
-	// Path components
-	public static final String SECURITY_SCAN = "/scan";
-	
+package org.acumos.securityverification.transport;
 
 
-	
-	
+/**
+ * Marker interface used by all transport (non-Domain) models.
+ */
+public interface SVServiceResponse extends SVResonse {
+
 }

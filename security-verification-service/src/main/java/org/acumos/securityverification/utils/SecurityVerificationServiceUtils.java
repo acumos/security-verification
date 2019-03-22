@@ -20,17 +20,23 @@
 package org.acumos.securityverification.utils;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SVUtils {
+public class SecurityVerificationServiceUtils {
 
-	private static Logger logger = LoggerFactory.getLogger(SVUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static boolean isEmptyOrNullString(String input) {
 		boolean isEmpty = false;
@@ -47,9 +53,9 @@ public class SVUtils {
         else return "";
     }
 
-	public static byte[] executeScript(String solutionId, String revisionId,String folder) throws Exception {
+	public static byte[] executeScript(String scriptFile,String solutionId, String revisionId,String folder) throws Exception {
 
-		logger.debug("executeScript() INSIDE-----");
+		logger.debug("Inside executeScript()");
 
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
@@ -57,8 +63,8 @@ public class SVUtils {
 		BufferedReader reader = null;
 		try {
 			StringBuilder sb = new StringBuilder();
-
-			String[] cmd = { "/home/cognitaopr/log/security-verification-test/shell-test/default.sh", solutionId, revisionId, folder };
+			String[] cmd = { scriptFile, solutionId, revisionId, SVServiceConstants.SCAN_SCRIPT_LOCATION+folder };
+			
 			processBuilder = new ProcessBuilder(cmd);
 
 			if (processBuilder != null) {
@@ -68,11 +74,10 @@ public class SVUtils {
 				String line = null;
 				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				while ((line = reader.readLine()) != null) {
-					logger.debug("executeScript() INSIDE 6666-----");
 					sb.append(line + System.getProperty("line.separator"));
 				}
 
-				logger.debug("sb.toString();>>>>  " + sb.toString());
+				logger.debug("sb.toString()>>  {}", sb.toString());
 			}
 		} finally {
 			if (null != process) {
@@ -83,7 +88,8 @@ public class SVUtils {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("executeScript failed {}", e);
+					throw e;
 				}
 			}
 		}
@@ -95,41 +101,37 @@ public class SVUtils {
 		File file = new File(path); 
 		return file;
 	}
-	/*
-	public static InputStream readScript() throws Exception {
+	
+	public static InputStream readScript(String folder, String jsonFile) throws Exception {
 
-		logger.debug("readScript()::: scancode JSON \n\n");
-		byte[] result = null;
-		File scancode_file = new File("/home/cognitaopr/log/security-verification-test/shell-test/output/test/scancode.json");
-		
-		InputStream scancodeStream = new DataInputStream(new FileInputStream(scancode_file));
-		
-		
-		FileReader fr = new FileReader(scancode_file);
-		BufferedReader br = new BufferedReader(fr);
-		String line;
-		logger.debug("Reading text file using FileReader");
-		while ((line = br.readLine()) != null) {
-			logger.debug(line);
-		}
-		br.close();
-		fr.close();
-		
+		logger.debug("readScript()::: read JSON \n\n");
+		File scancode_file = new File(SVServiceConstants.SCAN_SCRIPT_LOCATION+folder+jsonFile);
+		InputStream scancodeStream;
+		FileReader fr=null;
+	    BufferedReader br=null;
+		try {
+			scancodeStream = new DataInputStream(new FileInputStream(scancode_file));
+			fr = new FileReader(scancode_file);
+			br = new BufferedReader(fr);
+			String line;
+			logger.debug("Reading text file using FileReader");
+			while ((line = br.readLine()) != null) {
+				logger.debug(line);
+			}
+		} catch (IOException e) {
+			logger.error("readScript failed {}", e);
+			throw e;
+		}finally {
+			if (null != br) {
+				br.close();
+			}
+			if (null != fr) {
+				fr.close();
+			}
 
-		logger.debug("readScript()::: scanresult JSON \n\n");
-		File scanresult_file = new File(
-				"/home/cognitaopr/log/security-verification-test/shell-test/output/test/scanresult.json");
-		FileReader fr1 = new FileReader(scanresult_file);
-		BufferedReader br1 = new BufferedReader(fr1);
-		String line1;
-		logger.debug("Reading text file using FileReader");
-		while ((line1 = br1.readLine()) != null) {
-			// process the line
-			logger.debug(line1);
 		}
-		br1.close();
-		fr1.close();
+		
 
 		return scancodeStream;
-	}*/
+	}
 }
