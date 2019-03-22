@@ -21,6 +21,7 @@
 package org.acumos.securityverification.utils;
 
 import java.io.StringReader;
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +35,7 @@ import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
 import org.acumos.securityverification.domain.SecurityVerify;
 import org.acumos.securityverification.domain.Verification;
-import org.acumos.securityverification.service.SecurityVerificationServiceImpl;
+import org.acumos.securityverification.service.SecurityVerificationClientServiceImpl;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -45,17 +46,17 @@ import org.slf4j.LoggerFactory;
 
 public class SecurityVerificationJsonParser {
 
-	 Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	 
-	public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) {
+	public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) throws Exception {
 
-		logger.debug(" parseJsonFile in ParseJSON Start");
+		logger.debug(" parseCdumpJsonFile in ParseJSON Start");
 		SecurityVerificationCdump securityVerificationCdump = new SecurityVerificationCdump();
 		try {
 			Object obj = new JSONParser().parse(new StringReader(jsonString));
 			JSONObject jo = (JSONObject) obj;
 			String version = (String) jo.get("version");
-			logger.debug("\n Revision version::-- " + version);
+			logger.debug("\n Revision version::-- {}", version);
 
 			securityVerificationCdump.setCname(jo.get("cname").toString());
 			securityVerificationCdump.setVersion(jo.get("version").toString());
@@ -76,21 +77,20 @@ public class SecurityVerificationJsonParser {
 						Map.Entry pair = itr4.next();
 						String key = (String) pair.getKey();
 						String val = (String) pair.getValue().toString();
-						// log.debug("key "+pair.getKey() + " value" + pair.getValue());
 						if (pair.getKey().toString().equals("name")) {
-							 logger.debug("name::-- " + pair.getValue());
+							 logger.debug("name::-- {}", pair.getValue());
 							securityVerificationCdumpNode.setName(pair.getValue().toString());
 						}
 						if (pair.getKey().toString().equals("nodeId")) {
-							 logger.debug("nodeId::-- " + pair.getValue());
+							 logger.debug("nodeId::-- {}", pair.getValue());
 							securityVerificationCdumpNode.setNodeId(pair.getValue().toString());
 						}
 						if (pair.getKey().toString().equals("nodeSolutionId")) {
-							 logger.debug("nodeSolutionId::-- " + pair.getValue());
+							 logger.debug("nodeSolutionId::-- {}", pair.getValue());
 							securityVerificationCdumpNode.setNodeSolutionId(pair.getValue().toString());
 						}
 						if (pair.getKey().toString().equals("nodeVersion")) {
-							 logger.debug("NodeVersion::-- " + pair.getValue());
+							 logger.debug("NodeVersion::-- {}", pair.getValue());
 							securityVerificationCdumpNode.setNodeVersion(pair.getValue().toString());
 						}
 					}
@@ -101,6 +101,7 @@ public class SecurityVerificationJsonParser {
 
 		} catch (Exception e) {
 			logger.error("parseJsonFile failed {}", e);
+			throw new Exception(e);
 		}
 		logger.debug("parseJsonFile in ParseJSON End");
 		return securityVerificationCdump;
@@ -115,14 +116,14 @@ public class SecurityVerificationJsonParser {
 		Verification verification = new Verification();
 		
 		JSONObject licenseScanObject = (JSONObject) verificationObject.get("licenseScan");
-		logger.debug("\n licenseScanObject::-- " + licenseScanObject.toJSONString());
-		logger.debug("created: " + licenseScanObject.get("created"));
-		logger.debug("updated: " + licenseScanObject.get("updated"));
-		logger.debug("deploy: " + licenseScanObject.get("deploy"));
-		logger.debug("download: " + licenseScanObject.get("download"));
-		logger.debug("share: " + licenseScanObject.get("share"));
-		logger.debug("publishCompany: " + licenseScanObject.get("publishCompany"));
-		logger.debug("publishPublic: " + licenseScanObject.get("publishPublic"));
+		logger.debug("\n licenseScanObject::-- {}", licenseScanObject.toJSONString());
+		logger.debug("created: {}", licenseScanObject.get("created"));
+		logger.debug("updated: {} ", licenseScanObject.get("updated"));
+		logger.debug("deploy: {} ", licenseScanObject.get("deploy"));
+		logger.debug("download: {} ", licenseScanObject.get("download"));
+		logger.debug("share: {} ", licenseScanObject.get("share"));
+		logger.debug("publishCompany: {} ", licenseScanObject.get("publishCompany"));
+		logger.debug("publishPublic: {} ", licenseScanObject.get("publishPublic"));
 		LicenseScan licenseScan = new LicenseScan();
 		licenseScan.setCreated(Boolean.valueOf(licenseScanObject.get("created").toString()));
 		licenseScan.setDeploy(Boolean.valueOf(licenseScanObject.get("deploy").toString()));
@@ -135,14 +136,14 @@ public class SecurityVerificationJsonParser {
 		
 		
 		JSONObject securityScanObject = (JSONObject) verificationObject.get("securityScan");
-		logger.debug("\n securityScanObject::-- " + securityScanObject.toJSONString());
-		logger.debug("created: " + securityScanObject.get("created"));
-		logger.debug("updated: " + securityScanObject.get("updated"));
-		logger.debug("deploy: " + securityScanObject.get("deploy"));
-		logger.debug("download: " + securityScanObject.get("download"));
-		logger.debug("share: " + securityScanObject.get("share"));
-		logger.debug("publishCompany: " + securityScanObject.get("publishCompany"));
-		logger.debug("publishPublic: " + securityScanObject.get("publishPublic"));
+		logger.debug("\n securityScanObject::-- {} ", securityScanObject.toJSONString());
+		logger.debug("created: {} ", securityScanObject.get("created"));
+		logger.debug("updated: {} ", securityScanObject.get("updated"));
+		logger.debug("deploy: {} ", securityScanObject.get("deploy"));
+		logger.debug("download: {} ", securityScanObject.get("download"));
+		logger.debug("share: {} ", securityScanObject.get("share"));
+		logger.debug("publishCompany: {} ", securityScanObject.get("publishCompany"));
+		logger.debug("publishPublic: {} ", securityScanObject.get("publishPublic"));
 		SecurityScan securityScan = new SecurityScan();
 		securityScan.setCreated(Boolean.valueOf(securityScanObject.get("created").toString()));
 		securityScan.setDeploy(Boolean.valueOf(securityScanObject.get("deploy").toString()));
@@ -155,12 +156,12 @@ public class SecurityVerificationJsonParser {
 		
 
 		JSONObject licenseVerifyObject = (JSONObject) verificationObject.get("licenseVerify");
-		logger.debug("\n licenseVerifyObject::-- " + licenseVerifyObject.toJSONString());
-		logger.debug("deploy: " + licenseVerifyObject.get("deploy"));
-		logger.debug("download: " + licenseVerifyObject.get("download"));
-		logger.debug("share: " + licenseVerifyObject.get("share"));
-		logger.debug("publishCompany: " + licenseVerifyObject.get("publishCompany"));
-		logger.debug("publishPublic: " + licenseVerifyObject.get("publishPublic"));
+		logger.debug("\n licenseVerifyObject::-- {} ", licenseVerifyObject.toJSONString());
+		logger.debug("deploy: {} ", licenseVerifyObject.get("deploy"));
+		logger.debug("download: {} ", licenseVerifyObject.get("download"));
+		logger.debug("share: {} ", licenseVerifyObject.get("share"));
+		logger.debug("publishCompany: {} ", licenseVerifyObject.get("publishCompany"));
+		logger.debug("publishPublic: {} ", licenseVerifyObject.get("publishPublic"));
 		LicenseVerify licenseVerify = new LicenseVerify();
 		licenseVerify.setDeploy(Boolean.valueOf(licenseVerifyObject.get("deploy").toString()));
 		licenseVerify.setDownload(Boolean.valueOf(licenseVerifyObject.get("download").toString()));
@@ -170,12 +171,12 @@ public class SecurityVerificationJsonParser {
 		verification.setLicenseVerify(licenseVerify );
 
 		JSONObject securityVerifyObject = (JSONObject) verificationObject.get("securityVerify");
-		logger.debug("\n securityVerifyObject::-- " + securityVerifyObject.toJSONString());
-		logger.debug("deploy: " + securityVerifyObject.get("deploy"));
-		logger.debug("download: " + securityVerifyObject.get("download"));
-		logger.debug("share: " + securityVerifyObject.get("share"));
-		logger.debug("publishCompany: " + securityVerifyObject.get("publishCompany"));
-		logger.debug("publishPublic: " + securityVerifyObject.get("publishPublic"));
+		logger.debug("\n securityVerifyObject::-- {} ", securityVerifyObject.toJSONString());
+		logger.debug("deploy: {} ", securityVerifyObject.get("deploy"));
+		logger.debug("download: {} ", securityVerifyObject.get("download"));
+		logger.debug("share: {} ", securityVerifyObject.get("share"));
+		logger.debug("publishCompany: {} ", securityVerifyObject.get("publishCompany"));
+		logger.debug("publishPublic: {} ", securityVerifyObject.get("publishPublic"));
 		SecurityVerify securityVerify = new SecurityVerify();
 		securityVerify.setDeploy(Boolean.valueOf(securityVerifyObject.get("deploy").toString()));
 		securityVerify.setDownload(Boolean.valueOf(securityVerifyObject.get("download").toString()));
@@ -185,14 +186,14 @@ public class SecurityVerificationJsonParser {
 		verification.setSecurityVerify(securityVerify);
 
 		String externalScanObject = (String) verificationObject.get("externalScan");
-		logger.debug("\n externalScanObject::-- " + externalScanObject);
+		logger.debug("\n externalScanObject::-- {} ", externalScanObject);
 		verification.setExternalScan(Boolean.valueOf(externalScanObject));
 		
 		JSONArray allowedLicenseJsonList = (JSONArray) verificationObject.get("allowedLicense");
 		List<AllowedLicense> allowedLicenseList = new ArrayList<>();
 		for (Object object : allowedLicenseJsonList) {
 			JSONObject jj = (JSONObject) object;
-			logger.debug(jj.get("type") + "----OK1----------" + jj.get("value"));
+			logger.debug("type: {}  Value {}  ",jj.get("type"),jj.get("value"));
 			AllowedLicense allowedLicense = new AllowedLicense();
 			allowedLicense.setType(jj.get("type").toString());
 			allowedLicense.setValue( jj.get("value").toString());
@@ -219,11 +220,12 @@ public class SecurityVerificationJsonParser {
 	/**
 	 * @param jsonString
 	 * @return
+	 * @throws Exception 
 	 */
-	public JSONObject stringToJsonObject(String jsonString) {
+	public JSONObject stringToJsonObject(String jsonString) throws Exception {
 		try {
-			System.out.println("jsonString::: "+jsonString);
-			System.out.println("jsonString.length::: "+jsonString.length());
+			logger.debug("jsonString::: {}",jsonString);
+			logger.debug("jsonString.length::: {}",jsonString.length());
 			String strTemp1 = jsonString.replaceAll("\\\\\"", "\"");
 			String strTemp2 = strTemp1.substring(1,strTemp1.length()-1);
 			JSONParser parser = new JSONParser();
@@ -231,7 +233,7 @@ public class SecurityVerificationJsonParser {
 			return jsonObject;
 		} catch (ParseException e) {
 			logger.error("Exception Occurred Json parsing", e);
+			throw new Exception(e.getMessage());
 		}
-		return null;
 	}
 }

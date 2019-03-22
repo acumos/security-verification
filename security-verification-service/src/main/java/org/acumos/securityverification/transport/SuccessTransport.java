@@ -17,28 +17,51 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
+
 package org.acumos.securityverification.transport;
 
-public class SecurityVerificationRequest {
+/**
+ * Model for message returned on success, to be serialized as JSON.
+ */
+public class SuccessTransport implements SVServiceResponse {
 
-	private String solutionId;
-	private String revisionId;
+	private int status;
+	private Object data;
 
-	public String getSolutionId() {
-		return solutionId;
+	/**
+	 * Builds an empty object
+	 */
+	public SuccessTransport() {
+		// no-arg constructor
 	}
 
-	public void setSolutionId(String solutionId) {
-		this.solutionId = solutionId;
+	/**
+	 * Builds an object with the specified values.
+	 * 
+	 * @param status
+	 *                   Status code
+	 * @param data
+	 *                   Data to transport
+	 */
+	public SuccessTransport(int status, Object data) {
+		this.status = status;
+		this.data = data;
 	}
 
-	public String getRevisionId() {
-		return revisionId;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setRevisionId(String revisionId) {
-		this.revisionId = revisionId;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
 
 }

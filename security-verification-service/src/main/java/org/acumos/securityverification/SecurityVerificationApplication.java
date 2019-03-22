@@ -19,6 +19,8 @@
 */
 package org.acumos.securityverification;
 
+import java.lang.invoke.MethodHandles;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -30,7 +32,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class SecurityVerificationApplication {
 
 	public static final String CONFIG_ENV_VAR_NAME = "SPRING_APPLICATION_JSON";
-	static Logger logger = LoggerFactory.getLogger(SecurityVerificationApplication.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static void main(String[] args) throws Exception {
 		final String springApplicationJson = System.getenv(CONFIG_ENV_VAR_NAME);

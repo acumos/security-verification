@@ -19,13 +19,28 @@
  */
 package org.acumos.securityverification.service;
 
-import org.acumos.securityverification.domain.Verification;
 import org.acumos.securityverification.domain.Workflow;
 
-public interface ISecurityVerificationService {
 
-	public Verification verificationSiteConfig();
+/**
+ * Defines the interface of the Java-based library to be imported by Acumos components that will
+ * call the S-V service. As described in the spec above section "Security
+ * Verification Library", this library will provide a function that will "check
+ * if a workflow should proceed, based upon the admin requirements for
+ * verification related to that workflow, and the status of verification for a
+ * solution/revision".
+ */
+public interface ISecurityVerificationClientService {
 
+	/** Checks the check if a workflow should proceed, based upon the admin
+	 * requirements for verification related to that workflow, and the status of
+	 * verification for a solution/revision.
+	 * @param solutionId, required field
+	 * @param revisionId, required field
+	 * @param worflowId, required field
+	 * @return workflow information
+	 * @throws Exception
+	 */
 	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) throws Exception;
 
 }

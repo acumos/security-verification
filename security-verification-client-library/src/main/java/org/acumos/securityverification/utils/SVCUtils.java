@@ -20,28 +20,30 @@
 package org.acumos.securityverification.utils;
 
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SVCUtils {
-	
-	private static Logger logger = LoggerFactory.getLogger(SVCUtils.class);
+
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static boolean isEmptyOrNullString(String input) {
-		logger.debug("isEmptyOrNullString()"); 
+		logger.debug("isEmptyOrNullString()");
 		boolean isEmpty = false;
 		if (null == input || 0 == input.trim().length()) {
 			isEmpty = true;
 		}
 		return isEmpty;
 	}
-	
+
 	public static String getFileExtension(File file) {
-		logger.debug("getFileExtension()"); 
-        String fileName = file.getName();
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-        return fileName.substring(fileName.lastIndexOf(".")+1);
-        else return "";
-    }
+		logger.debug("getFileExtension()");
+		String fileName = file.getName();
+		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		else
+			return "";
+	}
 }

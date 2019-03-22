@@ -20,3 +20,8 @@
 Security Verification Release Notes
 ===================================
 
+----------------------------
+Version 0.0.1, 04 April 2019 
+----------------------------
+
+* S-V Library scan invocation logic (`ACUMOS-2558 <https://jira.acumos.org/browse/ACUMOS-2558>`_)

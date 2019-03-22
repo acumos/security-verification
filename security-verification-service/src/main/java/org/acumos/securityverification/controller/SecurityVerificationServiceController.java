@@ -19,14 +19,19 @@
  */
 package org.acumos.securityverification.controller;
 
+import java.lang.invoke.MethodHandles;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.acumos.securityverification.service.ISecurityVerificationService;
+import org.acumos.securityverification.transport.ErrorTransport;
 import org.acumos.securityverification.transport.SVResonse;
+import org.acumos.securityverification.transport.SuccessTransport;
+import org.acumos.securityverification.utils.SVServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,31 +42,43 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 public class SecurityVerificationServiceController extends AbstractController {
 
-	Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceController.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	@Autowired
 	ISecurityVerificationService securityVerificationService;
-	
-	@ApiOperation(value = "Security Verification Service Scan.")
-	@RequestMapping(value = "/scan/{solutionId}/{revisionId}/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<SVResonse> securityVerification(@PathVariable("solutionId") String solutionId,
+
+	@ApiOperation(value = "Security Verification Service Scan.", response = SuccessTransport.class)
+	@RequestMapping(value = "/" + SVServiceConstants.SOLUTIONID + "/{solutionId}/" + SVServiceConstants.REVISIONID
+			+ "/{revisionId}/" + SVServiceConstants.WORKFLOWID
+			+ "/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public SVResonse securityVerification(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @PathVariable("workflowId") String workflowId) {
-		logger.debug("Inside security verification server scan... ");
-//		String solutionId = SanitizeUtils.sanitize(securityVerificationRequest.getSolutionId());
-//        String revisionId = SanitizeUtils.sanitize(securityVerificationRequest.getRevisionId());
-        
-        logger.debug("securityVerification solutionId {}  revisionId{}",solutionId,revisionId );
-        SVResonse svResonse = new SVResonse();
-        try {
-        	//TODO Need to add logic. development is in progress
-        	 securityVerificationService.securityVerification(solutionId,revisionId);
-        	 svResonse.setScanSucess("Development is in progress");
-        	
-        }catch (Exception e) {
-        	logger.error("Exception Occurred Security Verification :{}" + "solutionId",e);
+		logger.debug("Inside securityVerification service scan... ");
+		logger.debug("securityVerification solutionId  {}  revisionId  {}", solutionId, revisionId);
+
+		try {
+			securityVerificationService.securityVerification(solutionId, revisionId);
+			return new SuccessTransport(HttpServletResponse.SC_OK, null);
+		} catch (Exception ex) {
+			logger.warn("securityVerification failed: {}", ex.toString());
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "securityVerification failed", ex);
 		}
-		return new ResponseEntity<SVResonse>(svResonse, null, HttpStatus.OK);
+
 	}
 
+	@ApiOperation(value = "Add default SiteConfig Verification.")
+	@RequestMapping(value = SVServiceConstants.UPDATE_SITE_CONFIG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SVResonse siteConfigVerification() throws Exception {
+		logger.debug("Inside siteConfigVerification adding default SiteConfig Verification Json");
+
+		try {
+			String siteConfigJson = securityVerificationService.createSiteConfig();
+			return new SuccessTransport(HttpServletResponse.SC_OK, siteConfigJson);
+		} catch (Exception ex) {
+			logger.warn("createSiteConfig failed: {}", ex.toString());
+			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSiteConfig failed", ex);
+		}
+
+	}
 
 }
