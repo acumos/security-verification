@@ -34,7 +34,7 @@ import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
 import org.acumos.securityverification.domain.SecurityVerify;
 import org.acumos.securityverification.domain.Verification;
-import org.acumos.securityverification.service.SecurityVerificationServiceImpl;
+import org.acumos.securityverification.service.SecurityVerificationClientServiceImpl;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -45,9 +45,9 @@ import org.slf4j.LoggerFactory;
 
 public class SecurityVerificationJsonParser {
 
-	 Logger logger = LoggerFactory.getLogger(SecurityVerificationServiceImpl.class);
+	 Logger logger = LoggerFactory.getLogger(SecurityVerificationClientServiceImpl.class);
 	 
-	public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) {
+	public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) throws Exception {
 
 		logger.debug(" parseJsonFile in ParseJSON Start");
 		SecurityVerificationCdump securityVerificationCdump = new SecurityVerificationCdump();
@@ -101,6 +101,7 @@ public class SecurityVerificationJsonParser {
 
 		} catch (Exception e) {
 			logger.error("parseJsonFile failed {}", e);
+			throw new Exception(e.getMessage());
 		}
 		logger.debug("parseJsonFile in ParseJSON End");
 		return securityVerificationCdump;
@@ -219,11 +220,12 @@ public class SecurityVerificationJsonParser {
 	/**
 	 * @param jsonString
 	 * @return
+	 * @throws Exception 
 	 */
-	public JSONObject stringToJsonObject(String jsonString) {
+	public JSONObject stringToJsonObject(String jsonString) throws Exception {
 		try {
-			System.out.println("jsonString::: "+jsonString);
-			System.out.println("jsonString.length::: "+jsonString.length());
+			logger.debug("jsonString::: "+jsonString);
+			logger.debug("jsonString.length::: "+jsonString.length());
 			String strTemp1 = jsonString.replaceAll("\\\\\"", "\"");
 			String strTemp2 = strTemp1.substring(1,strTemp1.length()-1);
 			JSONParser parser = new JSONParser();
@@ -231,7 +233,7 @@ public class SecurityVerificationJsonParser {
 			return jsonObject;
 		} catch (ParseException e) {
 			logger.error("Exception Occurred Json parsing", e);
+			throw new Exception(e.getMessage());
 		}
-		return null;
 	}
 }

@@ -20,8 +20,12 @@
 package org.acumos.securityverification.utils;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
@@ -83,7 +87,8 @@ public class SVUtils {
 				try {
 					reader.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					logger.error("executeScript failed {}", e);
+					throw new Exception(e.getMessage());
 				}
 			}
 		}
@@ -95,7 +100,7 @@ public class SVUtils {
 		File file = new File(path); 
 		return file;
 	}
-	/*
+	
 	public static InputStream readScript() throws Exception {
 
 		logger.debug("readScript()::: scancode JSON \n\n");
@@ -131,5 +136,5 @@ public class SVUtils {
 		fr1.close();
 
 		return scancodeStream;
-	}*/
+	}
 }
