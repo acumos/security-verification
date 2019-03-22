@@ -16,6 +16,41 @@
       "revId": "1d7f52f00439ba23c96e5e3267cd1575a21d82ff",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7227df1d_d9597063",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/SecurityVerificationClientServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-03-22T23:19:09Z",
+      "side": 1,
+      "message": "This is not needed",
+      "parentUuid": "21991f97_6c435c64",
+      "revId": "1d7f52f00439ba23c96e5e3267cd1575a21d82ff",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16a311d3_b688b68a",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/SecurityVerificationClientServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-03-22T23:19:09Z",
+      "side": 1,
+      "message": "Please get it as ADMIN user from CDS",
+      "revId": "1d7f52f00439ba23c96e5e3267cd1575a21d82ff",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
