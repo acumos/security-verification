@@ -17,37 +17,51 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.utils;
 
+package org.acumos.securityverification.transport;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+/**
+ * Model for message returned on success, to be serialized as JSON.
+ */
+public class SuccessTransport implements SVServiceResponse {
 
-public class Configurations {
-	public static String getConfig(String key){
-		Properties prop = new Properties();
+	private int status;
+	private Object data;
 
-		InputStream input = null;
-		String value ="";
-		try {
-			prop.load(Configurations.class.getClassLoader().getResourceAsStream("application-sv.properties"));
-            value= prop.getProperty(key).toString();
-                
-              
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return value;
+	/**
+	 * Builds an empty object
+	 */
+	public SuccessTransport() {
+		// no-arg constructor
 	}
 
+	/**
+	 * Builds an object with the specified values.
+	 * 
+	 * @param status
+	 *                   Status code
+	 * @param data
+	 *                   Data to transport
+	 */
+	public SuccessTransport(int status, Object data) {
+		this.status = status;
+		this.data = data;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Object getData() {
+		return data;
+	}
+
+	public void setData(Object data) {
+		this.data = data;
+	}
 
 }

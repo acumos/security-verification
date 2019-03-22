@@ -268,15 +268,26 @@
 								<assembly>
 									<inline>
 										<files>
-											<file>
+										   <file>
 												<source>application.properties</source>
 												<outputDirectory />
 												<destName>application.properties</destName>
+										   </file>
+										   <file>  
+												<source>scripts/dump_model.sh</source> 
+												<outputDirectory />                                                                                                 
+												<destName>scan/dump_model.sh</destName>                                                                                        
 											</file>
+											<file>  
+												<source>scripts/license_scan.sh</source> 
+												<outputDirectory />                                                                                                 
+												<destName>scan/license_scan.sh</destName>                                                                                        
+											</file> 
 											<file>
 												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
 												<outputDirectory />
 											</file>
+
 										</files>
 									</inline>
 								</assembly>

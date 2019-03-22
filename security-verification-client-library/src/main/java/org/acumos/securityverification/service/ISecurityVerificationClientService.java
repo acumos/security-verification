@@ -17,37 +17,28 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.utils;
+package org.acumos.securityverification.service;
+
+import org.acumos.securityverification.domain.Workflow;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+/**
+ * Defines the interface of the Java-based library to be imported by Acumos components that will
+ * call the S-V service. As described in the spec above section "Security
+ * Verification Library", this library will provide a function that will "check
+ * if a workflow should proceed, based upon the admin requirements for
+ * verification related to that workflow, and the status of verification for a
+ * solution/revision".
+ */
+public interface ISecurityVerificationClientService {
 
-public class Configurations {
-	public static String getConfig(String key){
-		Properties prop = new Properties();
-
-		InputStream input = null;
-		String value ="";
-		try {
-			prop.load(Configurations.class.getClassLoader().getResourceAsStream("application-sv.properties"));
-            value= prop.getProperty(key).toString();
-                
-              
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return value;
-	}
-
+	/**
+	 * Checks the check if a workflow should proceed, based upon the admin
+	 * requirements for verification related to that workflow, and the status of
+	 * verification for a solution/revision.
+	 * 
+	 * @return Object with workflow
+	 */
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) throws Exception;
 
 }

@@ -19,17 +19,10 @@
  */
 package org.acumos.securityverification.transport;
 
-public class SVResonse {
+/**
+ * Trivial marker interface for any type returned by server, which make coding
+ * of controllers a bit more type safe.
+ */
+public interface SVResonse {
 
-	private String scanSucess;
-
-	public String getScanSucess() {
-		return scanSucess;
-	}
-
-	public void setScanSucess(String scanSucess) {
-		this.scanSucess = scanSucess;
-	}
-
-	
 }

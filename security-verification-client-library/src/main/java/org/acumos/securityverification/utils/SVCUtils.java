@@ -20,13 +20,14 @@
 package org.acumos.securityverification.utils;
 
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SVCUtils {
 	
-	private static Logger logger = LoggerFactory.getLogger(SVCUtils.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static boolean isEmptyOrNullString(String input) {
 		logger.debug("isEmptyOrNullString()"); 

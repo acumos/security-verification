@@ -17,28 +17,13 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
+
 package org.acumos.securityverification.transport;
 
-public class SecurityVerificationRequest {
 
-	private String solutionId;
-	private String revisionId;
-
-	public String getSolutionId() {
-		return solutionId;
-	}
-
-	public void setSolutionId(String solutionId) {
-		this.solutionId = solutionId;
-	}
-
-	public String getRevisionId() {
-		return revisionId;
-	}
-
-	public void setRevisionId(String revisionId) {
-		this.revisionId = revisionId;
-	}
-
+/**
+ * Marker interface used by all transport (non-Domain) models.
+ */
+public interface SVServiceResponse extends SVResonse {
 
 }

@@ -25,15 +25,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 
+import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPDocument;
 import org.acumos.nexus.client.NexusArtifactClient;
+import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.nexus.client.data.UploadArtifactInfo;
 import org.acumos.securityverification.exception.AcumosServiceException;
-import org.acumos.securityverification.utils.Configurations;
-import org.acumos.securityverification.utils.SVUtils;
+import org.acumos.securityverification.utils.SecurityVerificationServiceUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
@@ -42,10 +44,19 @@ import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.apache.maven.wagon.authentication.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 
-public class UploadArtifactSVOutput extends AbstractServiceImpl{
+public class UploadArtifactSVOutput {
 
-	Logger logger = LoggerFactory.getLogger(UploadArtifactSVOutput.class);
+	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	
+	@Autowired
+	private Environment env;
+	
+	public void setEnvironment (Environment env1){
+		env = env1;
+	}
 	
 	public MLPDocument addRevisionDocument(String solutionId, String revisionId, String accessType, String userId, File file) throws AcumosServiceException, FileNotFoundException {
 
@@ -53,7 +64,7 @@ public class UploadArtifactSVOutput extends AbstractServiceImpl{
 		
 		long size = file.length();
 		String name = FilenameUtils.getBaseName(file.getName());
-		String extension = FilenameUtils.getExtension(SVUtils.getFileExtension(file));
+		String extension = FilenameUtils.getExtension(SecurityVerificationServiceUtils.getFileExtension(file));
 		
 		logger.debug("Inside the addRevisionDocument" +name);
 		logger.debug("size  "+size);
@@ -61,9 +72,9 @@ public class UploadArtifactSVOutput extends AbstractServiceImpl{
 		logger.debug("name "+name);
 		
 		
-		ICommonDataServiceRestClient dataServiceRestClient = getClient();
+		ICommonDataServiceRestClient dataServiceRestClient = getCcdsClient();
 
-		if(SVUtils.isEmptyOrNullString(extension))
+		if(SecurityVerificationServiceUtils.isEmptyOrNullString(extension))
 			throw new IllegalArgumentException("Incorrect file extension.");
 
 		//Check if docuemtn already exists with the same name
@@ -119,11 +130,27 @@ public class UploadArtifactSVOutput extends AbstractServiceImpl{
 	}
 
 	private String getNexusGroupId(String solutionId, String revisionId) {
-		String group = Configurations.getConfig("nexus.groupId");
+		String group = env.getProperty("nexus.groupId");
 		
-		if(SVUtils.isEmptyOrNullString(group))
+		if(SecurityVerificationServiceUtils.isEmptyOrNullString(group))
 			throw new IllegalArgumentException("Missing property value for nexus groupId.");
 		//This will created the nexus file upload path as groupId/solutionId/revisionId. Ex.. "org/acumos/solutionId/revisionId".
 		return String.join(".", group, solutionId, revisionId);
 	}
+	
+	private ICommonDataServiceRestClient getCcdsClient() {
+		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(env.getProperty("cdms.client.url"), env.getProperty("cdms.client.username"), env.getProperty("cdms.client.password"), null);
+		return client;
+	}
+	
+	private NexusArtifactClient getNexusClient() {
+		RepositoryLocation repositoryLocation = new RepositoryLocation();
+		repositoryLocation.setId("1");
+		repositoryLocation.setUrl(env.getProperty("nexus.client.url"));
+		repositoryLocation.setUsername(env.getProperty("nexus.client.username"));
+		repositoryLocation.setPassword(env.getProperty("nexus.client.pwd"));
+		NexusArtifactClient artifactClient = new NexusArtifactClient(repositoryLocation);
+		return artifactClient;
+	}
+	
 }

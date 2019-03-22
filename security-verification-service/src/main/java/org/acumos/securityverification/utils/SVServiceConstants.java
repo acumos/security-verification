@@ -20,13 +20,22 @@
 
 package org.acumos.securityverification.utils;
 
-public class SVConstants {
+public class SVServiceConstants {
 
 	// Path components
 	public static final String SECURITY_SCAN = "/scan";
-	
-
-
+	public static final String UPDATE_SITE_CONFIG = "/update/siteConfig/verification";
+	public static final String SOLUTIONID = "solutionId";
+	public static final String REVISIONID = "revisionId";
+	public static final String WORKFLOWID = "workflowId";
+	public static final String SCAN_SCRIPT_LOCATION = "/maven/scan/";
+	public static final String SCRIPTFILE_DUMP_MODEL = "/maven/scan/dump_model.sh";
+	public static final String SCRIPTFILE_LICENSE_SCAN = "/maven/scan/license_scan.sh";
+	public static final String SCAN_CODE_JSON = "/scancode.json";
+	public static final String SCAN_RESULT_JSON = "/scanresult.json";
+	public static final String SCAN_OUTPUT_LOCATION ="scanOutput";
+	//Site config Json tag
+	public static final String CONFIGKEY = "site_config";
 	
 	
 }
