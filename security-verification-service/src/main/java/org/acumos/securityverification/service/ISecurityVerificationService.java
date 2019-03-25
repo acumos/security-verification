@@ -22,6 +22,7 @@ package org.acumos.securityverification.service;
 
 public interface ISecurityVerificationService {
 
-	public String securityVerification(String solutionId, String revisionId)  throws Exception; 
+	public String securityVerification(String solutionId, String revisionId)  throws Exception;
+	public String createSiteConfigCall();
 	
 }

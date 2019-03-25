@@ -36,7 +36,7 @@ public abstract class AbstractServiceImpl {
 		env = env1;
 	}
 	
-	public ICommonDataServiceRestClient getClient() {
+	public ICommonDataServiceRestClient getCcdsClient() {
 		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(env.getProperty("cdms.client.url"), env.getProperty("cdms.client.username"), env.getProperty("cdms.client.password"), null);
 		return client;
 	}

@@ -20,13 +20,13 @@
 
 package org.acumos.securityverification.utils;
 
-public class SVConstants {
+public class SVServiceConstants {
 
 	// Path components
 	public static final String SECURITY_SCAN = "/scan";
 	
-
-
+	//Site config Json tag
+	public static final String CONFIGKEY = "site_config";
 	
 	
 }

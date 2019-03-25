@@ -36,7 +36,6 @@ import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
 import org.acumos.securityverification.domain.Verification;
 import org.acumos.securityverification.domain.Workflow;
 import org.acumos.securityverification.transport.SVResonse;
-import org.acumos.securityverification.utils.Configurations;
 import org.acumos.securityverification.utils.SVConstants;
 import org.acumos.securityverification.utils.SecurityVerificationJsonParser;
 import org.json.simple.JSONObject;
@@ -63,11 +62,10 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	private String nexusClientUrl;
 	private String nexusClientUsername;
 	private String nexusClientPwd;
-	private String siteConfigVerification;
 
 	public SecurityVerificationClientServiceImpl(final String securityVerificationApiUrl, final String cdmsClientUrl,
 			final String cdmsClientUsername, final String cdmsClientPwd, final String nexusClientUrl,
-			final String nexusClientUsername, final String nexusClientPwd, final String siteConfigVerification) {
+			final String nexusClientUsername, final String nexusClientPwd) {
 
 		this.securityVerificationApiUrl = securityVerificationApiUrl;
 		this.cdmsClientUrl = cdmsClientUrl;
@@ -76,7 +74,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		this.nexusClientUrl = nexusClientUrl;
 		this.nexusClientUsername = nexusClientUsername;
 		this.nexusClientPwd = nexusClientPwd;
-		this.siteConfigVerification = siteConfigVerification;
 
 	}
 	 
@@ -205,7 +202,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	private Verification verificationSiteConfig() throws Exception {
 
 		logger.debug("Inside verificationSiteConfig method call");
-		logger.debug("Default siteConfigVerification JSON: " + siteConfigVerification);
 		SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
 		ICommonDataServiceRestClient client = getClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
 		JSONObject siteConfigDataJsonObj = new JSONObject();
@@ -214,23 +210,10 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			if (mlpSiteConfig != null) {
 				siteConfigDataJsonObj = parseJSON.stringToJsonObject(mlpSiteConfig.getConfigValue().toString());
 			} else {
-				String siteConfigJsonFromConfiguration;
-				if (siteConfigVerification == null) {
-					// TODO Need to discuss do we need to keep siteConfig in
-					// application-sv.properties
-					siteConfigJsonFromConfiguration = Configurations.getConfig("siteConfig.verification");
-				} else {
-					siteConfigJsonFromConfiguration = siteConfigVerification;
-				}
-				logger.debug("siteConfigJsonFromConfiguration:::: " + siteConfigJsonFromConfiguration);
-				MLPSiteConfig config = new MLPSiteConfig();
-				config.setConfigKey(SVConstants.CONFIGKEY);
-				config.setConfigValue(siteConfigJsonFromConfiguration);
-				config.setUserId("26fcd4bf-8819-41c1-b46c-87ec2f7a39f8"); // TODO Need to be discuss
-				logger.debug("Before createSiteConfig...");
-				Object obj = client.createSiteConfig(config);
-				logger.debug("After createSiteConfig...");
-				siteConfigDataJsonObj = parseJSON.stringToJsonObject(siteConfigJsonFromConfiguration);
+				String createSiteConfigUrl = securityVerificationApiUrl + SVConstants.SITE_CONFIG_UPDATE;
+				RestTemplate restTemplate = new RestTemplate();
+				String siteConfigJson = restTemplate.getForObject(createSiteConfigUrl, String.class);
+				siteConfigDataJsonObj = parseJSON.stringToJsonObject(siteConfigJson);
 			}
 		}
 		return parseJSON.parseSiteConfigJson(siteConfigDataJsonObj);
@@ -266,9 +249,10 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		map.add("revisionId", revisionId);
 		map.add("workflowId", worflowId);
 		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-		logger.debug("Before Call to SV Service");
+		logger.debug("Before Call to SV Service 11");
 		ResponseEntity<SVResonse> svResonse = restTemplate.exchange(securityVerificationApiUrl, HttpMethod.POST,
 				request, SVResonse.class);
+
 		logger.debug("getScanSucess result {}", svResonse.getBody());
 
 		return svResonse;
