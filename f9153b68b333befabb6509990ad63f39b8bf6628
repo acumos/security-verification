@@ -1,0 +1,441 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2a52ce7f_e6488a05",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/ISecurityVerificationClientService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Must write detailed javadoc on the interface to define the contract.  Leaving it blank is not acceptable practice.",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 115
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2191e8c_77700286",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/SecurityVerificationClientServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Please use the slf4j feature of {} instead of string catenation.  For example the first line should be as follows:\n\n    logger.debug(\"securityVerificationScan: revisionId:: {}\", revisionId);\n\nThe important change is use of parameter interpolation. I also added the method name.",
+      "range": {
+        "startLine": 84,
+        "startChar": 2,
+        "endLine": 85,
+        "endChar": 40
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "515def9a_3e105248",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/SecurityVerificationClientServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Similar to above",
+      "range": {
+        "startLine": 243,
+        "startChar": 15,
+        "endLine": 243,
+        "endChar": 44
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70a821b3_5ea2270b",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "The right way to get a logger follows.  Don\u0027t hardcode the class, too easy to have copy-paste errors:\n\n\tprivate static final Logger logger \u003d LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 87
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c86aab2_03cd7a4f",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Incorrect method name",
+      "range": {
+        "startLine": 52,
+        "startChar": 17,
+        "endLine": 52,
+        "endChar": 30
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49c91c5f_33b0fe61",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Don\u0027t discard the exception class!  Just do this to rethrow:\n\n     throw e;",
+      "range": {
+        "startLine": 104,
+        "startChar": 12,
+        "endLine": 104,
+        "endChar": 13
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8673ea87_932b67b8",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Please remove empty Javadoc.  Even better, write complete \u0026 descriptive Javadoc.",
+      "range": {
+        "startLine": 220,
+        "startChar": 0,
+        "endLine": 223,
+        "endChar": 22
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5cb0d10c_caa3be88",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Use {} instead of string catenation",
+      "range": {
+        "startLine": 227,
+        "startChar": 16,
+        "endLine": 227,
+        "endChar": 44
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81b1be6c_e5b9faa8",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "See above. Just rethrow:\n\n    throw e;",
+      "range": {
+        "startLine": 236,
+        "startChar": 0,
+        "endLine": 236,
+        "endChar": 39
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ad39dfc7_ce3d44e4",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/controller/SecurityVerificationServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Remove, don\u0027t comment out",
+      "range": {
+        "startLine": 58,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 92
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "382b8a66_906ba114",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/controller/SecurityVerificationServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "NO.  Do not return OK if you take an exception!!  Return 500, internal service error!",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 71
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b4f8791_3ab56107",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/AbstractServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Is this class abstract or is it implementation?  I feel it\u0027s very confusing to name an abstract class with suffix Impl!  Please rename",
+      "range": {
+        "startLine": 30,
+        "startChar": 22,
+        "endLine": 30,
+        "endChar": 41
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "52e529be_04fa01e5",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/ISecurityVerificationService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Must write detailed javadoc on the interface to define the contract.  Leaving it blank is not acceptable practice.",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 92
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d5c5e0a0_94566b71",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Please see comment about right way to get a logger",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 80
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a36d462_87c54e03",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Maybe this should throw NotImplementedException instead?",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 14
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85c49809_7f82ceb3",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Why the suffix \"call\" ?\n\nWhat if the site config exists already?",
+      "range": {
+        "startLine": 58,
+        "startChar": 15,
+        "endLine": 58,
+        "endChar": 35
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "963c4d46_68b0ede6",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/utils/SVUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "If you wish to rethrow, just do this:\n\n    throw e;\n\nDon\u0027t discard the class and keep just the message, it\u0027s confusing.",
+      "range": {
+        "startLine": 91,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 41
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbf29905_63969349",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/utils/SVUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Please remove hardcoded path immediately",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 120
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0cd9914a_9482bee2",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/utils/SVUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-25T13:27:34Z",
+      "side": 1,
+      "message": "Missing try/catch/finally to ensure the resource is closed",
+      "range": {
+        "startLine": 132,
+        "startChar": 2,
+        "endLine": 138,
+        "endChar": 14
+      },
+      "revId": "f9153b68b333befabb6509990ad63f39b8bf6628",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
