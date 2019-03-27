@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f4cfc612_b2322d66",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-27T15:24:40Z",
+      "side": 1,
+      "message": "suggest you combine these. you can use as many {} and arguments as you like in a logger invocation.",
+      "range": {
+        "startLine": 103,
+        "startChar": 3,
+        "endLine": 105,
+        "endChar": 14
+      },
+      "revId": "a8c8e5e2da7beaed926679b257a07d7c47947d74",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
