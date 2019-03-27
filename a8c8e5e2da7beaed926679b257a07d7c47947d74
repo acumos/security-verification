@@ -22,6 +22,23 @@
       "revId": "a8c8e5e2da7beaed926679b257a07d7c47947d74",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2969711_3dbc2267",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/utils/SecurityVerificationServiceUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-03-27T21:30:20Z",
+      "side": 1,
+      "message": "should be fr.close()\nProbably better to have InputStream.close() as well",
+      "revId": "a8c8e5e2da7beaed926679b257a07d7c47947d74",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
