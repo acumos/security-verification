@@ -1,0 +1,406 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b27518e3_bf6f4432",
+        "filename": "license-manager-client-library/README.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "please add license in header or footer",
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b61621b1_fb40a637",
+        "filename": "license-manager-client-library/docs/index.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "can you add a few words about what it is?",
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0abab54_65d1cf2e",
+        "filename": "license-manager-client-library/docs/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "I suggest remove details like this from the header, put them as text in the body of this little section",
+      "range": {
+        "startLine": 23,
+        "startChar": 30,
+        "endLine": 23,
+        "endChar": 63
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d76f7fb8_e700ae4e",
+        "filename": "license-manager-client-library/docs/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 29,
+        "startChar": 30,
+        "endLine": 29,
+        "endChar": 49
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e894d6c8_5d93921e",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "do you want the library to be packaged as license-manager.jar or maybe as lic-mgr-client.jar  ?",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd7c444b_5022a3ab",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "who is Nordix?",
+      "range": {
+        "startLine": 112,
+        "startChar": 32,
+        "endLine": 112,
+        "endChar": 49
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "592193b6_8e7a484b",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "why do you repeat the method name here? I would avoid that",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 23
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "19c9d427_aa1a3fc8",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "not used here, why require it??",
+      "range": {
+        "startLine": 57,
+        "startChar": 64,
+        "endLine": 57,
+        "endChar": 74
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c9632961_7e39f77a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "see above, this is an unusual and not helpful style of writing javadoc",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 29
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c36ee562_219cabc2",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "does this get discarded?  in case of failure, do what every other method does, send a clear indicator in the response.  Kind of strange to write into a parameter that was passed along.",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4950344a_189847f8",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "Pls remove all @author annotations",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 19
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1ea5d9ea_793e6689",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseVerifier.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "pls remove",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 19
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8e72a900_a37c12f0",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "this isn\u0027t especially helpful",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7cc5249b_9edbf90d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "pls remove @author",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e02d6065_4fb41ed5",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "You might use the Eclipse/STS code formatter to eliminate little stuff like this extra whitespace",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 1
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb2e9187_daebab87",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreatedRtu.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "It\u0027s common to name things with suffix \"Impl\" in these cases, but not mandatory",
+      "range": {
+        "startLine": 36,
+        "startChar": 13,
+        "endLine": 36,
+        "endChar": 23
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "64ad349c_7cea8e95",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreatedRtu.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "I would skip all these inherit things, doesn\u0027t add value. BUT be sure to add all the @Override annotations, I think some are missing.",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 22
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c7f17389_cd590e75",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICreatedRtu.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-03-31T11:13:59Z",
+      "side": 1,
+      "message": "Interfaces are important please document.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 32
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
