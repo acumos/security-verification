@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5ea18814_14c0626a",
+        "filename": "license-manager-client-library/README.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b27518e3_bf6f4432",
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b61621b1_fb40a637",
         "filename": "license-manager-client-library/docs/index.rst",
         "patchSetId": 7
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "81bd64ca_57a07815",
+        "filename": "license-manager-client-library/docs/index.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b61621b1_fb40a637",
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0abab54_65d1cf2e",
         "filename": "license-manager-client-library/docs/release-notes.rst",
         "patchSetId": 7
@@ -47,6 +83,30 @@
       "writtenOn": "2019-03-31T11:13:59Z",
       "side": 1,
       "message": "I suggest remove details like this from the header, put them as text in the body of this little section",
+      "range": {
+        "startLine": 23,
+        "startChar": 30,
+        "endLine": 23,
+        "endChar": 63
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4c49fcc_d9ea0aaa",
+        "filename": "license-manager-client-library/docs/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0abab54_65d1cf2e",
       "range": {
         "startLine": 23,
         "startChar": 30,
@@ -82,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "e265fdeb_c71f6a40",
+        "filename": "license-manager-client-library/docs/release-notes.rst",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d76f7fb8_e700ae4e",
+      "range": {
+        "startLine": 29,
+        "startChar": 30,
+        "endLine": 29,
+        "endChar": 49
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e894d6c8_5d93921e",
         "filename": "license-manager-client-library/pom.xml",
         "patchSetId": 7
@@ -105,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "352e3889_b442d617",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e894d6c8_5d93921e",
+      "range": {
+        "startLine": 28,
+        "startChar": 13,
+        "endLine": 28,
+        "endChar": 28
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dd7c444b_5022a3ab",
         "filename": "license-manager-client-library/pom.xml",
         "patchSetId": 7
@@ -116,6 +224,30 @@
       "writtenOn": "2019-03-31T11:13:59Z",
       "side": 1,
       "message": "who is Nordix?",
+      "range": {
+        "startLine": 112,
+        "startChar": 32,
+        "endLine": 112,
+        "endChar": 49
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "392f2b55_10833ce4",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 7
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "https://www.nordix.org",
+      "parentUuid": "dd7c444b_5022a3ab",
       "range": {
         "startLine": 112,
         "startChar": 32,
@@ -220,6 +352,30 @@
     },
     {
       "key": {
+        "uuid": "aba89742_1e90aedc",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "not sure what you mean. we don\u0027t want an exception to prevent multiple calls / rtu requests from being processed in the multiple rtu creation or verification user cases so we are keeping a list that can be handled / reviewed at the end.",
+      "parentUuid": "c36ee562_219cabc2",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4950344a_189847f8",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
         "patchSetId": 7
@@ -231,6 +387,30 @@
       "writtenOn": "2019-03-31T11:13:59Z",
       "side": 1,
       "message": "Pls remove all @author annotations",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 19
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66cb9f0f_838b9cec",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4950344a_189847f8",
       "range": {
         "startLine": 41,
         "startChar": 0,
@@ -266,6 +446,30 @@
     },
     {
       "key": {
+        "uuid": "4272cff6_d02951fa",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseVerifier.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ea5d9ea_793e6689",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 19
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8e72a900_a37c12f0",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
         "patchSetId": 7
@@ -277,6 +481,30 @@
       "writtenOn": "2019-03-31T11:13:59Z",
       "side": 1,
       "message": "this isn\u0027t especially helpful",
+      "range": {
+        "startLine": 27,
+        "startChar": 0,
+        "endLine": 27,
+        "endChar": 33
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ebd0c3a5_3653336d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8e72a900_a37c12f0",
       "range": {
         "startLine": 27,
         "startChar": 0,
@@ -312,6 +540,30 @@
     },
     {
       "key": {
+        "uuid": "b67f96e8_9874f313",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cc5249b_9edbf90d",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 19
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e02d6065_4fb41ed5",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
         "patchSetId": 7
@@ -323,6 +575,30 @@
       "writtenOn": "2019-03-31T11:13:59Z",
       "side": 1,
       "message": "You might use the Eclipse/STS code formatter to eliminate little stuff like this extra whitespace",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 130,
+        "endChar": 1
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d011da4_cf0873f2",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRTURequest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e02d6065_4fb41ed5",
       "range": {
         "startLine": 128,
         "startChar": 0,
@@ -358,6 +634,30 @@
     },
     {
       "key": {
+        "uuid": "6e283c41_54140869",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreatedRtu.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Not following that convention right now.",
+      "parentUuid": "cb2e9187_daebab87",
+      "range": {
+        "startLine": 36,
+        "startChar": 13,
+        "endLine": 36,
+        "endChar": 23
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "64ad349c_7cea8e95",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreatedRtu.java",
         "patchSetId": 7
@@ -381,6 +681,30 @@
     },
     {
       "key": {
+        "uuid": "8bb53e9a_6bb74625",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreatedRtu.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64ad349c_7cea8e95",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 22
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c7f17389_cd590e75",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICreatedRtu.java",
         "patchSetId": 7
@@ -392,6 +716,30 @@
       "writtenOn": "2019-03-31T11:13:59Z",
       "side": 1,
       "message": "Interfaces are important please document.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 32
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b707f597_3f42235a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICreatedRtu.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-01T22:00:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7f17389_cd590e75",
       "range": {
         "startLine": 28,
         "startChar": 0,
