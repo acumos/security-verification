@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1ace73f3_cb376e94",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/ISecurityVerificationClientService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "ed5fd272_77af061d",
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "67f1306f_7133acc8",
         "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SVCUtils.java",
         "patchSetId": 4
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-26T13:21:13Z",
       "side": 1,
       "message": "Please consider using the Eclipse/STS code formatter which will remove trailing whitespace occurrences such as this..",
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "34fcbc2b_c702ebd3",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SVCUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "67f1306f_7133acc8",
       "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "068a01e2_641f55cc",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SVCUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "088bfade_74318e5a",
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c60720f_a005070a",
         "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
         "patchSetId": 4
@@ -64,6 +118,30 @@
       "writtenOn": "2019-03-26T13:21:13Z",
       "side": 1,
       "message": "perhaps include the method name and/or use level trace, because this is really low-level information",
+      "range": {
+        "startLine": 81,
+        "startChar": 22,
+        "endLine": 81,
+        "endChar": 26
+      },
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a35dcf7_2c511322",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "4c60720f_a005070a",
       "range": {
         "startLine": 81,
         "startChar": 22,
@@ -99,6 +177,30 @@
     },
     {
       "key": {
+        "uuid": "cce6ce67_932bedcc",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "2271c4a9_0ba343b3",
+      "range": {
+        "startLine": 220,
+        "startChar": 1,
+        "endLine": 223,
+        "endChar": 22
+      },
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bbba535f_375aea2e",
         "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
         "patchSetId": 4
@@ -110,6 +212,30 @@
       "writtenOn": "2019-03-26T13:21:13Z",
       "side": 1,
       "message": "to re-throw an exception, just use \"throw e;\" do NOT discard the exception class as you have done here.",
+      "range": {
+        "startLine": 236,
+        "startChar": 3,
+        "endLine": 236,
+        "endChar": 37
+      },
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "25f23d30_f0b0793f",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "bbba535f_375aea2e",
       "range": {
         "startLine": 236,
         "startChar": 3,
@@ -145,6 +271,30 @@
     },
     {
       "key": {
+        "uuid": "a3b26c43_29347ede",
+        "filename": "security-verification-service/application.properties",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "This is per the design. \"/scan\" is the service being requested.",
+      "parentUuid": "27349d4f_0ba69cb1",
+      "range": {
+        "startLine": 20,
+        "startChar": 29,
+        "endLine": 20,
+        "endChar": 33
+      },
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "46174005_ccec7d5f",
         "filename": "security-verification-service/pom.xml",
         "patchSetId": 4
@@ -156,6 +306,30 @@
       "writtenOn": "2019-03-26T13:21:13Z",
       "side": 1,
       "message": "Why is the application.properties file packaged at the top level?  You can just leave a file with default values inside src/main/resources.  On deployment all the values will be overridden via environment variable SPRING_APPLICATION_JSON",
+      "range": {
+        "startLine": 274,
+        "startChar": 9,
+        "endLine": 275,
+        "endChar": 4
+      },
+      "revId": "75420a90ca98101ea6d4ca0ce323c1f37a9fe68a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "595e8e53_498c5121",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-04-01T16:44:06Z",
+      "side": 1,
+      "message": "We will address this later",
+      "parentUuid": "46174005_ccec7d5f",
       "range": {
         "startLine": 274,
         "startChar": 9,
