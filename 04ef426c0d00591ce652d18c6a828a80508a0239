@@ -376,6 +376,30 @@
     },
     {
       "key": {
+        "uuid": "24b175ba_56ea0751",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-02T01:10:47Z",
+      "side": 1,
+      "message": "If you take 15 exceptions while scanning 30 solutions, what does that mean?  I would be inclined to give up at the first failure.  Otherwise how do you expect the caller to disentangle a failure like this, to know which ones succeeded and which ones failed?  You really want to define a contract with that complexity?",
+      "parentUuid": "aba89742_1e90aedc",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4950344a_189847f8",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
         "patchSetId": 7
