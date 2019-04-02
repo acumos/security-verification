@@ -400,6 +400,30 @@
     },
     {
       "key": {
+        "uuid": "662360ef_aaa76452",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCDSUtil.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-02T05:12:16Z",
+      "side": 1,
+      "message": "Good point - this has been removed in latest patch",
+      "parentUuid": "24b175ba_56ea0751",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 30
+      },
+      "revId": "04ef426c0d00591ce652d18c6a828a80508a0239",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4950344a_189847f8",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
         "patchSetId": 7
