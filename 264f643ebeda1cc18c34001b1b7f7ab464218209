@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "470f5411_509925fa",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICreateRTURequest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-02T05:12:16Z",
+      "side": 1,
+      "message": "Not sure atm I am referring to request as a payload.. maybe it could be ICreateRTUInput instead?",
+      "parentUuid": "0129ba31_96a66024",
+      "range": {
+        "startLine": 30,
+        "startChar": 17,
+        "endLine": 30,
+        "endChar": 34
+      },
+      "revId": "264f643ebeda1cc18c34001b1b7f7ab464218209",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "de301ad0_e66cc5da",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ILicenseRequest.java",
         "patchSetId": 8
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c13612e7_a4c51260",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ILicenseRequest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-02T05:12:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de301ad0_e66cc5da",
+      "range": {
+        "startLine": 36,
+        "startChar": 17,
+        "endLine": 36,
+        "endChar": 32
+      },
+      "revId": "264f643ebeda1cc18c34001b1b7f7ab464218209",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f5ad2ecf_f161499f",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ILicenseVerification.java",
         "patchSetId": 8
@@ -59,6 +107,30 @@
       "writtenOn": "2019-04-02T01:10:47Z",
       "side": 1,
       "message": "Why do you define interfaces that are error responses?",
+      "range": {
+        "startLine": 34,
+        "startChar": 17,
+        "endLine": 34,
+        "endChar": 37
+      },
+      "revId": "264f643ebeda1cc18c34001b1b7f7ab464218209",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "54140680_c3442200",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ILicenseVerification.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-02T05:12:16Z",
+      "side": 1,
+      "message": "Removed this in favor of exception handling",
+      "parentUuid": "f5ad2ecf_f161499f",
       "range": {
         "startLine": 34,
         "startChar": 17,
