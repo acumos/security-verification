@@ -28,7 +28,7 @@ public class SVServiceConstants {
 	public static final String SOLUTIONID = "solutionId";
 	public static final String REVISIONID = "revisionId";
 	public static final String WORKFLOWID = "workflowId";
-	public static final String SCAN_SCRIPT_LOCATION = "/maven/scan/";
+	public static final String SCAN_SCRIPT_LOCATION = "scan/";
 	public static final String SCRIPTFILE_DUMP_MODEL = "/maven/scan/dump_model.sh";
 	public static final String SCRIPTFILE_LICENSE_SCAN = "/maven/scan/license_scan.sh";
 	public static final String SCAN_CODE_JSON = "/scancode.json";

@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,8 +53,7 @@ public class SecurityVerificationServiceUtils {
     }
 
 	public static byte[] executeScript(String scriptFile,String solutionId, String revisionId,String folder) throws Exception {
-
-		logger.debug("Inside executeScript()");
+		logger.debug("Inside executeScript.");
 
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
@@ -63,10 +61,9 @@ public class SecurityVerificationServiceUtils {
 		BufferedReader reader = null;
 		try {
 			StringBuilder sb = new StringBuilder();
-			String[] cmd = { scriptFile, solutionId, revisionId, SVServiceConstants.SCAN_SCRIPT_LOCATION+folder };
 			
-			processBuilder = new ProcessBuilder(cmd);
-
+			String[] cmd1 = { "chmod", "777", scriptFile };
+			processBuilder = new ProcessBuilder(cmd1);
 			if (processBuilder != null) {
 				process = processBuilder.start();
 				int errCode = process.waitFor();
@@ -77,7 +74,37 @@ public class SecurityVerificationServiceUtils {
 					sb.append(line + System.getProperty("line.separator"));
 				}
 
-				logger.debug("sb.toString()>>  {}", sb.toString());
+				logger.debug("cmd1 >>  {}", sb.toString());
+			}
+			
+			String[] cmd2 = { "mkdir", SVServiceConstants.SCAN_SCRIPT_LOCATION+folder };
+			processBuilder = new ProcessBuilder(cmd2);
+			if (processBuilder != null) {
+				process = processBuilder.start();
+				int errCode = process.waitFor();
+				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+				String line = null;
+				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + System.getProperty("line.separator"));
+				}
+				logger.debug("cmd2>>  {}", sb.toString());
+			}
+			logger.debug("Before call script shell");
+			String[] cmd3 = { "bash", scriptFile, solutionId, revisionId, SVServiceConstants.SCAN_SCRIPT_LOCATION+folder };
+			processBuilder = new ProcessBuilder(cmd3);
+			logger.debug("After call script shell");
+			if (processBuilder != null) {
+				process = processBuilder.start();
+				int errCode = process.waitFor();
+				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+				String line = null;
+				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + System.getProperty("line.separator"));
+				}
+
+				logger.debug("cmd3>>  {}", sb.toString());
 			}
 		} finally {
 			if (null != process) {

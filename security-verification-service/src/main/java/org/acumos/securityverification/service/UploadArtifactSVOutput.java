@@ -51,66 +51,68 @@ import org.springframework.core.env.Environment;
 public class UploadArtifactSVOutput {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	
+
 	@Autowired
 	private Environment env;
-	
-	public void setEnvironment (Environment env1){
+
+	public void setEnvironment(Environment env1) {
 		env = env1;
 	}
-	
-	public MLPDocument addRevisionDocument(String solutionId, String revisionId, String accessType, String userId, File file) throws AcumosServiceException, FileNotFoundException {
+
+	public MLPDocument addRevisionDocument(String solutionId, String revisionId, String accessType, String userId,
+			File file) throws AcumosServiceException, FileNotFoundException {
 
 		logger.debug("Inside the addRevisionDocument");
-		
+
 		long size = file.length();
 		String name = FilenameUtils.getBaseName(file.getName());
 		String extension = FilenameUtils.getExtension(SecurityVerificationServiceUtils.getFileExtension(file));
-		
-		logger.debug("Inside the addRevisionDocument" +name);
-		logger.debug("size  "+size);
-		logger.debug("extension "+extension);
-		logger.debug("name "+name);
-		
-		
+
+		logger.debug("Inside the addRevisionDocument" + name);
+		logger.debug("size  " + size);
+		logger.debug("extension " + extension);
+		logger.debug("name " + name);
+
 		ICommonDataServiceRestClient dataServiceRestClient = getCcdsClient();
 
-		if(SecurityVerificationServiceUtils.isEmptyOrNullString(extension))
+		if (SecurityVerificationServiceUtils.isEmptyOrNullString(extension))
 			throw new IllegalArgumentException("Incorrect file extension.");
 
-		//Check if docuemtn already exists with the same name
+		// Check if docuemtn already exists with the same name
 		List<MLPDocument> documents = dataServiceRestClient.getSolutionRevisionDocuments(revisionId, accessType);
 		logger.debug("CCDS call sucess..");
 		for (MLPDocument doc : documents) {
 			if (doc.getName().equalsIgnoreCase(name)) {
 				logger.error("Document Already exists with the same name.");
-				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION, "Document Already exists with the same name.");
+				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION,
+						"Document Already exists with the same name.");
 			}
 		}
 
-		//first try to upload the file to nexus. If successful then only create the c_document record in db
+		// first try to upload the file to nexus. If successful then only create the c_document record in db
 		NexusArtifactClient nexusClient = getNexusClient();
 		UploadArtifactInfo uploadInfo = null;
 		MLPDocument document = null;
 		InputStream stream = null;
 		try {
-			try {		
+			try {
 				stream = new DataInputStream(new FileInputStream(file));
 				logger.debug("Before nexusClient call sucess..");
-				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, accessType, extension, size, stream);
+				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, accessType,
+						extension, size, stream);
 				logger.debug("After nexusClient call sucess..");
-			} catch (IOException | ConnectionException | AuthenticationException | AuthorizationException | TransferFailedException | ResourceDoesNotExistException e) {
+			} catch (IOException | ConnectionException | AuthenticationException | AuthorizationException
+					| TransferFailedException | ResourceDoesNotExistException e) {
 				logger.error("Failed to upload the document", e);
 				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION, e.getMessage());
-			}finally {
+			} finally {
 				if (null != stream) {
-						stream.close();
+					stream.close();
 				}
 			}
-			
+
 			if (uploadInfo != null) {
 				logger.debug("Inside uploadInfo..");
-				/*document = new MLPDocument(null, name,uploadInfo.getArtifactMvnPath(), (int) size, "1628acd3-37d6-4c53-a722-0396d0590235");*/
 				document = new MLPDocument();
 				document.setName(name);
 				document.setUri(uploadInfo.getArtifactMvnPath());
@@ -119,12 +121,16 @@ public class UploadArtifactSVOutput {
 				document = dataServiceRestClient.createDocument(document);
 				logger.debug("After uploadInfo..");
 				dataServiceRestClient.addSolutionRevisionDocument(revisionId, accessType, document.getDocumentId());
+				logger.debug("getDocumentId {}  getName {}  getUserId {}", document.getDocumentId(), document.getName(),
+						document.getUserId());
+
 			} else {
 				logger.error("Cannot upload the Document to the specified path");
-				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION, "Cannot upload the Document to the specified path");
+				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION,
+						"Cannot upload the Document to the specified path");
 			}
 		} catch (Exception e) {
-			logger.error( "Exception during addRevisionDocument ={}", e);
+			logger.error("Exception during addRevisionDocument ={}", e);
 			throw new AcumosServiceException(e.getMessage());
 		}
 		return document;
@@ -132,13 +138,13 @@ public class UploadArtifactSVOutput {
 
 	private String getNexusGroupId(String solutionId, String revisionId) {
 		String group = env.getProperty("nexus.groupId");
-		
-		if(SecurityVerificationServiceUtils.isEmptyOrNullString(group))
+
+		if (SecurityVerificationServiceUtils.isEmptyOrNullString(group))
 			throw new IllegalArgumentException("Missing property value for nexus groupId.");
-		//This will created the nexus file upload path as groupId/solutionId/revisionId. Ex.. "org/acumos/solutionId/revisionId".
+		// This will created the nexus file upload path as groupId/solutionId/revisionId. Ex.. "org/acumos/solutionId/revisionId".
 		return String.join(".", group, solutionId, revisionId);
 	}
-	
+
 	private ICommonDataServiceRestClient getCcdsClient() {
 		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_URL),
@@ -156,5 +162,5 @@ public class UploadArtifactSVOutput {
 		NexusArtifactClient artifactClient = new NexusArtifactClient(repositoryLocation);
 		return artifactClient;
 	}
-	
+
 }
