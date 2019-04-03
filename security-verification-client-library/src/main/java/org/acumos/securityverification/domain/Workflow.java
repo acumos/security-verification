@@ -23,6 +23,7 @@ public class Workflow {
 
 	boolean workflowAllowed;
 	String reason;
+	String svException;
 	
 	public boolean isWorkflowAllowed() {
 		return workflowAllowed;
@@ -35,6 +36,12 @@ public class Workflow {
 	}
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+	public String getSvException() {
+		return svException;
+	}
+	public void setSvException(String svException) {
+		this.svException = svException;
 	}
 	
 	

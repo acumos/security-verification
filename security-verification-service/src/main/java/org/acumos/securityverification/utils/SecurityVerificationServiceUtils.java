@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,17 +44,18 @@ public class SecurityVerificationServiceUtils {
 		}
 		return isEmpty;
 	}
-	
+
 	public static String getFileExtension(File file) {
-        String fileName = file.getName();
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-        return fileName.substring(fileName.lastIndexOf(".")+1);
-        else return "";
-    }
+		String fileName = file.getName();
+		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
+			return fileName.substring(fileName.lastIndexOf(".") + 1);
+		else
+			return "";
+	}
 
-	public static byte[] executeScript(String scriptFile,String solutionId, String revisionId,String folder) throws Exception {
-
-		logger.debug("Inside executeScript()");
+	public static byte[] executeScript(String scriptFile, String solutionId, String revisionId, String folder)
+			throws Exception {
+		logger.debug("Inside executeScript.");
 
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
@@ -63,10 +63,9 @@ public class SecurityVerificationServiceUtils {
 		BufferedReader reader = null;
 		try {
 			StringBuilder sb = new StringBuilder();
-			String[] cmd = { scriptFile, solutionId, revisionId, SVServiceConstants.SCAN_SCRIPT_LOCATION+folder };
-			
-			processBuilder = new ProcessBuilder(cmd);
 
+			String[] cmd1 = { "chmod", "777", scriptFile };
+			processBuilder = new ProcessBuilder(cmd1);
 			if (processBuilder != null) {
 				process = processBuilder.start();
 				int errCode = process.waitFor();
@@ -77,8 +76,40 @@ public class SecurityVerificationServiceUtils {
 					sb.append(line + System.getProperty("line.separator"));
 				}
 
-				logger.debug("sb.toString()>>  {}", sb.toString());
+				logger.debug("cmd1 >>  {}", sb.toString());
 			}
+			String[] cmd2 = { "mkdir", SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder };
+			processBuilder = new ProcessBuilder(cmd2);
+			if (processBuilder != null) {
+				process = processBuilder.start();
+				int errCode = process.waitFor();
+				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+				String line = null;
+				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + System.getProperty("line.separator"));
+				}
+				logger.debug("cmd2>>  {}", sb.toString());
+			}
+			logger.debug("Before call script shell");
+			
+			String[] cmd3 = { "bash", scriptFile, solutionId, revisionId,
+					SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder };
+			processBuilder = new ProcessBuilder(cmd3);
+			logger.debug("After call script shell");
+			if (processBuilder != null) {
+				process = processBuilder.start();
+				int errCode = process.waitFor();
+				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+				String line = null;
+				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+				while ((line = reader.readLine()) != null) {
+					sb.append(line + System.getProperty("line.separator"));
+				}
+				logger.debug("cmd3>>  {}", sb.toString());
+			}
+			logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN, SVServiceConstants.BACKSLASH,
+					folder);
 		} finally {
 			if (null != process) {
 				process.waitFor(10, TimeUnit.SECONDS);
@@ -96,19 +127,20 @@ public class SecurityVerificationServiceUtils {
 
 		return result;
 	}
-	
+
 	public static File readScanOutput(String path) {
-		File file = new File(path); 
+		File file = new File(path);
 		return file;
 	}
-	
+
 	public static InputStream readScript(String folder, String jsonFile) throws Exception {
 
 		logger.debug("readScript()::: read JSON \n\n");
-		File scancode_file = new File(SVServiceConstants.SCAN_SCRIPT_LOCATION+folder+jsonFile);
+		File scancode_file = new File(
+				SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder + jsonFile);
 		InputStream scancodeStream;
-		FileReader fr=null;
-	    BufferedReader br=null;
+		FileReader fr = null;
+		BufferedReader br = null;
 		try {
 			scancodeStream = new DataInputStream(new FileInputStream(scancode_file));
 			fr = new FileReader(scancode_file);
@@ -121,7 +153,7 @@ public class SecurityVerificationServiceUtils {
 		} catch (IOException e) {
 			logger.error("readScript failed {}", e);
 			throw e;
-		}finally {
+		} finally {
 			if (null != br) {
 				br.close();
 			}
@@ -130,7 +162,6 @@ public class SecurityVerificationServiceUtils {
 			}
 
 		}
-		
 
 		return scancodeStream;
 	}

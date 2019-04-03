@@ -45,10 +45,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -78,15 +75,13 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 	}
 	 
-	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId)throws Exception {
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) {
  
 		Workflow workflow = new Workflow();
+		logger.debug("revisionId:: {} worflowId:: {}", revisionId, worflowId);
 		
-		logger.debug("revisionId:: {}", revisionId);
-		logger.debug("worflowId:: ()", worflowId);
-		
-		ICommonDataServiceRestClient client = getClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
-		
+	 try {
+		 ICommonDataServiceRestClient client = getClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
 		if (client != null) {
 			logger.debug("CCDS CALL GET /solution/{solutionId} ");
 			MLPSolution mlpSolution = client.getSolution(solutionId);
@@ -170,8 +165,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 													if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY) && licenseVerify.isDeploy()) {
 														svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(), mlpCdumpSolutionRevision.getRevisionId(), worflowId);
 													}
-//													
-//												}
 												
 											}
 										}
@@ -182,7 +175,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 							//TODO scan invocation logic
 							workflow.setWorkflowAllowed(true); 
 							ResponseEntity<SVResonse> svResonse = invokesScan(solutionId, revisionId, worflowId);
-
 						}
 						
 					} else {
@@ -196,7 +188,11 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			}
 			
 		}
-		
+	} catch(Exception e) {
+		logger.error("Exception",e);
+		workflow.setWorkflowAllowed(false); 
+		workflow.setSvException(e.getMessage());
+	}
 		return workflow;
 	}
 
@@ -211,6 +207,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			if (mlpSiteConfig != null) {
 				siteConfigDataJsonObj = parseJSON.stringToJsonObject(mlpSiteConfig.getConfigValue().toString());
 			} else {
+				//TBD Need to be removed once getting confirmation added this feature in SV service 
 				String createSiteConfigUrl = securityVerificationApiUrl + SVConstants.SITE_CONFIG_UPDATE;
 				RestTemplate restTemplate = new RestTemplate();
 				String siteConfigJson = restTemplate.getForObject(createSiteConfigUrl, String.class);
@@ -240,25 +237,35 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	}
 
 	private ResponseEntity<SVResonse> invokesScan(String nodeSolutionId, String revisionId, String worflowId) {
-
-		logger.debug("securityVerificationApiUrl  {}",securityVerificationApiUrl);
+		logger.debug("securityVerificationApiUrl  {}", securityVerificationApiUrl);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 		RestTemplate restTemplate = new RestTemplate();
-		MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-		map.add("solutionId", nodeSolutionId);
-		map.add("revisionId", revisionId);
-		map.add("workflowId", worflowId);
-		HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-		logger.debug("Before Call to SV Service ");
-		ResponseEntity<SVResonse> svResonse = restTemplate.exchange(securityVerificationApiUrl, HttpMethod.POST,
-				request, SVResonse.class);
-
-		logger.debug("getScanSucess result {}", svResonse.getBody());
-
+		HttpEntity<String> entity = new HttpEntity<String>(headers);
+		String svApiUrl = svApiUrlBuilder(nodeSolutionId, revisionId, worflowId, securityVerificationApiUrl);
+		logger.debug("Security verification Api Url {}" + svApiUrl);
+		ResponseEntity<SVResonse> svResonse = restTemplate.exchange(svApiUrl, HttpMethod.POST, entity, SVResonse.class);
+		logger.debug("Security verification Api result {}", svResonse.getBody());
 		return svResonse;
 	}
-	
-	
+
+	private String svApiUrlBuilder(String nodeSolutionId, String revisionId, String worflowId,
+			String securityVerificationApiUrl) {
+		StringBuilder url = new StringBuilder();
+		url.append(securityVerificationApiUrl);
+		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.SOLUTIONID);
+		url.append(SVConstants.BACKSLASH);
+		url.append(nodeSolutionId);
+		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.REVISIONID);
+		url.append(SVConstants.BACKSLASH);
+		url.append(revisionId);
+		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.WORKFLOWID);
+		url.append(SVConstants.BACKSLASH);
+		url.append(worflowId);
+		return url.toString();
+	}
+
 }
 
