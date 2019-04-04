@@ -23,7 +23,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.acumos.license-manager</groupId>
+	<groupId>org.acumos.security-verification.license-manager</groupId>
 	<artifactId>license-manager-client-library</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 	<name>License Manager Client Library</name>
@@ -147,14 +147,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<distributionManagement>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<url>https://nexus.acumos.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>releases</id>
-			<url>https://nexus.acumos.org/content/repositories/releases</url>
-		</repository>
-	</distributionManagement>
 </project>
