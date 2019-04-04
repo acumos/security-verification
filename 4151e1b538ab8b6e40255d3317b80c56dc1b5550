@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2b77f42_13106618",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-04T18:07:01Z",
+      "side": 1,
+      "message": "This is unnecessary, is not used by LF Jenkins, and should be dropped at your next chance.",
+      "range": {
+        "startLine": 150,
+        "startChar": 1,
+        "endLine": 159,
+        "endChar": 26
+      },
+      "revId": "4151e1b538ab8b6e40255d3317b80c56dc1b5550",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
