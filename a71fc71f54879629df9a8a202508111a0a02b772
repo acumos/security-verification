@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "19760ac8_cb65450e",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-04T12:15:55Z",
+      "side": 1,
+      "message": "Use the {} feature of the logger, not string catenation.  Do this:\n\n    logger.debug(\"addRevisionDocument: size {}\", size);",
+      "range": {
+        "startLine": 72,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 32
+      },
+      "revId": "a71fc71f54879629df9a8a202508111a0a02b772",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12b22a21_b9ae7c07",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/utils/SVServiceConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-04T12:15:55Z",
+      "side": 1,
+      "message": "this appears to duplicate the SECURITY_SCAN constant above, just with a trailing slash? Is that what\u0027s going on?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 59
+      },
+      "revId": "a71fc71f54879629df9a8a202508111a0a02b772",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8e86c04e_005caf7c",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/utils/SecurityVerificationServiceUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-04T12:15:55Z",
+      "side": 1,
+      "message": "Some docker images don\u0027t have bash!",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 94,
+        "endChar": 114
+      },
+      "revId": "a71fc71f54879629df9a8a202508111a0a02b772",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
