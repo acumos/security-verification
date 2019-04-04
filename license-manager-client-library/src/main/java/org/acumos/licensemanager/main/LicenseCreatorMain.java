@@ -69,7 +69,7 @@ public class LicenseCreatorMain {
    * Set as an environment variable ACUMOS_CDS_PORT.
    */
   private static final int PORT =
-    Integer.valueOf(System.getenv("ACUMOS_CDS_PORT"));
+    Integer.parseInt(System.getenv("ACUMOS_CDS_PORT"));
 
   /**
    * Common data service user name.

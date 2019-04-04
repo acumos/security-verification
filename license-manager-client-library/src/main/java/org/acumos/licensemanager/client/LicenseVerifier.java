@@ -67,7 +67,7 @@ public class LicenseVerifier implements ILicenseVerifier {
         this.dataClient = dataServiceClient;
     }
 
-    @Override
+      @Override
     public final ILicenseVerification verifyRTU(
             final IVerifyLicenseRequest request) throws RightToUseException {
         // currently only using action for dummy response
@@ -84,7 +84,7 @@ public class LicenseVerifier implements ILicenseVerifier {
             throw new IllegalArgumentException("request user "
             + "id is not defined");
         }
-        if (request.getActions().size() == 0) {
+        if (request.getActions().isEmpty()) {
             throw new IllegalArgumentException("request action is not "
             + "defined");
         }
@@ -99,16 +99,16 @@ public class LicenseVerifier implements ILicenseVerifier {
         // for download or deploy actions
         // are allowed in Boreas)
         if ((siteWideRTUForSolution != null
-            && siteWideRTUForSolution.size() > 0)
+            && !siteWideRTUForSolution.isEmpty())
                 || (rightToUse != null && !rightToUse.isEmpty())) {
             rightToUseFlag = true;
         }
         for (LicenseAction action : request.getActions()) {
             switch (action) {
-            case download:
+            case DOWNLOAD:
                 response.addAction(action, rightToUseFlag);
                 break;
-            case deploy:
+            case DEPLOY:
                 response.addAction(action, rightToUseFlag);
                 break;
             default:

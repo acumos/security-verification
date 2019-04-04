@@ -93,43 +93,67 @@ public class LicenseCreator implements ILicenseCreator {
     // in Boreas only expect 1 rtu
     if (rtus != null && !rtus.isEmpty()) {
       // in Boreas we will not update RTU if added for solution and user
-      for (MLPRightToUse rtu : rtus) {
-        LicenseCDSUtil.addRtuRefs(dataClient, request, rtu);
-        rtu.setSite(request.isSiteWide());
-        rtu.setRtuId(request.getRTUId());
-        rtu.setModified(Instant.now());
-          if (LicenseCDSUtil.updateRightToUse(dataClient, rtu, response)) {
-            response.addRtu(rtu);
-            response.setUpdated(true);
-            response.setCreated(false);
-          }
-      }
+      updateRtu(request, response, rtus);
       return response;
     } else {
-      MLPRightToUse rightToUse = new MLPRightToUse(request.getSolutionId(),
-          request.isSiteWide());
-      rightToUse.setRtuId(request.getRTUId());
-      LicenseCDSUtil.addRtuRefs(dataClient, request, rightToUse);
-      rightToUse.setCreated(Instant.now());
-
-      try {
-        MLPRightToUse completeRtu = dataClient.createRightToUse(rightToUse);
-        MLPRightToUse rtu;
-        if (completeRtu != null) {
-          rtu = completeRtu;
-        } else {
-          rtu = rightToUse;
-        }
-        response.addRtu(rtu);
-        response.setCreated(true);
-      } catch (RestClientResponseException ex) {
-        LOGGER.error("createRightToUse failed, server reports: {}",
-           ex.getResponseBodyAsString());
-           throw new RightToUseException("createRightToUse failed", ex);
-      }
-
+      createRightToUse(request, response);
     }
     return response;
+  }
+
+  /**
+   * Update Right to use if an existing RTU exists will create a new RTU.
+   * @param request creation request
+   * @param response responds with information about the rtu creation
+   * @throws RightToUseException when then creation of RTU was unsuccessful
+   */
+  private void createRightToUse(
+      final ICreateRTURequest request,
+      final CreatedRtu response) throws RightToUseException {
+    MLPRightToUse rightToUse =
+      new MLPRightToUse(request.getSolutionId(), request.isSiteWide());
+    rightToUse.setRtuId(request.getRTUId());
+    LicenseCDSUtil.addRtuRefs(dataClient, request, rightToUse);
+    rightToUse.setCreated(Instant.now());
+
+    try {
+      MLPRightToUse completeRtu = dataClient.createRightToUse(rightToUse);
+      MLPRightToUse rtu;
+      if (completeRtu != null) {
+        rtu = completeRtu;
+      } else {
+        rtu = rightToUse;
+      }
+      response.addRtu(rtu);
+      response.setCreated(true);
+    } catch (RestClientResponseException ex) {
+      LOGGER.error("createRightToUse failed, server reports: {}",
+        ex.getResponseBodyAsString());
+      throw new RightToUseException("createRightToUse failed", ex);
+    }
+  }
+
+  /**
+   * Internal method to update the rtu.
+   * @param request creation request
+   * @param response responds with information about the rtu creation
+   * @param rtus list of rtus to process
+   * @throws RightToUseException when then creation of RTU was unsuccessful
+   */
+  private void updateRtu(final ICreateRTURequest request,
+    final CreatedRtu response, final List<MLPRightToUse> rtus)
+      throws RightToUseException {
+    for (MLPRightToUse rtu : rtus) {
+      LicenseCDSUtil.addRtuRefs(dataClient, request, rtu);
+      rtu.setSite(request.isSiteWide());
+      rtu.setRtuId(request.getRTUId());
+      rtu.setModified(Instant.now());
+      if (LicenseCDSUtil.updateRightToUse(dataClient, rtu)) {
+        response.addRtu(rtu);
+        response.setUpdated(true);
+        response.setCreated(false);
+      }
+    }
   }
 
 }

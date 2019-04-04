@@ -114,7 +114,7 @@ public class LicenseCreatorTest {
 			licenseSrvc.createRTU(null);
 			fail("expected illegal argument exception");
 		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals(illegalArgument.getMessage(),"request is not defined");
+			assertEquals("request is not defined",illegalArgument.getMessage());
 		}
 	}
 
@@ -128,7 +128,7 @@ public class LicenseCreatorTest {
 			licenseSrvc.createRTU(creationrequest);
 			fail("expected illegal argument exception");
 		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals(illegalArgument.getMessage(),"request solution id is not defined");
+			assertEquals("request solution id is not defined",illegalArgument.getMessage());
 		}
 	}
 
@@ -142,7 +142,7 @@ public class LicenseCreatorTest {
 			licenseSrvc.createRTU(creationrequest);
 			fail("expected illegal argument exception");
 		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals(illegalArgument.getMessage(),"request userId or siteWide is not defined");
+			assertEquals("request userId or siteWide is not defined",illegalArgument.getMessage());
 		}
 	}
 

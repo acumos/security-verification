@@ -26,7 +26,8 @@ import org.acumos.cds.domain.MLPRightToUse;
 
 /**
  * <p>
- * The output of the RTU creation process {@link ILicenseCreator}.
+ * The output of the RTU creation process
+ *  {@link org.acumos.licensemanager.client.model.ILicenseCreator}.
  * </p>
  *
  * CreatedRtu
@@ -36,7 +37,7 @@ import org.acumos.cds.domain.MLPRightToUse;
 public interface ICreatedRtu {
   /**
    * <p>
-   * If rtu was updated or there was an error will return false.
+   * True if rtu was updated.
    * </p>
    *
    * @return if the RTU was created
@@ -44,6 +45,9 @@ public interface ICreatedRtu {
   boolean isCreated();
 
   /**
+   * <p>
+   * True if rtu was updated.
+   * </p>
    *
    * @return if instead of creating we updated the rtu This will indicate
    *   that the rtu references will be overriden

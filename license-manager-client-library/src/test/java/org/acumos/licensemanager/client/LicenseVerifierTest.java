@@ -93,17 +93,17 @@ public class LicenseVerifierTest {
 		client.setRightToUseList(rightToUseList);
 
 		ILicenseVerifier licenseSrvc = new LicenseVerifier(client);
-		VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.deploy, solution.getSolutionId(),
+		VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY, solution.getSolutionId(),
 				allowedUser.getUserId());
-		licenseDownloadRequest.addAction(LicenseAction.download);
+		licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
 
 		client.setRightToUses(new RestPageResponse<MLPRightToUse>(new ArrayList<MLPRightToUse>()));
 
 		ILicenseVerification verifyUserRTU = licenseSrvc.verifyRTU(licenseDownloadRequest);
 		// CompletableFuture.allOf(verifyUserRTU).join();
 		assertEquals(true, verifyUserRTU != null);
-		assertEquals(true, verifyUserRTU.isAllowed(LicenseAction.download));
-		assertEquals(true, verifyUserRTU.isAllowed(LicenseAction.deploy));
+		assertEquals(true, verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD));
+		assertEquals(true, verifyUserRTU.isAllowed(LicenseAction.DEPLOY));
 
 		client.setRightToUseList(new ArrayList<MLPRightToUse>());
 
@@ -121,11 +121,11 @@ public class LicenseVerifierTest {
 		client.setUser(disAllowedUser);
 		disAllowedUser.setUserId("disAllowedUser");
 		licenseDownloadRequest = new VerifyLicenseRequest(
-			new LicenseAction[] { LicenseAction.deploy, LicenseAction.download }, solution.getSolutionId(), disAllowedUser.getUserId());
+			new LicenseAction[] { LicenseAction.DEPLOY, LicenseAction.DOWNLOAD }, solution.getSolutionId(), disAllowedUser.getUserId());
 		verifyUserRTU = licenseSrvc.verifyRTU(licenseDownloadRequest);
 		assertEquals(true, verifyUserRTU != null);
-		assertEquals(false, verifyUserRTU.getAllowedToUse().get(LicenseAction.download));
-		assertEquals(false, verifyUserRTU.getAllowedToUse().get(LicenseAction.deploy));
+		assertEquals(false, verifyUserRTU.getAllowedToUse().get(LicenseAction.DOWNLOAD));
+		assertEquals(false, verifyUserRTU.getAllowedToUse().get(LicenseAction.DEPLOY));
 
 
 	}
@@ -170,25 +170,25 @@ public class LicenseVerifierTest {
 		client.setRightToUseList(rightToUseList);
 
 		ILicenseVerifier licenseSrvc = new LicenseVerifier(client);
-		VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.deploy, "dummysolutionid",
+		VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY, "dummysolutionid",
 				"dummyuserid");
-		licenseDownloadRequest.addAction(LicenseAction.download);
+		licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
 		client.setRightToUses(new RestPageResponse<MLPRightToUse>(rightToUseList));
 
 		ILicenseVerification verifyUserRTU = licenseSrvc.verifyRTU(licenseDownloadRequest);
 		// CompletableFuture.allOf(verifyUserRTU).join();
 		assertEquals(true, verifyUserRTU != null);
-		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.download).booleanValue());
-		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.deploy).booleanValue());
+		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.DOWNLOAD).booleanValue());
+		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.DEPLOY).booleanValue());
 
 		client.setRightToUseList(new ArrayList<MLPRightToUse>());
 
 		licenseDownloadRequest = new VerifyLicenseRequest(
-				new LicenseAction[] { LicenseAction.deploy, LicenseAction.download }, "dummysolutionid", "dummyuserid");
+				new LicenseAction[] { LicenseAction.DEPLOY, LicenseAction.DOWNLOAD }, "dummysolutionid", "dummyuserid");
 		verifyUserRTU = licenseSrvc.verifyRTU(licenseDownloadRequest);
 		assertEquals(true, verifyUserRTU != null);
-		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.download).booleanValue());
-		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.deploy).booleanValue());
+		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.DOWNLOAD).booleanValue());
+		assertEquals(true, verifyUserRTU.getAllowedToUse().get(LicenseAction.DEPLOY).booleanValue());
 
 	}
 
@@ -199,8 +199,8 @@ public class LicenseVerifierTest {
 		LicenseVerifier licenseVerifier = new LicenseVerifier(dataClient);
 		VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest();
 		List<LicenseAction> actions = new ArrayList<LicenseAction>();
-		actions.add(LicenseAction.download);
-		actions.add(LicenseAction.deploy);
+		actions.add(LicenseAction.DOWNLOAD);
+		actions.add(LicenseAction.DEPLOY);
 		licenseDownloadRequest.setActions(actions);
 		licenseDownloadRequest.setSolutionId("dummysolutionid");
 		
@@ -223,7 +223,7 @@ public class LicenseVerifierTest {
 			licenseVerifier.verifyRTU(null);
 			fail("expected illegal argument exception");
 		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals(illegalArgument.getMessage(),"request is not defined");
+			assertEquals("request is not defined",illegalArgument.getMessage());
 		}
 
 	}

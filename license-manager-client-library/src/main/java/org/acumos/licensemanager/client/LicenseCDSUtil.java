@@ -35,7 +35,6 @@ import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.licensemanager.client.model.ICreateRTURequest;
 import org.acumos.licensemanager.client.model.ICommonLicenseRequest;
 import org.acumos.licensemanager.exceptions.RightToUseException;
-import org.acumos.licensemanager.client.model.CreatedRtu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClientResponseException;
@@ -104,15 +103,13 @@ class LicenseCDSUtil {
    *  {@link org.acumos.cds.client.ICommonDataServiceRestClient} object.
    * @param rtu a
    *  {@link org.acumos.cds.domain.MLPRightToUse} object.
-   * @param response a
-   *  {@link org.acumos.licensemanager.client.model.CreatedRtu} object.
    * @return a boolean.
-   * @throws RightToUseException when not able to update right to use
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException
+   *  when not able to update right to use
    */
   protected static boolean updateRightToUse(
     final ICommonDataServiceRestClient dataClient,
-    final MLPRightToUse rtu,
-    final CreatedRtu response) throws RightToUseException {
+    final MLPRightToUse rtu) throws RightToUseException {
     try {
       dataClient.updateRightToUse(rtu);
     } catch (RestClientResponseException ex) {
@@ -138,14 +135,15 @@ class LicenseCDSUtil {
    *  a {@link org.acumos.licensemanager.client.model.ICommonLicenseRequest}
    *  object.
    * @return a {@link java.util.List} object.
-   * @throws RightToUseException when cannot get right to uses
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException
+   *  when cannot get right to uses
    */
   protected static List<MLPRightToUse> getRightToUses(
     final ICommonDataServiceRestClient dataClient,
     final ICommonLicenseRequest request) throws RightToUseException {
     List<MLPRightToUse> rtus = new ArrayList<MLPRightToUse>(0);
     try {
-      // TODO support multiple users
+      // only supporting one userid at a time
         rtus = dataClient.getRightToUses(request.getSolutionId(),
           request.getUserIds().get(0));
     } catch (RestClientResponseException ex) {
@@ -167,7 +165,8 @@ class LicenseCDSUtil {
    *  {@link org.acumos.licensemanager.client.model.ICommonLicenseRequest}
    *  object.
    * @return a {@link java.util.List} object.
-   * @throws RightToUseException when not able to get site wide right to use
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException
+   *  when not able to get site wide right to use
    */
   protected static List<MLPRightToUse> getSitewideSolutionRTU(
       final ICommonDataServiceRestClient dataClient,

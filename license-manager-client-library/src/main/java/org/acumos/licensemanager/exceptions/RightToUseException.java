@@ -27,18 +27,21 @@ import org.springframework.web.client.RestClientResponseException;
  * When getting, updating, or creating a right to use
  * this exception captures the issue.
  * </p>
+ *
+ * @version 0.0.2
  */
 public class RightToUseException extends Exception {
 
   /**
    * Internal exception being wrapped by RTU exception.
    */
-  private RestClientResponseException cdsRestClientException;
+  private final RestClientResponseException cdsRestClientException;
 
   /**
    * <p>
    * Creates exception for any RTU operation error.
    * </p>
+   *
    * @param message provide text for message
    * @param restException rest client response error
    */
@@ -50,6 +53,8 @@ public class RightToUseException extends Exception {
   }
 
   /**
+   * <p>Getter for the field <code>cdsRestClientException</code>.</p>
+   *
    * @return the cdsRestClientException
    */
   public final RestClientResponseException getCdsRestClientException() {

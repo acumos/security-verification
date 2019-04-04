@@ -69,7 +69,7 @@ public class LicenseVerifyMain {
    * Set as an environment variable ACUMOS_CDS_PORT.
    */
   private static final int PORT =
-    Integer.valueOf(System.getenv("ACUMOS_CDS_PORT"));
+    Integer.parseInt(System.getenv("ACUMOS_CDS_PORT"));
 
   /**
    * Common data service user name.
@@ -90,6 +90,7 @@ public class LicenseVerifyMain {
     throw new UnsupportedOperationException();
   }
   /**
+   * String solutionId String userId.
    *
    * @param args an array of {@link java.lang.String} objects.
    * @throws java.lang.Exception if any.
@@ -106,15 +107,15 @@ public class LicenseVerifyMain {
       LicenseVerifier licenseVerifier = new LicenseVerifier(client);
       VerifyLicenseRequest verifyRequest =
         new VerifyLicenseRequest(
-          new LicenseAction[]{LicenseAction.download,
-          LicenseAction.deploy}, args[0], args[1]);
+          new LicenseAction[]{LicenseAction.DOWNLOAD,
+          LicenseAction.DEPLOY}, args[0], args[1]);
       ILicenseVerification licenseRes =
         licenseVerifier.verifyRTU(verifyRequest);
       System.out.println("Verified rtu");
       System.out.println("deploy allowed? "
-        + licenseRes.isAllowed(LicenseAction.deploy));
+        + licenseRes.isAllowed(LicenseAction.DEPLOY));
       System.out.println("download allowed? "
-        + licenseRes.isAllowed(LicenseAction.download));
+        + licenseRes.isAllowed(LicenseAction.DOWNLOAD));
 
     } catch (HttpStatusCodeException ex) {
       LOGGER.error("basicSequenceDemo failed, server reports: {}",

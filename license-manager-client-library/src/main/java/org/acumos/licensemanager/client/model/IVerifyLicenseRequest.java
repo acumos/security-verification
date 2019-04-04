@@ -26,7 +26,8 @@ import java.util.List;
 /**
  * <p>
  * A request object that must be created before calling
- * {@link ILicenseVerifier#verifyRTU(IVerifyLicenseRequest)}.
+ * {@link org.acumos.licensemanager.client.model
+ *  .ILicenseVerifier#verifyRTU(IVerifyLicenseRequest)}.
  * </p>
  *
  *CreatedRtu

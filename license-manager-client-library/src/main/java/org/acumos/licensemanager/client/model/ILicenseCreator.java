@@ -44,7 +44,8 @@ public interface ILicenseCreator {
    *
    * @param createRtu create rtu request
    * @return ICreatedRtu the response of the create rtu request
-   * @throws RightToUseException when rtu was not able to be verified
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException
+   *  when rtu was not able to be verified
    */
   ICreatedRtu createRTU(ICreateRTURequest createRtu) throws RightToUseException;
 }

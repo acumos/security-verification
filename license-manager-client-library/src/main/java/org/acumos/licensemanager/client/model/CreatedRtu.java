@@ -43,25 +43,18 @@ public class CreatedRtu implements ICreatedRtu {
   /**
    * Created RTU in CDS.
    */
-  private boolean createdRtu;
+  private boolean createdRtuInCds;
 
   /**
    * Updated RTU in CDS.
    */
-  private boolean updatedRtu;
+  private boolean updatedRtuInCds;
 
   /**
    * List of RTUs created.
    */
   private List<MLPRightToUse> rtu = new ArrayList<MLPRightToUse>();
 
-  /**
-   * <p>
-   * Constructor for CreatedRtu.
-   * </p>
-   */
-  public CreatedRtu() {
-  }
 
   @Override
   public final ICreateRTURequest getRequest() {
@@ -82,7 +75,7 @@ public class CreatedRtu implements ICreatedRtu {
 
   @Override
   public final boolean isCreated() {
-    return createdRtu;
+    return createdRtuInCds;
   }
 
 
@@ -94,13 +87,13 @@ public class CreatedRtu implements ICreatedRtu {
    * @param created indicate that rtu was created
    */
   public final void setCreated(final boolean created) {
-    this.createdRtu = created;
+    this.createdRtuInCds = created;
   }
 
 
   @Override
   public final boolean isUpdated() {
-    return updatedRtu;
+    return updatedRtuInCds;
   }
 
   /**
@@ -111,7 +104,7 @@ public class CreatedRtu implements ICreatedRtu {
    * @param updated indicate that rtu was updated
    */
   public final void setUpdated(final boolean updated) {
-    this.updatedRtu = updated;
+    this.updatedRtuInCds = updated;
   }
 
 

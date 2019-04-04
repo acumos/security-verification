@@ -28,6 +28,8 @@ import java.util.List;
  * When making a request for a license RTU consolidating
  * common functionality.
  * </p>
+ *
+ * @version 0.0.2
  */
 public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
 

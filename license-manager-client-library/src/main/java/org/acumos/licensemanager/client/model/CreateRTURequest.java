@@ -92,7 +92,7 @@ public class CreateRTURequest extends BaseLicenseRequest
 
   @Override
   public final List<String> getRTURefs() {
-    if (rtuRefsAsStr == null) {
+    if (rtuRefsAsStr.isEmpty()) {
       rtuRefsAsStr.add(UUID.randomUUID().toString());
     }
     return rtuRefsAsStr;

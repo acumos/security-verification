@@ -32,9 +32,9 @@ public enum LicenseAction {
    * Download action in the portal
    * Or through docker pull.
    */
-  download,
+  DOWNLOAD,
   /**
    *  Deploy action in the portal.
    */
-  deploy
+  DEPLOY
 }

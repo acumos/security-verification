@@ -43,7 +43,8 @@ public interface ILicenseVerifier {
    * @return a
    *   {@link org.acumos.licensemanager.client.model.ILicenseVerification}
    *   object.
-   * @throws RightToUseException when exception was not able to be verified
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException
+   *  when exception was not able to be verified
    */
   ILicenseVerification verifyRTU(
       IVerifyLicenseRequest licenseDownloadRequest)

@@ -27,9 +27,8 @@ import java.util.List;
 /**
  * <p>
  * Request object to verify a user's right to use for a specific action passed
- * to the {@link ILicenseVerifier}.
+ * to the {@link org.acumos.licensemanager.client.model.ILicenseVerifier}.
  * </p>
- *
  *
  * @version 0.0.2
  */
@@ -51,6 +50,7 @@ public class VerifyLicenseRequest
   }
 
   /**
+   * <p>Constructor for VerifyLicenseRequest.</p>
    *
    * @param action     a
    *     {@link org.acumos.licensemanager.client.model.LicenseAction}
@@ -67,6 +67,8 @@ public class VerifyLicenseRequest
   }
 
   /**
+   * <p>Constructor for VerifyLicenseRequest.</p>
+   *
    * @param action     an array of
    *      {@link org.acumos.licensemanager.client.model.LicenseAction} objects.
    * @param solutionId a {@link java.lang.String} object.
