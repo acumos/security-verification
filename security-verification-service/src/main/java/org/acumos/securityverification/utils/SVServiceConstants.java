@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-
 package org.acumos.securityverification.utils;
 
 public class SVServiceConstants {
@@ -29,16 +28,28 @@ public class SVServiceConstants {
 	public static final String SOLUTIONID = "solutionId";
 	public static final String REVISIONID = "revisionId";
 	public static final String WORKFLOWID = "workflowId";
-	public static final String SCRIPTFILE_DUMP_MODEL = "/maven/scan/dump_model.sh";
-	public static final String SCRIPTFILE_LICENSE_SCAN = "/maven/scan/license_scan.sh";
+	public static final String MAVEN = "maven";
+	public static final String SCRIPTFILE_DUMP_MODEL = "dump_model.sh";
+	public static final String SCRIPTFILE_LICENSE_SCAN = "license_scan.sh";
 	public static final String SCAN_CODE_JSON = "/scancode.json";
 	public static final String SCAN_RESULT_JSON = "/scanresult.json";
 	public static final String SCAN_OUTPUT_LOCATION = "scanOutput";
+	
 	public static final String CDMS_CLIENT_URL = "cdms.client.url";
 	public static final String CDMS_CLIENT_USER = "cdms.client.username";
 	public static final String CDMS_CLIENT_PWD = "cdms.client.password";
-
+	public static final String CDMS_HOST= "cdms.client.host";
+	public static final String CDMS_PORT= "cdms.client.port";
+	
+	public static final String NEXUS_GROUPID= "nexus.client.groupId";
+	public static final String NEXUS_HOST= "nexus.client.host";
+	public static final String NEXUS_API_PORT= "nexus.client.port";
+	public static final String NEXUS_MAVEN_REPO= "nexus.client.maven_repo";
+	public static final String NEXUS_CLIENT_URL = "nexus.client.url";
+	public static final String NEXUS_CLIENT_USER = "nexus.client.username";
+	public static final String NEXUS_CLIENT_PWD = "nexus.client.pwd";
+	
+	
 	// Site config Json tag
 	public static final String CONFIGKEY = "site_config";
-
 }

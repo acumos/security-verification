@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -71,24 +71,21 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 		logger.debug("Inside SecurityVerificationServiceImpl");
 		UUID uidNumber = UUID.randomUUID();
 		String folder = uidNumber.toString();
-		logger.debug("Before executeScript..");
-		
-		SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_DUMP_MODEL, solutionId, revisionId,
-				folder);
-		SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_LICENSE_SCAN, solutionId,
-				revisionId, folder);
-
-		logger.debug("After executeScript..");
-		// TODO Need add logic
-		File fileScanCodeJson = SecurityVerificationServiceUtils.readScanOutput(SVServiceConstants.SECURITY_SCAN
-				+ SVServiceConstants.BACKSLASH + folder + SVServiceConstants.SCAN_CODE_JSON);
-		uploadToArtifact(solutionId, revisionId, fileScanCodeJson);
-		File fileScanresultJson = SecurityVerificationServiceUtils.readScanOutput(SVServiceConstants.SECURITY_SCAN
+		SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_DUMP_MODEL, solutionId, revisionId, folder, env);
+		SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_LICENSE_SCAN, solutionId, revisionId, folder, env);
+		//Upload scanresult.json
+		File fileScanResultJson = SecurityVerificationServiceUtils.readScanOutput(SVServiceConstants.SECURITY_SCAN
 				+ SVServiceConstants.BACKSLASH + folder + SVServiceConstants.SCAN_RESULT_JSON);
-		uploadToArtifact(solutionId, revisionId, fileScanresultJson);
-		// SecurityVerificationServiceUtils.readScript(SVServiceConstants.SCAN_OUTPUT_LOCATION,SVServiceConstants.SCAN_CODE_JSON);
-		// SecurityVerificationServiceUtils.readScript(SVServiceConstants.SCAN_OUTPUT_LOCATION,SVServiceConstants.SCAN_RESULT_JSON);
-
+		logger.debug("fileScanResultJson: {}",fileScanResultJson);
+		uploadToArtifact(solutionId, revisionId, fileScanResultJson);
+		logger.debug("ScanResult Json uploadToArtifact successfully");
+		//Upload scancode.json
+		File fileScanCodeResultJson = SecurityVerificationServiceUtils.readScanOutput(SVServiceConstants.SECURITY_SCAN
+				+ SVServiceConstants.BACKSLASH + folder + SVServiceConstants.SCAN_CODE_JSON);
+		logger.debug("fileScanCodeResultJson: {}",fileScanCodeResultJson);
+		uploadToArtifact(solutionId, revisionId, fileScanCodeResultJson);
+		logger.debug("ScanCode Json uploadToArtifact successfully");
+		
 		return null;
 	}
 
