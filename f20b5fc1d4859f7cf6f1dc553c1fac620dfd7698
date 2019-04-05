@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e6259a36_e37cc3dd",
+        "filename": "security-verification-client-library/docs/release-notes.rst",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-05T13:09:23Z",
+      "side": 1,
+      "message": "If you change the code and date you must bump the version!",
+      "range": {
+        "startLine": 24,
+        "startChar": 8,
+        "endLine": 24,
+        "endChar": 13
+      },
+      "revId": "f20b5fc1d4859f7cf6f1dc553c1fac620dfd7698",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "592d090e_f8f29f27",
+        "filename": "security-verification-client-library/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-05T13:09:23Z",
+      "side": 1,
+      "message": "Release notes say 0.0.1, that\u0027s a big miss",
+      "range": {
+        "startLine": 7,
+        "startChar": 10,
+        "endLine": 7,
+        "endChar": 15
+      },
+      "revId": "f20b5fc1d4859f7cf6f1dc553c1fac620dfd7698",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b298460_366b0aca",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/domain/AllowedLicense.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-05T13:09:23Z",
+      "side": 1,
+      "message": "If you\u0027re gonna be all technical about it, this should be 2017-2019",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 21
+      },
+      "revId": "f20b5fc1d4859f7cf6f1dc553c1fac620dfd7698",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a6fa8a73_2d5f9e67",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-05T13:09:23Z",
+      "side": 1,
+      "message": "Backslash?  / is forward slash.  \\ is backslash.  Instead of this bogus homebrew solution do it the right way, use something like java.io.File.separator",
+      "range": {
+        "startLine": 84,
+        "startChar": 25,
+        "endLine": 84,
+        "endChar": 34
+      },
+      "revId": "f20b5fc1d4859f7cf6f1dc553c1fac620dfd7698",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
