@@ -62,4 +62,10 @@ public class SVConstants {
 	public static final String REASON_NOT_FOUND = "solution/revision not found";
 	public static final String LICENSE_SCAN_INCOMPLETE = "license scan incomplete";
 	
+	public static final String SOLUTIONID = "solutionId";
+	public static final String REVISIONID = "revisionId";
+	public static final String WORKFLOWID = "workflowId";
+	public static final String BACKSLASH = "/";
+	
+	
 }

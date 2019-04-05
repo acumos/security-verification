@@ -50,7 +50,7 @@ public class SecurityVerificationServiceController extends AbstractController {
 	@ApiOperation(value = "Security Verification Service Scan.", response = SuccessTransport.class)
 	@RequestMapping(value = "/" + SVServiceConstants.SOLUTIONID + "/{solutionId}/" + SVServiceConstants.REVISIONID
 			+ "/{revisionId}/" + SVServiceConstants.WORKFLOWID
-			+ "/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+			+ "/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SVResonse securityVerification(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @PathVariable("workflowId") String workflowId) {
 		logger.debug("Inside securityVerification service scan... ");
