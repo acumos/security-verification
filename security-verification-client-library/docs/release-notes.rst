@@ -21,7 +21,7 @@ Security Verification Release Notes
 ===================================
 
 ----------------------------
-Version 0.0.1, 05 April 2019 
+Version 0.0.3, 05 April 2019 
 ----------------------------
 
 * S-V Library base module (`ACUMOS-2555 <https://jira.acumos.org/browse/ACUMOS-2555>`_)
