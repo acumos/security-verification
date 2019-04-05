@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -66,15 +66,14 @@ public class UploadArtifactSVOutput {
 
 		long size = file.length();
 		String name = FilenameUtils.getBaseName(file.getName());
-		String extension = FilenameUtils.getExtension(SecurityVerificationServiceUtils.getFileExtension(file));
-		
-		logger.debug("Inside the addRevisionDocument {} size  {} extension {} name {} ", name, size, extension, name);
+		String extension = FilenameUtils.getExtension(file.getName());
+		logger.debug("Inside the addRevisionDocument: {} \n size: {} \n extension: {} \n name: {} ", name, size, extension, name);
 		
 		ICommonDataServiceRestClient dataServiceRestClient = getCcdsClient();
 		if (SecurityVerificationServiceUtils.isEmptyOrNullString(extension))
 			throw new IllegalArgumentException("Incorrect file extension.");
 
-		// Check if docuemtn already exists with the same name
+		// Check if document already exists with the same name
 		List<MLPDocument> documents = dataServiceRestClient.getSolutionRevisionDocuments(revisionId, accessType);
 		logger.debug("CCDS call sucess..");
 		for (MLPDocument doc : documents) {
@@ -84,13 +83,12 @@ public class UploadArtifactSVOutput {
 						"Document Already exists with the same name.");
 			}
 		}
-
-		// first try to upload the file to nexus. If successful then only create the c_document record in db
-		NexusArtifactClient nexusClient = getNexusClient();
-		UploadArtifactInfo uploadInfo = null;
 		MLPDocument document = null;
-		InputStream stream = null;
 		try {
+			// first try to upload the file to nexus. If successful then only create the c_document record in db
+			NexusArtifactClient nexusClient = getNexusClient();
+			UploadArtifactInfo uploadInfo = null;
+			InputStream stream = null;
 			try {
 				stream = new DataInputStream(new FileInputStream(file));
 				logger.debug("Before nexusClient call sucess..");
@@ -152,9 +150,9 @@ public class UploadArtifactSVOutput {
 	private NexusArtifactClient getNexusClient() {
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
-		repositoryLocation.setUrl(env.getProperty("nexus.client.url"));
-		repositoryLocation.setUsername(env.getProperty("nexus.client.username"));
-		repositoryLocation.setPassword(env.getProperty("nexus.client.pwd"));
+		repositoryLocation.setUrl(env.getProperty(SVServiceConstants.NEXUS_CLIENT_URL));
+		repositoryLocation.setUsername(env.getProperty(SVServiceConstants.NEXUS_CLIENT_USER));
+		repositoryLocation.setPassword(env.getProperty(SVServiceConstants.NEXUS_CLIENT_PWD));
 		NexusArtifactClient artifactClient = new NexusArtifactClient(repositoryLocation);
 		return artifactClient;
 	}

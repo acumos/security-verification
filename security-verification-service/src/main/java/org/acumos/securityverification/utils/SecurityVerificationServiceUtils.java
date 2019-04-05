@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 
 public class SecurityVerificationServiceUtils {
 
@@ -46,6 +47,7 @@ public class SecurityVerificationServiceUtils {
 	}
 
 	public static String getFileExtension(File file) {
+		logger.debug("getFileExtension()");
 		String fileName = file.getName();
 		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
 			return fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -53,10 +55,15 @@ public class SecurityVerificationServiceUtils {
 			return "";
 	}
 
-	public static byte[] executeScript(String scriptFile, String solutionId, String revisionId, String folder)
-			throws Exception {
-		logger.debug("Inside executeScript.");
+	public static byte[] executeScript(String scriptFile, String solutionId, String revisionId, String folder,
+			Environment env) throws Exception {
+		logger.debug("Inside executeScript scriptFile:{} solutionId:{} revisionId:{}", scriptFile, solutionId,
+				revisionId);
 
+		String scriptFileWithLocation = SVServiceConstants.BACKSLASH + SVServiceConstants.MAVEN
+				+ SVServiceConstants.BACKSLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH
+				+ scriptFile;
+		String folderNameWithLocation = SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder;
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
 		Process process = null;
@@ -64,7 +71,7 @@ public class SecurityVerificationServiceUtils {
 		try {
 			StringBuilder sb = new StringBuilder();
 
-			String[] cmd1 = { "chmod", "777", scriptFile };
+			String[] cmd1 = { "chmod", "777", scriptFileWithLocation };
 			processBuilder = new ProcessBuilder(cmd1);
 			if (processBuilder != null) {
 				process = processBuilder.start();
@@ -91,25 +98,53 @@ public class SecurityVerificationServiceUtils {
 				}
 				logger.debug("cmd2>>  {}", sb.toString());
 			}
-			logger.debug("Before call script shell");
-			
-			String[] cmd3 = { "bash", scriptFile, solutionId, revisionId,
-					SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder };
-			processBuilder = new ProcessBuilder(cmd3);
-			logger.debug("After call script shell");
-			if (processBuilder != null) {
-				process = processBuilder.start();
-				int errCode = process.waitFor();
-				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
-				String line = null;
-				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + System.getProperty("line.separator"));
+
+			if (scriptFile.equalsIgnoreCase(SVServiceConstants.SCRIPTFILE_DUMP_MODEL)) {
+				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_DUMP_MODEL);
+				String[] dump_model_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,
+						folderNameWithLocation, env.getProperty(SVServiceConstants.CDMS_HOST),
+						env.getProperty(SVServiceConstants.CDMS_PORT),
+						env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
+						env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD),
+						env.getProperty(SVServiceConstants.NEXUS_HOST),
+						env.getProperty(SVServiceConstants.NEXUS_API_PORT),
+						env.getProperty(SVServiceConstants.NEXUS_MAVEN_REPO) };
+				processBuilder = new ProcessBuilder(dump_model_cmd);
+				logger.debug("After call script shell");
+				if (processBuilder != null) {
+					process = processBuilder.start();
+					int errCode = process.waitFor();
+					logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+					String line = null;
+					reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					while ((line = reader.readLine()) != null) {
+						sb.append(line + System.getProperty("line.separator"));
+					}
+					logger.debug("dump_model_cmd>>  {}", sb.toString());
 				}
-				logger.debug("cmd3>>  {}", sb.toString());
+				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
+						SVServiceConstants.BACKSLASH, folder);
+			} else {
+				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_LICENSE_SCAN);
+				String[] license_scan_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,
+						folderNameWithLocation };
+				processBuilder = new ProcessBuilder(license_scan_cmd);
+				logger.debug("After call script shell");
+				if (processBuilder != null) {
+					process = processBuilder.start();
+					int errCode = process.waitFor();
+					logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+					String line = null;
+					reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+					while ((line = reader.readLine()) != null) {
+						sb.append(line + System.getProperty("line.separator"));
+					}
+					logger.debug("license_scan_cmd>>  {}", sb.toString());
+				}
+				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
+						SVServiceConstants.BACKSLASH, folder);
 			}
-			logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN, SVServiceConstants.BACKSLASH,
-					folder);
+
 		} finally {
 			if (null != process) {
 				process.waitFor(10, TimeUnit.SECONDS);
@@ -135,7 +170,7 @@ public class SecurityVerificationServiceUtils {
 
 	public static InputStream readScript(String folder, String jsonFile) throws Exception {
 
-		logger.debug("readScript()::: read JSON \n\n");
+		logger.debug("Insed readScript, Started reading the file {}", jsonFile);
 		File scancode_file = new File(
 				SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder + jsonFile);
 		InputStream scancodeStream;
@@ -147,9 +182,12 @@ public class SecurityVerificationServiceUtils {
 			br = new BufferedReader(fr);
 			String line;
 			logger.debug("Reading text file using FileReader");
+			StringBuilder filedata = new StringBuilder();
 			while ((line = br.readLine()) != null) {
-				logger.debug(line);
+				filedata.append(line);
+				filedata.append("\n");
 			}
+			logger.debug("Scan result {}", filedata.toString());
 		} catch (IOException e) {
 			logger.error("readScript failed {}", e);
 			throw e;
@@ -165,4 +203,5 @@ public class SecurityVerificationServiceUtils {
 
 		return scancodeStream;
 	}
+
 }

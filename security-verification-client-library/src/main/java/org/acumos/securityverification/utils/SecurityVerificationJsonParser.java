@@ -2,7 +2,7 @@
  * ===============LICENSE_START=======================================================
  * Acumos
  * ===================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -225,14 +225,13 @@ public class SecurityVerificationJsonParser {
 	 */
 	public JSONObject stringToJsonObject(String jsonString) throws Exception {
 		try {
-			logger.debug("jsonString::: {} jsonString.length::: {}", jsonString, jsonString.length());
-			String strTemp1 = jsonString.replaceAll("\\\\\"", "\"");
-			String strTemp2 = strTemp1.substring(1, strTemp1.length() - 1);
+			logger.debug("Inside stringToJsonObject. jsonString: {} jsonString.length: {}", jsonString,
+					jsonString.length());
 			JSONParser parser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) parser.parse(strTemp2);
+			JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
 			return jsonObject;
 		} catch (ParseException e) {
-			logger.error("Exception Occurred Json parsing", e);
+			logger.error("ParseException:", e);
 			throw e;
 		}
 	}

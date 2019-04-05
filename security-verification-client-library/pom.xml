@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-client</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<name>security-verification-client-library</name>
 	<description>Acumos Security Verification Client Library</description>
 		
@@ -48,11 +48,6 @@
 			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
 			<artifactId>owasp-java-html-sanitizer</artifactId>
 			<version>20180219.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.att.eelf</groupId>
-			<artifactId>eelf-core</artifactId>
-			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
