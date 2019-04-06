@@ -224,7 +224,7 @@ function verify_license() {
 
 WORK_DIR=$(pwd)
 
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq python-dev xz-utils zlib1g libxml2-dev libxslt1-dev bzip2 < /dev/null > /dev/null
+DEBIAN_FRONTEND=noninteractive apt-get install -qq python-dev xz-utils zlib1g libxml2-dev libxslt1-dev bzip2 < /dev/null > /dev/null
 
 if [[ ! -e scancode-toolkit-3.0.2 ]]; then
   wget https://github.com/nexB/scancode-toolkit/releases/download/v3.0.2/scancode-toolkit-3.0.2.zip

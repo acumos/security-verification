@@ -125,7 +125,7 @@ function get_documents() {
 }
 
 WORK_DIR=$(pwd)
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq jq zip < /dev/null > /dev/null
+DEBIAN_FRONTEND=noninteractive apt-get install -qq jq zip < /dev/null > /dev/null
 solutionId=$1
 revisionId=$2
 folder=$3

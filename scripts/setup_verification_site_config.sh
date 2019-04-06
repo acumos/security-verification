@@ -47,7 +47,7 @@ function log() {
 function find_admin() {
   trap 'fail' ERR
   log "Finding user name $admin"
-  local jsonout="/tmp/$(uuidgen)"
+  local jsonout="/tmp/$(date +%H%M%S%N)"
   curl -s -o $jsonout -u $cds_creds -H 'Accept: application/json' $cds_base/user
   cat $jsonout
   users=$(jq -r '.content | length' $jsonout)
@@ -66,8 +66,8 @@ function find_admin() {
 }
 
 function setup_verification_site_config() {
-  local jsonout="/tmp/$(uuidgen)"
-  local jsoninp="/tmp/$(uuidgen)"
+  local jsonout="/tmp/$(date +%H%M%S%N)"
+  local jsoninp="/tmp/$(date +%H%M%S%N)"
   if [[ $(curl -I -u $cds_creds $cds_base/site/config/verification | grep -ci 'content-length: 0') -eq 1 ]]; then
     cds_api="-X POST $cds_base/site/config"
   else
@@ -120,49 +120,51 @@ if [[ "$json" != "" ]]; then
   log "Using provided JSON file $json"
   cat $json
 else
-  json="/tmp/$(uuidgen)"
+  json="/tmp/$(date +%H%M%S%N)"
   log "Using script-default JSON"
   cat <<EOF >$json
 {
-  "externalScan":"false",
-  "allowedLicense": [
-    { "type":"SPDX", "value":"Apache-2.0" },
-    { "type":"SPDX", "value":"CC-BY-4.0" },
-    { "type":"SPDX", "value":"BSD-3-Clause" },
-    { "type":"VendorA", "value":"VendorA-OSS" },
-    { "type":"CompanyB", "value":"CompanyB-Proprietary" }
-  ],
-  "licenseScan": {
-    "created":"true",
-    "updated":"true",
-    "deploy":"false",
-    "download":"false",
-    "share":"false",
-    "publishCompany":"false",
-    "publishPublic":"false"
-  },
-  "securityScan": {
-    "created":"true",
-    "updated":"true",
-    "deploy":"false",
-    "download":"false",
-    "share":"false",
-    "publishCompany":"false",
-    "publishPublic":"false"
-  },
-  "licenseVerify": {
-    "deploy":"true",
-    "download":"true",
-    "share":"false",
-    "publishCompany":"true",
-    "publishPublic":"true"
-  },
-  "securityVerify": {
-    "deploy":"true",
-    "download":"true",
-    "share":"false",
-    "publishCompany":"true",
-    "publishPublic":"true"
+  "verification" : {
+    "externalScan":"false",
+    "allowedLicense": [
+      { "type":"SPDX", "value":"Apache-2.0" },
+      { "type":"SPDX", "value":"CC-BY-4.0" },
+      { "type":"SPDX", "value":"BSD-3-Clause" },
+      { "type":"VendorA", "value":"VendorA-OSS" },
+      { "type":"CompanyB", "value":"CompanyB-Proprietary" }
+    ],
+    "licenseScan": {
+      "created":"true",
+      "updated":"true",
+      "deploy":"false",
+      "download":"false",
+      "share":"false",
+      "publishCompany":"false",
+      "publishPublic":"false"
+    },
+    "securityScan": {
+      "created":"true",
+      "updated":"true",
+      "deploy":"false",
+      "download":"false",
+      "share":"false",
+      "publishCompany":"false",
+      "publishPublic":"false"
+    },
+    "licenseVerify": {
+      "deploy":"true",
+      "download":"true",
+      "share":"false",
+      "publishCompany":"true",
+      "publishPublic":"true"
+    },
+    "securityVerify": {
+      "deploy":"true",
+      "download":"true",
+      "share":"false",
+      "publishCompany":"true",
+      "publishPublic":"true"
+    }
   }
 }
 EOF
