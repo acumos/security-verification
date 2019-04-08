@@ -60,10 +60,10 @@ public class SecurityVerificationServiceUtils {
 		logger.debug("Inside executeScript scriptFile:{} solutionId:{} revisionId:{}", scriptFile, solutionId,
 				revisionId);
 
-		String scriptFileWithLocation = SVServiceConstants.BACKSLASH + SVServiceConstants.MAVEN
-				+ SVServiceConstants.BACKSLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH
+		String scriptFileWithLocation = SVServiceConstants.FORWARD_SLASH + SVServiceConstants.MAVEN
+				+ SVServiceConstants.FORWARD_SLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH
 				+ scriptFile;
-		String folderNameWithLocation = SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder;
+		String folderNameWithLocation = SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder;
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
 		Process process = null;
@@ -85,7 +85,7 @@ public class SecurityVerificationServiceUtils {
 
 				logger.debug("cmd1 >>  {}", sb.toString());
 			}
-			String[] cmd2 = { "mkdir", SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder };
+			String[] cmd2 = { "mkdir", SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder };
 			processBuilder = new ProcessBuilder(cmd2);
 			if (processBuilder != null) {
 				process = processBuilder.start();
@@ -101,14 +101,7 @@ public class SecurityVerificationServiceUtils {
 
 			if (scriptFile.equalsIgnoreCase(SVServiceConstants.SCRIPTFILE_DUMP_MODEL)) {
 				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_DUMP_MODEL);
-				String[] dump_model_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,
-						folderNameWithLocation, env.getProperty(SVServiceConstants.CDMS_HOST),
-						env.getProperty(SVServiceConstants.CDMS_PORT),
-						env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
-						env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD),
-						env.getProperty(SVServiceConstants.NEXUS_HOST),
-						env.getProperty(SVServiceConstants.NEXUS_API_PORT),
-						env.getProperty(SVServiceConstants.NEXUS_MAVEN_REPO) };
+				String[] dump_model_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,folderNameWithLocation };
 				processBuilder = new ProcessBuilder(dump_model_cmd);
 				logger.debug("After call script shell");
 				if (processBuilder != null) {
@@ -123,11 +116,10 @@ public class SecurityVerificationServiceUtils {
 					logger.debug("dump_model_cmd>>  {}", sb.toString());
 				}
 				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
-						SVServiceConstants.BACKSLASH, folder);
+						SVServiceConstants.FORWARD_SLASH, folder);
 			} else {
 				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_LICENSE_SCAN);
-				String[] license_scan_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,
-						folderNameWithLocation };
+				String[] license_scan_cmd = { "bash", scriptFileWithLocation, folderNameWithLocation };
 				processBuilder = new ProcessBuilder(license_scan_cmd);
 				logger.debug("After call script shell");
 				if (processBuilder != null) {
@@ -142,7 +134,7 @@ public class SecurityVerificationServiceUtils {
 					logger.debug("license_scan_cmd>>  {}", sb.toString());
 				}
 				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
-						SVServiceConstants.BACKSLASH, folder);
+						SVServiceConstants.FORWARD_SLASH, folder);
 			}
 
 		} finally {
@@ -172,7 +164,7 @@ public class SecurityVerificationServiceUtils {
 
 		logger.debug("Insed readScript, Started reading the file {}", jsonFile);
 		File scancode_file = new File(
-				SVServiceConstants.SECURITY_SCAN + SVServiceConstants.BACKSLASH + folder + jsonFile);
+				SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder + jsonFile);
 		InputStream scancodeStream;
 		FileReader fr = null;
 		BufferedReader br = null;

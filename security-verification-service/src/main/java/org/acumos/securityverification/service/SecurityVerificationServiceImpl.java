@@ -75,13 +75,13 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 		SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_LICENSE_SCAN, solutionId, revisionId, folder, env);
 		//Upload scanresult.json
 		File fileScanResultJson = SecurityVerificationServiceUtils.readScanOutput(SVServiceConstants.SECURITY_SCAN
-				+ SVServiceConstants.BACKSLASH + folder + SVServiceConstants.SCAN_RESULT_JSON);
+				+ SVServiceConstants.FORWARD_SLASH + folder + SVServiceConstants.SCAN_RESULT_JSON);
 		logger.debug("fileScanResultJson: {}",fileScanResultJson);
 		uploadToArtifact(solutionId, revisionId, fileScanResultJson);
 		logger.debug("ScanResult Json uploadToArtifact successfully");
 		//Upload scancode.json
 		File fileScanCodeResultJson = SecurityVerificationServiceUtils.readScanOutput(SVServiceConstants.SECURITY_SCAN
-				+ SVServiceConstants.BACKSLASH + folder + SVServiceConstants.SCAN_CODE_JSON);
+				+ SVServiceConstants.FORWARD_SLASH + folder + SVServiceConstants.SCAN_CODE_JSON);
 		logger.debug("fileScanCodeResultJson: {}",fileScanCodeResultJson);
 		uploadToArtifact(solutionId, revisionId, fileScanCodeResultJson);
 		logger.debug("ScanCode Json uploadToArtifact successfully");

@@ -22,7 +22,7 @@ package org.acumos.securityverification.utils;
 public class SVServiceConstants {
 
 	// Path components
-	public static final String BACKSLASH = "/";
+	public static final String FORWARD_SLASH = "/";
 	public static final String SECURITY_SCAN = "scan";
 	public static final String UPDATE_SITE_CONFIG = "/update/siteConfig/verification";
 	public static final String SOLUTIONID = "solutionId";
@@ -38,13 +38,8 @@ public class SVServiceConstants {
 	public static final String CDMS_CLIENT_URL = "cdms.client.url";
 	public static final String CDMS_CLIENT_USER = "cdms.client.username";
 	public static final String CDMS_CLIENT_PWD = "cdms.client.password";
-	public static final String CDMS_HOST= "cdms.client.host";
-	public static final String CDMS_PORT= "cdms.client.port";
 	
 	public static final String NEXUS_GROUPID= "nexus.client.groupId";
-	public static final String NEXUS_HOST= "nexus.client.host";
-	public static final String NEXUS_API_PORT= "nexus.client.port";
-	public static final String NEXUS_MAVEN_REPO= "nexus.client.maven_repo";
 	public static final String NEXUS_CLIENT_URL = "nexus.client.url";
 	public static final String NEXUS_CLIENT_USER = "nexus.client.username";
 	public static final String NEXUS_CLIENT_PWD = "nexus.client.pwd";

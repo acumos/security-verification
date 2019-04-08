@@ -40,13 +40,7 @@
 #   revisionId: ID of Acumos model revision
 #   folder: destination folder
 #
-export ACUMOS_CDS_HOST=$5
-export ACUMOS_CDS_PORT=$6
-export ACUMOS_CDS_USER=$7
-export ACUMOS_CDS_PASSWORD=$8
-export ACUMOS_NEXUS_HOST=$9
-export ACUMOS_NEXUS_API_PORT=$10
-export ACUMOS_NEXUS_MAVEN_REPO=$11
+
 trap 'fail' ERR
 
 function fail() {
@@ -131,7 +125,7 @@ function get_documents() {
 }
 
 WORK_DIR=$(pwd)
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq jq zip < /dev/null > /dev/null
+DEBIAN_FRONTEND=noninteractive apt-get install -qq jq zip < /dev/null > /dev/null
 solutionId=$1
 revisionId=$2
 folder=$3

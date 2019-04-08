@@ -105,9 +105,7 @@ public class SecurityVerificationJsonParser {
 		return securityVerificationCdump;
 	}
 
-	public Verification parseSiteConfigJson(JSONObject jsonObject) {
-
-		JSONObject verificationObject = (JSONObject) jsonObject.get("verification");
+	public Verification parseSiteConfigJson(JSONObject verificationObject) {
 
 		Verification verification = new Verification();
 

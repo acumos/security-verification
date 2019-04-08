@@ -29,11 +29,17 @@ import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
+import org.acumos.licensemanager.client.LicenseVerifier;
+import org.acumos.licensemanager.client.model.ILicenseVerification;
+import org.acumos.licensemanager.client.model.ILicenseVerifier;
+import org.acumos.licensemanager.client.model.LicenseAction;
+import org.acumos.licensemanager.client.model.VerifyLicenseRequest;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.domain.LicenseVerify;
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
+import org.acumos.securityverification.domain.SecurityVerify;
 import org.acumos.securityverification.domain.Verification;
 import org.acumos.securityverification.domain.Workflow;
 import org.acumos.securityverification.transport.SVResonse;
@@ -94,9 +100,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
 					logger.debug("mlpSolutionRevision.getRevisionId()::--> {}" + mlpSolutionRevision.getRevisionId());
 					if(mlpSolutionRevision.getRevisionId() != null && mlpSolutionRevision.getRevisionId().equals(revisionId)) {
-						
 						Verification siteConfigVerificationObj = verificationSiteConfig();
-						
+						String userId = mlpSolutionRevision.getUserId();						
 						mlpRevisionId = mlpSolutionRevision.getRevisionId();	
 						logger.debug("mlpSolutionRevision.getVersion():::--> {}"+mlpSolutionRevision.getVersion());
 						//modelTypeCode is PR (predictor) and the toolkitTypeCode is CP (composite solution) then retrieves the CD (CDUMP) artifact for the revisionId
@@ -151,20 +156,68 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 												//ACUMOS-2558: TBD verifiedVulnerability or verifiedLicense are null and unable to find validationStatusCode in MLPSolutionRevision. 
 												mlpCdumpSolutionRevision.getVerifiedLicense();
 												mlpCdumpSolutionRevision.getVerifiedVulnerability();
-												workflow.setWorkflowAllowed(true); 
-												
-												LicenseVerify licenseVerify = siteConfigVerificationObj.getLicenseVerify();
-													//TODO Need to be tested once getting serve access.
-													//workflow.setWorkflowAllowed(false); 
-													//workflow.setReason(SVConstants.LICENSE_SCAN_INCOMPLETE);
-													
-													ResponseEntity<SVResonse> svResonse = null;
-													if(worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD) && licenseVerify.isDownload() ) {
-														svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(), mlpCdumpSolutionRevision.getRevisionId(), worflowId);	
-													}
-													if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY) && licenseVerify.isDeploy()) {
-														svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(), mlpCdumpSolutionRevision.getRevisionId(), worflowId);
-													}
+												//workflow.setWorkflowAllowed(true); 
+
+												LicenseVerify licenseVerify = siteConfigVerificationObj
+														.getLicenseVerify();
+												SecurityVerify securityVerify = siteConfigVerificationObj
+														.getSecurityVerify();
+												ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
+												ResponseEntity<SVResonse> svResonse = null;
+												if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)
+														&& licenseVerify.isDownload()) {
+													VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(
+															LicenseAction.DOWNLOAD,
+															securityVerificationCdumpNode.getNodeSolutionId(), userId);
+													licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
+													ILicenseVerification verifyUserRTU = licenseVerifier
+															.verifyRTU(licenseDownloadRequest);
+													// returns true or false if rtu exists
+													workflow.setWorkflowAllowed(
+															verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD));
+												}
+												if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY)
+														&& licenseVerify.isDeploy()) {
+													VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(
+															LicenseAction.DEPLOY,
+															securityVerificationCdumpNode.getNodeSolutionId(), userId);
+													licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
+													ILicenseVerification verifyUserRTU = licenseVerifier
+															.verifyRTU(licenseDownloadRequest);
+													// returns true or false if rtu exists
+													workflow.setWorkflowAllowed(
+															verifyUserRTU.isAllowed(LicenseAction.DEPLOY));
+												}
+												if (licenseVerify.isDownload() && workflow.isWorkflowAllowed()) {
+													svResonse = invokesScan(
+															securityVerificationCdumpNode.getNodeSolutionId(),
+															mlpCdumpSolutionRevision.getRevisionId(), worflowId);
+													workflow.setWorkflowAllowed(false);
+													workflow.setReason("license scan incomplete|security scan failure");
+
+												}
+												if (licenseVerify.isDeploy() && workflow.isWorkflowAllowed()) {
+													svResonse = invokesScan(
+															securityVerificationCdumpNode.getNodeSolutionId(),
+															mlpCdumpSolutionRevision.getRevisionId(), worflowId);
+													workflow.setWorkflowAllowed(false);
+													workflow.setReason("license scan incomplete|security scan failure");
+												}
+												if (securityVerify.isDownload() && workflow.isWorkflowAllowed()) {
+													svResonse = invokesScan(
+															securityVerificationCdumpNode.getNodeSolutionId(),
+															mlpCdumpSolutionRevision.getRevisionId(), worflowId);
+													workflow.setWorkflowAllowed(false);
+													workflow.setReason("security scan incomplete|license scan failure");
+
+												}
+												if (securityVerify.isDeploy() && workflow.isWorkflowAllowed()) {
+													svResonse = invokesScan(
+															securityVerificationCdumpNode.getNodeSolutionId(),
+															mlpCdumpSolutionRevision.getRevisionId(), worflowId);
+													workflow.setWorkflowAllowed(false);
+													workflow.setReason("security scan incomplete|license scan failure");
+												}
 												
 											}
 										}
@@ -207,7 +260,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			if (mlpSiteConfig != null) {
 				siteConfigDataJsonObj = parseJSON.stringToJsonObject(mlpSiteConfig.getConfigValue().toString());
 			} else {
-				//TBD Need to be removed once getting confirmation added this feature in SV service 
+				// TBD Need to be removed once getting confirmation added this feature in SV
+				// service
 				String createSiteConfigUrl = securityVerificationApiUrl + SVConstants.SITE_CONFIG_UPDATE;
 				RestTemplate restTemplate = new RestTemplate();
 				String siteConfigJson = restTemplate.getForObject(createSiteConfigUrl, String.class);
@@ -268,4 +322,3 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	}
 
 }
-
