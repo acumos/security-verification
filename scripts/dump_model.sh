@@ -78,10 +78,7 @@ function get_artifacts() {
     name=$(jq -r ".[$i].name" cds/artifacts.json)
     uri=$(jq -r ".[$i].uri" cds/artifacts.json)
     type=$(jq -r ".[$i].artifactTypeCode" cds/artifacts.json)
-    if [[ "$type" == "DI" ]]; then
-      log "Downloading description"
-      wget -O description $nexusUri/repository/$nexusRepo/$uri
-    elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
+    if [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
       log "Downloading model.zip"
       wget -O model.zip $nexusUri/repository/$nexusRepo/$uri
       unzip -d model-zip model.zip
@@ -124,8 +121,20 @@ function get_documents() {
   done
 }
 
+function get_description() {
+  log "Getting description"
+  access_types="OR PB PR RS"
+  for access_type in $access_types; do
+    curl -s -o description-$access_type.txt -u $cdsCreds $cdsUri/ccds/revision/$revisionId/access/$access_type/descr
+    if [[ "$(cat description-$access_type.txt)" == "" ]];
+      then rm description-$access_type.txt;
+    fi
+  done
+}
+
 WORK_DIR=$(pwd)
-DEBIAN_FRONTEND=noninteractive apt-get install -qq jq zip < /dev/null > /dev/null
+apt-get update
+apt-get install -qq wget jq zip
 solutionId=$1
 revisionId=$2
 folder=$3
@@ -144,4 +153,5 @@ get_solution
 get_revision
 get_artifacts
 get_documents
+get_description
 cd $WORK_DIR

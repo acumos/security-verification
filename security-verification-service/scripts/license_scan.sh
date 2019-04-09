@@ -224,8 +224,6 @@ function verify_license() {
 
 WORK_DIR=$(pwd)
 
-DEBIAN_FRONTEND=noninteractive apt-get install -qq python-dev xz-utils zlib1g libxml2-dev libxslt1-dev bzip2 < /dev/null > /dev/null
-
 if [[ ! -e scancode-toolkit-3.0.2 ]]; then
   wget https://github.com/nexB/scancode-toolkit/releases/download/v3.0.2/scancode-toolkit-3.0.2.zip
   unzip scancode-toolkit-3.0.2.zip
@@ -234,7 +232,7 @@ fi
 solutionId=$1
 revisionId=$2
 folder=$3
-OUT=$(uuidgen)
+OUT=$(date +%H%M%S%N)
 mkdir $OUT
 scancode-toolkit-3.0.2/scancode --license --copyright \
   --ignore "cds/*" --ignore "scancode.json" --ignore "scanresult.json" \
