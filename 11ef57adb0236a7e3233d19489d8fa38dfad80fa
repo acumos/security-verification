@@ -34,6 +34,52 @@
       "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0f8359c_1e736b3d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:21:26Z",
+      "side": 1,
+      "message": "This always generates a new ID, which is the next integer in sequence. \n\n\t/**\n\t * Creates a new RTU object and generates an ID. Any RTU references in the entry\n\t * will be created if needed.\n\t * \n\t * @param rightToUse\n\t *                       Right to use data\n\t * @return Complete object, with generated information such as ID\n\t * @throws RestClientResponseException\n\t *                                         Error message is in the response body\n\t */\n\tMLPRightToUse createRightToUse(MLPRightToUse rightToUse) throws RestClientResponseException;",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 74
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fae34e55_496a0e12",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:21:26Z",
+      "side": 1,
+      "message": "Wot the heck is this?  If you get back null use a bogus one? Please remove this strange construct.",
+      "range": {
+        "startLine": 110,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 7
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
