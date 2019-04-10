@@ -23,6 +23,7 @@ import java.lang.invoke.MethodHandles;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.acumos.securityverification.logging.LogConfig;
 import org.acumos.securityverification.service.ISecurityVerificationService;
 import org.acumos.securityverification.transport.ErrorTransport;
 import org.acumos.securityverification.transport.SVResonse;
@@ -53,11 +54,11 @@ public class SecurityVerificationServiceController extends AbstractController {
 			+ "/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SVResonse securityVerification(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @PathVariable("workflowId") String workflowId) {
-		logger.debug("Inside securityVerification service scan... ");
-		logger.debug("securityVerification solutionId  {}  revisionId  {}", solutionId, revisionId);
-
+		logger.debug("Inside securityVerification service scan solutionId  {}  revisionId  {}", solutionId, revisionId);
 		try {
+			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScan");
 			securityVerificationService.securityVerification(solutionId, revisionId);
+			LogConfig.clearMDCDetails();
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			logger.warn("securityVerification failed: {}", ex.toString());
@@ -70,9 +71,10 @@ public class SecurityVerificationServiceController extends AbstractController {
 	@RequestMapping(value = SVServiceConstants.UPDATE_SITE_CONFIG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SVResonse siteConfigVerification() throws Exception {
 		logger.debug("Inside siteConfigVerification adding default SiteConfig Verification Json");
-
 		try {
+			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScan");
 			String siteConfigJson = securityVerificationService.createSiteConfig();
+			LogConfig.clearMDCDetails();
 			return new SuccessTransport(HttpServletResponse.SC_OK, siteConfigJson);
 		} catch (Exception ex) {
 			logger.warn("createSiteConfig failed: {}", ex.toString());

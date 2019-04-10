@@ -28,7 +28,7 @@ public class SVConstants {
 	public static final String SITE_CONFIG_UPDATE= "/update/siteConfig/verification";
 	
 	//Site config Json tag
-	public static final String CONFIGKEY = "site_config";
+	public static final String SITE_VERIFICATION_KEY = "verification";
 	public static final String VERIFICATION = "verification";
 	public static final String LICENSESCAN = "licenseScan";
 	public static final String CREATED = "created";
@@ -65,7 +65,7 @@ public class SVConstants {
 	public static final String SOLUTIONID = "solutionId";
 	public static final String REVISIONID = "revisionId";
 	public static final String WORKFLOWID = "workflowId";
-	public static final String BACKSLASH = "/";
-	
+	public static final String FORWARD_SLASH = "/";
+	public static final String TRUE="true";
 	
 }
