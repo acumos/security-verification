@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "a3bc0fad_1cefdbd0",
+        "filename": "license-manager-client-library/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "What does this do?  You expect users to run this?",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 86
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "10d4937e_7348bc59",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "something reformatted your pom file, for the worse",
+      "range": {
+        "startLine": 31,
+        "startChar": 35,
+        "endLine": 31,
+        "endChar": 151
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bcc52c86_ea2fd39e",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
         "patchSetId": 1
@@ -76,6 +122,97 @@
         "startChar": 0,
         "endLine": 114,
         "endChar": 7
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a28b2098_0f30543a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "you don\u0027t need this file if you\u0027re not going to write javadoc for the package",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8021e268_5d94198d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "Superfluous",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ecad8cc3_2ac23d58",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "Why add files you\u0027re not going to use?",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c4a9a4bf_d8f1dae6",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "did one of the newly added checkstyle plugins add these empty files?",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "989e32b8_ae99aedc",
+        "filename": "license-manager-client-library/src/test/java/org/acumos/licensemanager/client/LicenseCreatorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T10:26:32Z",
+      "side": 1,
+      "message": "You might factor this out of your tests and into a @Setup annotated method",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 71
       },
       "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
