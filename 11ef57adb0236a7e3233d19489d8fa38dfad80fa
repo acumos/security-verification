@@ -347,6 +347,316 @@
     },
     {
       "key": {
+        "uuid": "c2576ab0_e66d2fa7",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ILicenseVerifier.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "wot?",
+      "range": {
+        "startLine": 38,
+        "startChar": 33,
+        "endLine": 38,
+        "endChar": 39
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fe3c783_6d60375e",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/LicenseVerification.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Maybe use suffix \"Impl\" which is the usual convention",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "256a75fa_6418cd19",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/LicenseVerification.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Well is it private, or is it public?  Please synch.  Cannot be both!",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 32
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f17a119_946d3b8e",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/VerifyLicenseRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Maybe use suffix Impl",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7b197c3b_309d40b1",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/VerifyLicenseRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "could simplify to \n\n    this(Arrays.asList(action), solutionId, userId); \n\nfor brevity.",
+      "range": {
+        "startLine": 64,
+        "startChar": 4,
+        "endLine": 66,
+        "endChar": 22
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4898a415_8ae6039f",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/exceptions/RightToUseException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "use a real unique serial #, not the default 1",
+      "range": {
+        "startLine": 56,
+        "startChar": 44,
+        "endLine": 56,
+        "endChar": 45
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e8b642e_bf31119d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Could be refactored to reduce code significantly.  Stream and String cases can be coalesced.  Json Node case could be factored out.",
+      "range": {
+        "startLine": 41,
+        "startChar": 13,
+        "endLine": 41,
+        "endChar": 33
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7da3d9c0_93eeaca2",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "This is weird - why do you have to create an object  and pass it to the validator?  why doesn\u0027t validate RETURN this object??",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 78
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a7bbbf16_a5b4bdac",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "this is a strange pattern. Instead create \u0026 return a results object",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 14
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9dea0045_a457932e",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/exceptions/LicenseJsonException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Please use a large unique number not just 1",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "543a12ff_6d013bec",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/exceptions/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Remember this is a PACKAGE comment, not a class comment.  And you\u0027re in the exceptions package.  I recommend just dropping this.",
+      "range": {
+        "startLine": 21,
+        "startChar": 9,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5831364d_0f2505f1",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/main/LicenseJsonValidatorMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Is this for testing??  Because this is a library, and libraries generally do NOT provide a main() method!",
+      "range": {
+        "startLine": 56,
+        "startChar": 21,
+        "endLine": 56,
+        "endChar": 25
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7067d213_dd4f39b7",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/main/LicenseJsonValidatorMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Don\u0027t catch and discard, just allow it to throw",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 67
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "27a5314c_12a589e8",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/ILicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Does this close the stream?",
+      "range": {
+        "startLine": 63,
+        "startChar": 31,
+        "endLine": 63,
+        "endChar": 50
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a28b2098_0f30543a",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/package-info.java",
         "patchSetId": 1
@@ -381,6 +691,52 @@
     },
     {
       "key": {
+        "uuid": "b0ff439f_befc6ef8",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "department of redundancy department?",
+      "range": {
+        "startLine": 39,
+        "startChar": 57,
+        "endLine": 39,
+        "endChar": 70
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c80f32f_406f7be9",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "What about closing the stream??",
+      "range": {
+        "startLine": 49,
+        "startChar": 21,
+        "endLine": 49,
+        "endChar": 38
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ecad8cc3_2ac23d58",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/package-info.java",
         "patchSetId": 1
@@ -392,6 +748,139 @@
       "writtenOn": "2019-04-10T10:26:32Z",
       "side": 1,
       "message": "Why add files you\u0027re not going to use?",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eab61b6d_82e734de",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Hmm, well now I see the sentence. But remember this is a package comment, not a class comment.",
+      "parentUuid": "ecad8cc3_2ac23d58",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6212e297_1e050e34",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseCreatorMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Yet another class with a main() method in a library - please remove.  Libraries should not provide a main.",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6c41aa6e_1289321f",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "I\u0027m really confused.  I keep finding classes with main() methods. Is this a LIBRARY or a SERVER ?",
+      "range": {
+        "startLine": 43,
+        "startChar": 13,
+        "endLine": 43,
+        "endChar": 30
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6cec44f2_c6aee2d7",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "what happens if this is null?",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 74
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "069072ba_6ae042bf",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "This should be config, not hardcoded",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 53
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af8911e9_d403a533",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T13:08:45Z",
+      "side": 1,
+      "message": "Maybe this should accept the CDS config, not read from environment??",
+      "range": {
+        "startLine": 67,
+        "startChar": 12,
+        "endLine": 67,
+        "endChar": 29
+      },
       "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
