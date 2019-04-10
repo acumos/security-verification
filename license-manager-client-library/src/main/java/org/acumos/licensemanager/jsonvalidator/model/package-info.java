@@ -18,43 +18,5 @@
  * ===============LICENSE_END==================================================
  */
 
-package org.acumos.licensemanager.client.model;
-
-import java.util.List;
-import org.acumos.cds.domain.MLPRightToUse;
-
-/**
- * The output of the RTU creation process {@link
- * org.acumos.licensemanager.client.model.ILicenseCreator}.
- */
-public interface ICreatedRtu {
-  /**
-   * True if rtu was updated.
-   *
-   * @return if the RTU was created
-   */
-  boolean isCreated();
-
-  /**
-   * True if rtu was updated.
-   *
-   * @return if instead of creating we updated the rtu This will indicate that the rtu references
-   *     will be overriden
-   */
-  boolean isUpdated();
-
-  /**
-   * Returns the original request for creating the RTU.
-   *
-   * @return original request
-   */
-  ICreateRtu getRequest();
-
-  /**
-   * Get the CDS {@link org.acumos.cds.domain.MLPRightToUse} created or updated during the
-   * processing.
-   *
-   * @return list of Rtus created in CDS
-   */
-  List<MLPRightToUse> getRtus();
-}
+/** Models used by license json validation. */
+package org.acumos.licensemanager.jsonvalidator.model;

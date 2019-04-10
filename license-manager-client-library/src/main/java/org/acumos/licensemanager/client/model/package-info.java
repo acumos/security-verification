@@ -18,7 +18,5 @@
  * ===============LICENSE_END==================================================
  */
 
-/**
- * Models for handling processing requests to create and verify right to use.
- */
+/** Models for handling processing requests to create and verify right to use. */
 package org.acumos.licensemanager.client.model;

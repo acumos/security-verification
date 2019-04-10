@@ -18,16 +18,15 @@
  * ===============LICENSE_END==================================================
  */
 
-package org.acumos.licensemanager.exceptions;
+package org.acumos.licensemanager.jsonvalidator.exceptions;
 
 import java.io.Serializable;
-import org.springframework.web.client.RestClientResponseException;
 
 /** When getting, updating, or creating a right to use this exception captures the issue. */
-public class RightToUseException extends Exception implements Serializable {
+public class LicenseJsonException extends Exception implements Serializable {
 
   /** Internal exception being wrapped by RTU exception. */
-  private final RestClientResponseException cdsRestClientException;
+  private Exception jsonParseException;
 
   /**
    * Creates exception for any RTU operation error.
@@ -35,20 +34,28 @@ public class RightToUseException extends Exception implements Serializable {
    * @param message provide text for message
    * @param restException rest client response error
    */
-  public RightToUseException(
-      final String message, final RestClientResponseException restException) {
+  public LicenseJsonException(final String message, final Exception restException) {
     super(message);
-    cdsRestClientException = restException;
+    jsonParseException = restException;
   }
 
   /**
-   * Getter for the field <code>cdsRestClientException</code>.
+   * Creates exception for any RTU operation error.
    *
-   * @return the cdsRestClientException
+   * @param message provide text for message
    */
-  public final RestClientResponseException getCdsRestClientException() {
-    return cdsRestClientException;
+  public LicenseJsonException(final String message) {
+    super(message);
   }
 
-  private static final long serialVersionUID = 3714073159231864295L;
+  /**
+   * Getter for the field <code>jsonParseException</code>.
+   *
+   * @return the jsonParseException
+   */
+  public final Exception getJsonParseException() {
+    return jsonParseException;
+  }
+
+  private static final long serialVersionUID = -7896327154019469541L;
 }

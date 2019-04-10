@@ -1,5 +1,5 @@
 /*-
-* ===============LICENSE_START================================================
+ * ===============LICENSE_START================================================
  * Acumos Apache-2.0
  * ============================================================================
  * Copyright (C) 2019 Nordix Foundation.
@@ -17,32 +17,20 @@
  * limitations under the License.
  * ===============LICENSE_END==================================================
  */
+
 package org.acumos.licensemanager.client.model;
 
+import com.google.common.collect.ImmutableMap;
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.google.common.collect.ImmutableMap;
-
-/**
- * <p>
- * Verified that there is a right to use for specified userId and solutionID.
- * </p>
- *
- * @version 0.0.2
- */
+/** Verified that there is a right to use for specified userId and solutionID. */
 public class LicenseVerification implements ILicenseVerification {
 
-    /**
-   * <p>
-   * List of allowed usages.
-   * </p>
-   */
+  /** List of allowed usages. */
   private Map<LicenseAction, Boolean> allowedToUse;
 
-  /**
-   * private contructor do not use.
-   */
+  /** private contructor do not use. */
   public LicenseVerification() {
     if (allowedToUse == null) {
       allowedToUse = new EnumMap<LicenseAction, Boolean>(LicenseAction.class);
@@ -50,18 +38,12 @@ public class LicenseVerification implements ILicenseVerification {
   }
 
   /**
-   * <p>
-   * Add {@link org.acumos.licensemanager.client.model.LicenseAction}
-   * to be verified.
-   * </p>
+   * Add {@link org.acumos.licensemanager.client.model.LicenseAction} to be verified.
    *
-   * @param action
-   *  a {@link org.acumos.licensemanager.client.model.LicenseAction} object.
+   * @param action a {@link org.acumos.licensemanager.client.model.LicenseAction} object.
    * @param allowed a boolean.
    */
-  public final void addAction(
-      final LicenseAction action,
-      final boolean allowed) {
+  public final void addAction(final LicenseAction action, final boolean allowed) {
     allowedToUse.put(action, allowed);
   }
 
@@ -77,5 +59,4 @@ public class LicenseVerification implements ILicenseVerification {
     }
     return allowedToUse.get(action).booleanValue();
   }
-
 }

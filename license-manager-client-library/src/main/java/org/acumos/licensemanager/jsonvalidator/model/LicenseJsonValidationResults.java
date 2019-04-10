@@ -9,7 +9,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,25 +18,32 @@
  * ===============LICENSE_END==================================================
  */
 
-package org.acumos.licensemanager.client.model;
+package org.acumos.licensemanager.jsonvalidator.model;
 
-import java.util.Map;
+import com.networknt.schema.ValidationMessage;
+import java.util.Set;
 
-/** ILicenseVerification interface. CreatedRtu */
-public interface ILicenseVerification {
+/** LicenseJsonValidationResults class. */
+public class LicenseJsonValidationResults {
 
-  /**
-   * Returns the list of actions for which are allowed to use.
-   *
-   * @return a {@link java.util.Map} object.
-   */
-  Map<LicenseAction, Boolean> getAllowedToUse();
+  /** list of errors found while validating json schema. */
+  private Set<ValidationMessage> jsonSchemaErrors;
 
   /**
-   * Convenience method to pass a license action and return true if a RTU exists.
+   * Setter for the field <code>jsonSchemaErrors</code>.
    *
-   * @param action a {@link org.acumos.licensemanager.client.model.LicenseAction} object.
-   * @return a boolean.
+   * @param errors a {@link java.util.Set} object.
    */
-  boolean isAllowed(LicenseAction action);
+  public final void setJsonSchemaErrors(final Set<ValidationMessage> errors) {
+    jsonSchemaErrors = errors;
+  }
+
+  /**
+   * Getter for the field <code>jsonSchemaErrors</code>.
+   *
+   * @return the jsonSchemaErrors
+   */
+  public final Set<ValidationMessage> getJsonSchemaErrors() {
+    return jsonSchemaErrors;
+  }
 }

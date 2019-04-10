@@ -1,5 +1,5 @@
 /*-
-* ===============LICENSE_START================================================
+ * ===============LICENSE_START================================================
  * Acumos Apache-2.0
  * ============================================================================
  * Copyright (C) 2019 Nordix Foundation.
@@ -17,55 +17,45 @@
  * limitations under the License.
  * ===============LICENSE_END==================================================
  **/
+
 package org.acumos.licensemanager.client;
 
 import java.lang.invoke.MethodHandles;
 import java.time.Instant;
 import java.util.List;
-
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPRightToUse;
-import org.acumos.licensemanager.client.model.ICreateRTURequest;
+import org.acumos.licensemanager.client.model.CreatedRtu;
+import org.acumos.licensemanager.client.model.ICreateRtu;
 import org.acumos.licensemanager.client.model.ICreatedRtu;
 import org.acumos.licensemanager.client.model.ILicenseCreator;
 import org.acumos.licensemanager.exceptions.RightToUseException;
-import org.acumos.licensemanager.client.model.CreatedRtu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClientResponseException;
 
 /**
- * LicenseCreator Library will create a right to use for either a solution and
- * can be added for the entire site or for a specific user.
- *
- * @version 0.0.2
+ * LicenseCreator Library will create a right to use for either a solution and can be added for the
+ * entire site or for a specific user.
  */
 public class LicenseCreator implements ILicenseCreator {
-  /**
-   * Logger for any exceptions that happen while
-   * creating a RTU with CDS.
-   */
-  private static final Logger LOGGER = LoggerFactory
-    .getLogger(MethodHandles.lookup().lookupClass());
-  /**
-   * dataClient must be provided by consumer of this library.
-   */
+  /** Logger for any exceptions that happen while creating a RTU with CDS. */
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  /** dataClient must be provided by consumer of this library. */
   private final ICommonDataServiceRestClient dataClient;
 
   /**
    * The implementation of the CDS is required to enable this library.
    *
-   * @param dataServiceClient a
-   *             {@link org.acumos.cds.client.ICommonDataServiceRestClient}
-   *             object.
+   * @param dataServiceClient a {@link org.acumos.cds.client.ICommonDataServiceRestClient} object.
    */
   public LicenseCreator(final ICommonDataServiceRestClient dataServiceClient) {
     this.dataClient = dataServiceClient;
   }
 
   @Override
-  public final ICreatedRtu createRTU(
-      final ICreateRTURequest request) throws RightToUseException {
+  public final ICreatedRtu createRtu(final ICreateRtu request) throws RightToUseException {
 
     if (request == null) {
       throw new IllegalArgumentException("request is not defined");
@@ -74,22 +64,19 @@ public class LicenseCreator implements ILicenseCreator {
       throw new IllegalArgumentException("request solution id is not defined");
     }
     if (request.getUserIds().isEmpty() && !request.isSiteWide()) {
-      throw new IllegalArgumentException("request userId or "
-        + "siteWide is not defined");
+      throw new IllegalArgumentException("request userId or " + "siteWide is not defined");
     }
 
     if (request.getUserIds().size() > 1) {
-      throw new IllegalArgumentException("only allow one user id was passed"
-        + request.getUserIds().size());
+      throw new IllegalArgumentException(
+          "only allow one user id was passed" + request.getUserIds().size());
     }
-
 
     CreatedRtu response = new CreatedRtu();
     response.setRequest(request);
     // check if rtu reference already exists for solution id + userid
 
-    List<MLPRightToUse> rtus = LicenseCDSUtil
-      .getRightToUses(dataClient, request);
+    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUses(dataClient, request);
     // in Boreas only expect 1 rtu
     if (rtus != null && !rtus.isEmpty()) {
       // in Boreas we will not update RTU if added for solution and user
@@ -103,57 +90,47 @@ public class LicenseCreator implements ILicenseCreator {
 
   /**
    * Update Right to use if an existing RTU exists will create a new RTU.
+   *
    * @param request creation request
    * @param response responds with information about the rtu creation
    * @throws RightToUseException when then creation of RTU was unsuccessful
    */
-  private void createRightToUse(
-      final ICreateRTURequest request,
-      final CreatedRtu response) throws RightToUseException {
-    MLPRightToUse rightToUse =
-      new MLPRightToUse(request.getSolutionId(), request.isSiteWide());
-    rightToUse.setRtuId(request.getRTUId());
-    LicenseCDSUtil.addRtuRefs(dataClient, request, rightToUse);
+  private void createRightToUse(final ICreateRtu request, final CreatedRtu response)
+      throws RightToUseException {
+    MLPRightToUse rightToUse = new MLPRightToUse(request.getSolutionId(), request.isSiteWide());
+    LicenseDataUtils.addRtuRefs(dataClient, request, rightToUse);
     rightToUse.setCreated(Instant.now());
 
     try {
       MLPRightToUse completeRtu = dataClient.createRightToUse(rightToUse);
-      MLPRightToUse rtu;
-      if (completeRtu != null) {
-        rtu = completeRtu;
-      } else {
-        rtu = rightToUse;
-      }
-      response.addRtu(rtu);
+      response.addRtu(completeRtu);
       response.setCreated(true);
     } catch (RestClientResponseException ex) {
-      LOGGER.error("createRightToUse failed, server reports: {}",
-        ex.getResponseBodyAsString());
+      LOGGER.error("createRightToUse failed, server reports: {}", ex.getResponseBodyAsString());
       throw new RightToUseException("createRightToUse failed", ex);
     }
   }
 
   /**
    * Internal method to update the rtu.
+   *
    * @param request creation request
    * @param response responds with information about the rtu creation
    * @param rtus list of rtus to process
    * @throws RightToUseException when then creation of RTU was unsuccessful
    */
-  private void updateRtu(final ICreateRTURequest request,
-    final CreatedRtu response, final List<MLPRightToUse> rtus)
+  private void updateRtu(
+      final ICreateRtu request, final CreatedRtu response, final List<MLPRightToUse> rtus)
       throws RightToUseException {
     for (MLPRightToUse rtu : rtus) {
-      LicenseCDSUtil.addRtuRefs(dataClient, request, rtu);
+      LicenseDataUtils.addRtuRefs(dataClient, request, rtu);
       rtu.setSite(request.isSiteWide());
-      rtu.setRtuId(request.getRTUId());
       rtu.setModified(Instant.now());
-      if (LicenseCDSUtil.updateRightToUse(dataClient, rtu)) {
+      if (LicenseDataUtils.updateRightToUse(dataClient, rtu)) {
         response.addRtu(rtu);
         response.setUpdated(true);
         response.setCreated(false);
       }
     }
   }
-
 }

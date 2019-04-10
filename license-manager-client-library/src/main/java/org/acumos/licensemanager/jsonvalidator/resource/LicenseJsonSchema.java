@@ -1,0 +1,48 @@
+/*-
+ * ===============LICENSE_START================================================
+ * Acumos Apache-2.0
+ * ============================================================================
+ * Copyright (C) 2019 Nordix Foundation.
+ * ============================================================================
+ * This Acumos software file is distributed by AT&T and Tech Mahindra
+ * under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This file is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===============LICENSE_END==================================================
+ */
+
+package org.acumos.licensemanager.jsonvalidator.resource;
+
+import com.networknt.schema.JsonSchema;
+import com.networknt.schema.JsonSchemaFactory;
+import java.io.IOException;
+import java.io.InputStream;
+
+/** LicenseJsonSchema class. */
+public final class LicenseJsonSchema {
+
+  /** Do not instantiate. */
+  private LicenseJsonSchema() {}
+
+  /** Name of the json schema for license. */
+  private static final String FILE_NAME = "/license-schema.schema.json";
+
+  /**
+   * Get the license json schema as JsonSchema.
+   *
+   * @return a {@link com.networknt.schema.JsonSchema} object.
+   * @throws java.io.IOException if any.
+   */
+  public static JsonSchema getSchema() throws IOException {
+    JsonSchemaFactory factory = JsonSchemaFactory.getInstance();
+    InputStream is = LicenseJsonSchema.class.getResource(FILE_NAME).openStream();
+    return factory.getSchema(is);
+  }
+}
