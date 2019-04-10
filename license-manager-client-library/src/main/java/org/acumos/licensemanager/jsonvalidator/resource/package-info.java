@@ -18,5 +18,5 @@
  * ===============LICENSE_END==================================================
  */
 
-/** Main programs for testing RTU creation and RTU verification. */
-package org.acumos.licensemanager.main;
+/** Fetch the json schema used for validation. */
+package org.acumos.licensemanager.jsonvalidator.resource;

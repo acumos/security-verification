@@ -23,37 +23,29 @@ package org.acumos.licensemanager.exceptions;
 import org.springframework.web.client.RestClientResponseException;
 
 /**
- * <p>
- * When getting, updating, or creating a right to use
- * this exception captures the issue.
- * </p>
+ * When getting, updating, or creating a right to use this exception captures the issue.
  *
  * @version 0.0.2
  */
 public class RightToUseException extends Exception {
 
-  /**
-   * Internal exception being wrapped by RTU exception.
-   */
+  /** Internal exception being wrapped by RTU exception. */
   private final RestClientResponseException cdsRestClientException;
 
   /**
-   * <p>
    * Creates exception for any RTU operation error.
-   * </p>
    *
    * @param message provide text for message
    * @param restException rest client response error
    */
   public RightToUseException(
-    final String message,
-    final RestClientResponseException restException) {
+      final String message, final RestClientResponseException restException) {
     super(message);
     cdsRestClientException = restException;
   }
 
   /**
-   * <p>Getter for the field <code>cdsRestClientException</code>.</p>
+   * Getter for the field <code>cdsRestClientException</code>.
    *
    * @return the cdsRestClientException
    */
@@ -62,5 +54,4 @@ public class RightToUseException extends Exception {
   }
 
   private static final long serialVersionUID = 1L;
-
 }

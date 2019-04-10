@@ -23,34 +23,23 @@ package org.acumos.licensemanager.client.model;
 import java.util.List;
 
 /**
- * <p>
- * When a Common Data service request is made for this library
- * These are the common properties we will need create, update, verify
- * a right to use.
- * </p>
- *
- * CreatedRtu
+ * When a Common Data service request is made for this library These are the common properties we
+ * will need create, update, verify a right to use. CreatedRtu
  *
  * @version 0.0.2
  */
 public interface ICommonLicenseRequest {
   /**
-   * <p>
    * Get the solution ID used in CCDS queries.
-   * </p>
    *
    * @return a {@link java.lang.String} object.
    */
   String getSolutionId();
 
   /**
-   * <p>
-   * Get list of userIds that will be used to  verify/create/update a RTU.
-   * </p>
+   * Get list of userIds that will be used to verify/create/update a RTU.
    *
    * @return a {@link java.lang.String} object.
    */
   List<String> getUserIds();
-
-
 }

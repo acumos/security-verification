@@ -27,28 +27,21 @@ import java.util.List;
  *
  * @version 0.0.2
  */
-public interface ICreateRTURequest extends ICommonLicenseRequest {
+public interface ICreateRtu extends ICommonLicenseRequest {
 
   /**
-   * <p>
-   * Optional - a list of Strings which will be converted to
-   * {@link org.acumos.cds.domain.MLPRtuReference} during creation of the RTU.
-   * Recomended we use UUID for each rtu reference to be inline with
-   * new RTU system in Clio.
-   * </p>
+   * Optional - a list of Strings which will be converted to {@link
+   * org.acumos.cds.domain.MLPRtuReference} during creation of the RTU. Recomended we use UUID for
+   * each rtu reference to be inline with new RTU system in Clio.
    *
    * @return list of UUIs used for creating a MLPRtuReference
    * @see org.acumos.cds.domain.MLPRtuReference
    */
-  List<String> getRTURefs();
+  List<String> getRtuRefs();
 
   /**
-   * <p>
-   * If set to true then the request to create a RTU will apply to
-   * every user using the acumos platform.
-   * If set to false then the RTU being created is a user specific
-   * RTU. Default is false.
-   * </p>
+   * If set to true then the request to create a RTU will apply to every user using the acumos
+   * platform. If set to false then the RTU being created is a user specific RTU. Default is false.
    *
    * @return Is the right to use specific to a user or applicable site wide
    * @see org.acumos.cds.domain.MLPRightToUse#site
@@ -56,13 +49,10 @@ public interface ICreateRTURequest extends ICommonLicenseRequest {
   boolean isSiteWide();
 
   /**
-   * <p>
    * Returns the RTUId that will be created.
-   * </p>
    *
    * @return Right to use ID
    * @see org.acumos.cds.domain.MLPRightToUse#rtuId
    */
-  Long getRTUId();
-
+  Long getRtuId();
 }

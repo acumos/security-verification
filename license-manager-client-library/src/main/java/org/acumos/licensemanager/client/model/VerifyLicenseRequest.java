@@ -1,5 +1,5 @@
 /*-
-* ===============LICENSE_START================================================
+ * ===============LICENSE_START================================================
  * Acumos Apache-2.0
  * ============================================================================
  * Copyright (C) 2019 Nordix Foundation.
@@ -25,86 +25,63 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * <p>
- * Request object to verify a user's right to use for a specific action passed
- * to the {@link org.acumos.licensemanager.client.model.ILicenseVerifier}.
- * </p>
+ * Request object to verify a user's right to use for a specific action passed to the {@link
+ * org.acumos.licensemanager.client.model.ILicenseVerifier}.
  *
  * @version 0.0.2
  */
-public class VerifyLicenseRequest
-  extends BaseLicenseRequest
-  implements IVerifyLicenseRequest {
+public class VerifyLicenseRequest extends BaseLicenseRequest implements IVerifyLicenseRequest {
 
-  /**
-   * License Actions to be verified.
-   */
+  /** License Actions to be verified. */
   private List<LicenseAction> licenseAction = new ArrayList<LicenseAction>();
 
-  /**
-   * <p>
-   * Constructor for VerifyLicenseRequest.
-   * </p>
-   */
-  public VerifyLicenseRequest() {
-  }
+  /** Constructor for VerifyLicenseRequest. */
+  public VerifyLicenseRequest() {}
 
   /**
-   * <p>Constructor for VerifyLicenseRequest.</p>
+   * Constructor for VerifyLicenseRequest.
    *
-   * @param action     a
-   *     {@link org.acumos.licensemanager.client.model.LicenseAction}
-   *     object.
+   * @param action a {@link org.acumos.licensemanager.client.model.LicenseAction} object.
    * @param solutionId a {@link java.lang.String} object.
-   * @param userId     a {@link java.lang.String} object.
+   * @param userId a {@link java.lang.String} object.
    */
-  public VerifyLicenseRequest(final LicenseAction action,
-    final String solutionId,
-    final String userId) {
+  public VerifyLicenseRequest(
+      final LicenseAction action, final String solutionId, final String userId) {
     this.licenseAction.add(action);
     setSolutionId(solutionId);
     addUserId(userId);
   }
 
   /**
-   * <p>Constructor for VerifyLicenseRequest.</p>
+   * Constructor for VerifyLicenseRequest.
    *
-   * @param action     an array of
-   *      {@link org.acumos.licensemanager.client.model.LicenseAction} objects.
+   * @param action an array of {@link org.acumos.licensemanager.client.model.LicenseAction} objects.
    * @param solutionId a {@link java.lang.String} object.
-   * @param userId     a {@link java.lang.String} object.
+   * @param userId a {@link java.lang.String} object.
    */
   public VerifyLicenseRequest(
-      final LicenseAction[] action,
-      final String solutionId,
-      final String userId) {
+      final LicenseAction[] action, final String solutionId, final String userId) {
     this.licenseAction = Arrays.asList(action);
     setSolutionId(solutionId);
     addUserId(userId);
   }
 
   /**
-   * <p>
    * Constructor for VerifyLicenseRequest.
-   * </p>
    *
-   * @param action     a {@link java.util.List} object.
+   * @param action a {@link java.util.List} object.
    * @param solutionId a {@link java.lang.String} object.
-   * @param userId     a {@link java.lang.String} object.
+   * @param userId a {@link java.lang.String} object.
    */
   public VerifyLicenseRequest(
-      final List<LicenseAction> action,
-      final String solutionId,
-      final String userId) {
+      final List<LicenseAction> action, final String solutionId, final String userId) {
     this.licenseAction = action;
     setSolutionId(solutionId);
     addUserId(userId);
   }
 
   /**
-   * <p>
    * Set the actions to be verified.
-   * </p>
    *
    * @param action a {@link java.util.List} object.
    */
@@ -118,16 +95,11 @@ public class VerifyLicenseRequest
   }
 
   /**
-   * <p>
-   *  Convenience method to add additional actions.
-   * </p>
+   * Convenience method to add additional actions.
    *
-   * @param action
-   *  {@link org.acumos.licensemanager.client.model.LicenseAction} object.
+   * @param action {@link org.acumos.licensemanager.client.model.LicenseAction} object.
    */
   public final void addAction(final LicenseAction action) {
     this.licenseAction.add(action);
   }
-
-
 }

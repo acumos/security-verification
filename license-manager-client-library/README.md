@@ -57,7 +57,7 @@ You can view javadocs in the path provided in console
 Fixing java docs 
 
 ```
-mvn javadoc:fix -DfixTags="version,param,return,throws,link" -DdefaultVersion="0.0.2" 
+mvn javadoc:fix -DfixTags="version,param,return,throws,link" -DdefaultVersion="0.0.3" 
 ```
 
 4. Unit test coverage should be above 40%

@@ -23,35 +23,24 @@ package org.acumos.licensemanager.client.model;
 import java.util.Map;
 
 /**
- * <p>
- * ILicenseVerification interface.
- * </p>
- *
- *CreatedRtu
+ * ILicenseVerification interface. CreatedRtu
  *
  * @version 0.0.2
  */
 public interface ILicenseVerification {
 
   /**
-   * <p>
    * Returns the list of actions for which are allowed to use.
-   * </p>
    *
    * @return a {@link java.util.Map} object.
    */
   Map<LicenseAction, Boolean> getAllowedToUse();
 
   /**
-   * <p>
-   * Convenience method to pass a license action and return true if a
-   * RTU exists.
-   * </p>
+   * Convenience method to pass a license action and return true if a RTU exists.
    *
-   * @param action a
-   *  {@link org.acumos.licensemanager.client.model.LicenseAction} object.
+   * @param action a {@link org.acumos.licensemanager.client.model.LicenseAction} object.
    * @return a boolean.
    */
   boolean isAllowed(LicenseAction action);
-
 }

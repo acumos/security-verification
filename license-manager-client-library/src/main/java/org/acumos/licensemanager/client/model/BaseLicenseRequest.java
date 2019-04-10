@@ -24,28 +24,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>
- * When making a request for a license RTU consolidating
- * common functionality.
- * </p>
+ * When making a request for a license RTU consolidating common functionality.
  *
  * @version 0.0.2
  */
 public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
 
-  /**
-   * Solution Id for CDS.
-   */
+  /** Solution Id for CDS. */
   private String solutionIdCds;
-  /**
-   * userIds to create RTUs for.
-   */
+  /** userIds to create RTUs for. */
   private List<String> userIdsCds = new ArrayList<String>();
 
   /**
-   * <p>
    * Set the solution ID used in CCDS queries.
-   * </p>
    *
    * @param solutionId a {@link java.lang.String} object.
    */
@@ -54,9 +45,7 @@ public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
   }
 
   /**
-   * <p>
    * Set list of userIds that will be used to verify/create/update a RTU.
-   * </p>
    *
    * @param userIds a List of userIds.
    */
@@ -65,9 +54,7 @@ public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
   }
 
   /**
-   * <p>
    * Adds a user ID that will be used to verify/create/update a RTU.
-   * </p>
    *
    * @param userId a {@link java.lang.String} object.
    */
@@ -75,20 +62,13 @@ public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
     userIdsCds.add(userId);
   }
 
-
   @Override
   public final String getSolutionId() {
     return solutionIdCds;
   }
 
-
   @Override
   public final List<String> getUserIds() {
     return userIdsCds;
   }
-
-
-
-
-
 }

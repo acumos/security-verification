@@ -22,67 +22,49 @@ package org.acumos.licensemanager.client.model;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.acumos.cds.domain.MLPRightToUse;
 
 /**
- * <p>
- * Implements {@link org.acumos.licensemanager.client.model.ICreatedRtu} which
- * supports the {@link org.acumos.licensemanager.client.model.ILicenseCreator}.
- * </p>
+ * Implements {@link org.acumos.licensemanager.client.model.ICreatedRtu} which supports the {@link
+ * org.acumos.licensemanager.client.model.ILicenseCreator}.
  *
  * @version 0.0.2
  */
 public class CreatedRtu implements ICreatedRtu {
 
-  /**
-   * Initial request.
-   */
-  private ICreateRTURequest initialRequest;
+  /** Initial request. */
+  private ICreateRtu initialRequest;
 
-  /**
-   * Created RTU in CDS.
-   */
+  /** Created RTU in CDS. */
   private boolean createdRtuInCds;
 
-  /**
-   * Updated RTU in CDS.
-   */
+  /** Updated RTU in CDS. */
   private boolean updatedRtuInCds;
 
-  /**
-   * List of RTUs created.
-   */
+  /** List of RTUs created. */
   private List<MLPRightToUse> rtu = new ArrayList<MLPRightToUse>();
 
-
   @Override
-  public final ICreateRTURequest getRequest() {
+  public final ICreateRtu getRequest() {
     return initialRequest;
   }
 
   /**
-   * <p>
    * Set the request for reference later.
-   * </p>
    *
    * @param request the original create request
    */
-  public final void setRequest(final ICreateRTURequest request) {
+  public final void setRequest(final ICreateRtu request) {
     initialRequest = request;
   }
-
 
   @Override
   public final boolean isCreated() {
     return createdRtuInCds;
   }
 
-
   /**
-   * <p>
    * Setter for the field <code>created</code>.
-   * </p>
    *
    * @param created indicate that rtu was created
    */
@@ -90,16 +72,13 @@ public class CreatedRtu implements ICreatedRtu {
     this.createdRtuInCds = created;
   }
 
-
   @Override
   public final boolean isUpdated() {
     return updatedRtuInCds;
   }
 
   /**
-   * <p>
    * Setter for the field <code>updated</code>.
-   * </p>
    *
    * @param updated indicate that rtu was updated
    */
@@ -107,12 +86,8 @@ public class CreatedRtu implements ICreatedRtu {
     this.updatedRtuInCds = updated;
   }
 
-
   /**
-   * <p>
-   * Adds {@link org.acumos.cds.domain.MLPRightToUse} that was
-   * created / updated during processing.
-   * </p>
+   * Adds {@link org.acumos.cds.domain.MLPRightToUse} that was created / updated during processing.
    *
    * @param rightToUse a {@link org.acumos.cds.domain.MLPRightToUse} object.
    */
@@ -124,6 +99,4 @@ public class CreatedRtu implements ICreatedRtu {
   public final List<MLPRightToUse> getRtus() {
     return rtu;
   }
-
-
 }

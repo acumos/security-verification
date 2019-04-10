@@ -23,11 +23,7 @@ package org.acumos.licensemanager.client.model;
 import org.acumos.licensemanager.exceptions.RightToUseException;
 
 /**
- * <p>
- * License Creator will create a right to use for a user for entire site for a
- * specific solution.
- * </p>
- *
+ * License Creator will create a right to use for a user for entire site for a specific solution.
  * CreatedRtu
  *
  * @version 0.0.2
@@ -37,15 +33,12 @@ public interface ILicenseCreator {
   /**
    * Create a RTU for siteWide or for a specific user.
    *
-   * Requires:
-   *   createRtu.siteWide to be true or
-   *  createRtu.userId to be a user id (from CDS)
-   *   createRtu.solutionId (from CDS)
+   * <p>Requires: createRtu.siteWide to be true or createRtu.userId to be a user id (from CDS)
+   * createRtu.solutionId (from CDS)
    *
    * @param createRtu create rtu request
    * @return ICreatedRtu the response of the create rtu request
-   * @throws org.acumos.licensemanager.exceptions.RightToUseException
-   *  when rtu was not able to be verified
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException if any.
    */
-  ICreatedRtu createRTU(ICreateRTURequest createRtu) throws RightToUseException;
+  ICreatedRtu createRtu(ICreateRtu createRtu) throws RightToUseException;
 }

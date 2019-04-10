@@ -18,8 +18,5 @@
  * ===============LICENSE_END==================================================
  */
 
-/**
- *
- * Package with main entry points for creating a RTU and verifying RTU.
- */
+/** Package with main entry points for creating a RTU and verifying RTU. */
 package org.acumos.licensemanager.client;

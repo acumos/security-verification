@@ -18,5 +18,37 @@
  * ===============LICENSE_END==================================================
  */
 
-/** Main programs for testing RTU creation and RTU verification. */
-package org.acumos.licensemanager.main;
+package org.acumos.licensemanager.jsonvalidator.exceptions;
+
+/**
+ * When getting, updating, or creating a right to use this exception captures the issue.
+ *
+ * @version 0.0.2
+ */
+public class LicenseJsonException extends Exception {
+
+  /** Internal exception being wrapped by RTU exception. */
+  private final Exception jsonParseException;
+
+  /**
+   * Creates exception for any RTU operation error.
+   *
+   * @param message provide text for message
+   * @param restException rest client response error
+   */
+  public LicenseJsonException(final String message, final Exception restException) {
+    super(message);
+    jsonParseException = restException;
+  }
+
+  /**
+   * Getter for the field <code>jsonParseException</code>.
+   *
+   * @return the jsonParseException
+   */
+  public final Exception getJsonParseException() {
+    return jsonParseException;
+  }
+
+  private static final long serialVersionUID = 1L;
+}
