@@ -83,6 +83,29 @@
     },
     {
       "key": {
+        "uuid": "5653b44b_21a5c259",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Removed since CDS is handing",
+      "range": {
+        "startLine": 103,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 44
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a0f8359c_1e736b3d",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
         "patchSetId": 1
@@ -496,6 +519,30 @@
     },
     {
       "key": {
+        "uuid": "bbfe2fa8_03e0e1cc",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e8b642e_bf31119d",
+      "range": {
+        "startLine": 41,
+        "startChar": 13,
+        "endLine": 41,
+        "endChar": 33
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7da3d9c0_93eeaca2",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
         "patchSetId": 1
@@ -507,6 +554,30 @@
       "writtenOn": "2019-04-10T13:08:45Z",
       "side": 1,
       "message": "This is weird - why do you have to create an object  and pass it to the validator?  why doesn\u0027t validate RETURN this object??",
+      "range": {
+        "startLine": 47,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 78
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "874ffeee_fe9a9f41",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7da3d9c0_93eeaca2",
       "range": {
         "startLine": 47,
         "startChar": 0,
@@ -542,6 +613,30 @@
     },
     {
       "key": {
+        "uuid": "e4cc52d8_1f608c0b",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7bbbf16_a5b4bdac",
+      "range": {
+        "startLine": 92,
+        "startChar": 10,
+        "endLine": 92,
+        "endChar": 14
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9dea0045_a457932e",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/exceptions/LicenseJsonException.java",
         "patchSetId": 1
@@ -553,6 +648,30 @@
       "writtenOn": "2019-04-10T13:08:45Z",
       "side": 1,
       "message": "Please use a large unique number not just 1",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 50
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c8aa550_acbabd3c",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/exceptions/LicenseJsonException.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9dea0045_a457932e",
       "range": {
         "startLine": 53,
         "startChar": 0,
@@ -588,6 +707,30 @@
     },
     {
       "key": {
+        "uuid": "d3967653_538458bc",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/exceptions/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "543a12ff_6d013bec",
+      "range": {
+        "startLine": 21,
+        "startChar": 9,
+        "endLine": 21,
+        "endChar": 16
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5831364d_0f2505f1",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/main/LicenseJsonValidatorMain.java",
         "patchSetId": 1
@@ -599,6 +742,30 @@
       "writtenOn": "2019-04-10T13:08:45Z",
       "side": 1,
       "message": "Is this for testing??  Because this is a library, and libraries generally do NOT provide a main() method!",
+      "range": {
+        "startLine": 56,
+        "startChar": 21,
+        "endLine": 56,
+        "endChar": 25
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9adf859_d36802fb",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/main/LicenseJsonValidatorMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "It is for testing ... moving it to testing package",
+      "parentUuid": "5831364d_0f2505f1",
       "range": {
         "startLine": 56,
         "startChar": 21,
@@ -657,6 +824,30 @@
     },
     {
       "key": {
+        "uuid": "8c6d5374_79fa024a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/ILicenseJsonValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Based on the com.fasterxml.jackson.coreJsonFactory the input steam is open and closed as needed.\n\nfrom the createParser method java doc\n\n     * Underlying input stream (needed for reading contents)\n     * will be \u003cb\u003eowned\u003c/b\u003e (and managed, i.e. closed as need be) by\n     * the parser, since caller has no access to it.",
+      "parentUuid": "27a5314c_12a589e8",
+      "range": {
+        "startLine": 63,
+        "startChar": 31,
+        "endLine": 63,
+        "endChar": 50
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a28b2098_0f30543a",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/package-info.java",
         "patchSetId": 1
@@ -674,6 +865,24 @@
     },
     {
       "key": {
+        "uuid": "5635f645_405f1de9",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "There is a one line javadoc added in this file for the summary.",
+      "parentUuid": "a28b2098_0f30543a",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8021e268_5d94198d",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/package-info.java",
         "patchSetId": 1
@@ -685,6 +894,24 @@
       "writtenOn": "2019-04-10T10:26:32Z",
       "side": 1,
       "message": "Superfluous",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8fe4b594_07cac6ed",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "needed for java doc",
+      "parentUuid": "8021e268_5d94198d",
       "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -714,6 +941,30 @@
     },
     {
       "key": {
+        "uuid": "54f32697_50cdc970",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Changed to FILE_NAME",
+      "parentUuid": "b0ff439f_befc6ef8",
+      "range": {
+        "startLine": 39,
+        "startChar": 57,
+        "endLine": 39,
+        "endChar": 70
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7c80f32f_406f7be9",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
         "patchSetId": 1
@@ -725,6 +976,30 @@
       "writtenOn": "2019-04-10T13:08:45Z",
       "side": 1,
       "message": "What about closing the stream??",
+      "range": {
+        "startLine": 49,
+        "startChar": 21,
+        "endLine": 49,
+        "endChar": 38
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "594fa7ae_45a835a3",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "In this case factory.getSchema is closing the steam.",
+      "parentUuid": "7c80f32f_406f7be9",
       "range": {
         "startLine": 49,
         "startChar": 21,
@@ -772,6 +1047,42 @@
     },
     {
       "key": {
+        "uuid": "e65ab645_b56f0050",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecad8cc3_2ac23d58",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6305e3b4_48eea802",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "fixing text",
+      "parentUuid": "eab61b6d_82e734de",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6212e297_1e050e34",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseCreatorMain.java",
         "patchSetId": 1
@@ -783,6 +1094,30 @@
       "writtenOn": "2019-04-10T13:08:45Z",
       "side": 1,
       "message": "Yet another class with a main() method in a library - please remove.  Libraries should not provide a main.",
+      "range": {
+        "startLine": 44,
+        "startChar": 13,
+        "endLine": 44,
+        "endChar": 31
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f75f4ee_f9e239a5",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseCreatorMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "moved to test package for now",
+      "parentUuid": "6212e297_1e050e34",
       "range": {
         "startLine": 44,
         "startChar": 13,
@@ -818,6 +1153,30 @@
     },
     {
       "key": {
+        "uuid": "c2e398f3_1cba8068",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "libraries can\u0027t have main programs? I have moved it to a test package for now since it is being used for testing.",
+      "parentUuid": "6c41aa6e_1289321f",
+      "range": {
+        "startLine": 43,
+        "startChar": 13,
+        "endLine": 43,
+        "endChar": 30
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cec44f2_c6aee2d7",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
         "patchSetId": 1
@@ -841,6 +1200,30 @@
     },
     {
       "key": {
+        "uuid": "f0cdbf4a_f9cf93ae",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Main doen\u0027t work. audience developers",
+      "parentUuid": "6cec44f2_c6aee2d7",
+      "range": {
+        "startLine": 50,
+        "startChar": 0,
+        "endLine": 50,
+        "endChar": 74
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "069072ba_6ae042bf",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
         "patchSetId": 1
@@ -852,6 +1235,30 @@
       "writtenOn": "2019-04-10T13:08:45Z",
       "side": 1,
       "message": "This should be config, not hardcoded",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 53
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62abfe76_5329a989",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Does it change in development?",
+      "parentUuid": "069072ba_6ae042bf",
       "range": {
         "startLine": 53,
         "startChar": 0,
@@ -904,6 +1311,24 @@
     },
     {
       "key": {
+        "uuid": "3299b45f_f731f970",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/package-info.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "\u003e did one of the newly added checkstyle plugins add these empty\n \u003e files?\n\nUsed by javadoc for describing package summary\n\nhttps://javadocs.acumos.org/org.acumos.security-verification/master/overview-summary.html",
+      "parentUuid": "c4a9a4bf_d8f1dae6",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "989e32b8_ae99aedc",
         "filename": "license-manager-client-library/src/test/java/org/acumos/licensemanager/client/LicenseCreatorTest.java",
         "patchSetId": 1
@@ -915,6 +1340,30 @@
       "writtenOn": "2019-04-10T10:26:32Z",
       "side": 1,
       "message": "You might factor this out of your tests and into a @Setup annotated method",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 71
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "50af202c_2b832477",
+        "filename": "license-manager-client-library/src/test/java/org/acumos/licensemanager/client/LicenseCreatorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T18:18:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "989e32b8_ae99aedc",
       "range": {
         "startLine": 52,
         "startChar": 0,
