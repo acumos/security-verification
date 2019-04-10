@@ -129,6 +129,224 @@
     },
     {
       "key": {
+        "uuid": "16666b7d_780fcf74",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "not public eh?",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49422a7d_5323eef4",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "why pass in the client if it\u0027s not used? strange.",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 52
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3c1ca7b3_5ca54de4",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "Don\u0027t initialize with an empty list that will instantly be discarded!",
+      "range": {
+        "startLine": 116,
+        "startChar": 0,
+        "endLine": 116,
+        "endChar": 63
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8a359d32_734ce71c",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseDataUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "dangerous - if the list comes back empty your get(0) will throw",
+      "range": {
+        "startLine": 119,
+        "startChar": 0,
+        "endLine": 119,
+        "endChar": 93
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fba04317_df3adc36",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseVerifier.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "I don\u0027t think you should litter your code with version strings.  This causes unnecessary churn at each commit.  I think this practice should be avoided.  I have not seen this anywhere else in the Acumosm project.",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 17
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f80c758_8b95845f",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseVerifier.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "don\u0027t just log, THROW",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 66
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "040d2705_01ccb45a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/BaseLicenseRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "This must have two constructors: empty and with all the fields, then the subclasses (children) should be calling super(solutionIdCds, ..) to populate all the fields here.",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2c9fdcaf_98b6fd54",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/BaseLicenseRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "Might use Abstract instead of Base, but that\u0027s pure style, not important",
+      "range": {
+        "startLine": 31,
+        "startChar": 22,
+        "endLine": 31,
+        "endChar": 25
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d0df9cde_7ac94ade",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/CreateRtuRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "I don\u0027t care for this style.  Instead should call super(solId), after extending the abstract class with that ctor",
+      "range": {
+        "startLine": 55,
+        "startChar": 0,
+        "endLine": 55,
+        "endChar": 25
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a19ac1f0_cc508d36",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICommonLicenseRequest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T12:18:48Z",
+      "side": 1,
+      "message": "Just CDS",
+      "range": {
+        "startLine": 33,
+        "startChar": 33,
+        "endLine": 33,
+        "endChar": 37
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a28b2098_0f30543a",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/package-info.java",
         "patchSetId": 1
