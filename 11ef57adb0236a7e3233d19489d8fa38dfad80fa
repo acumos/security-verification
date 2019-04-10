@@ -1177,6 +1177,30 @@
     },
     {
       "key": {
+        "uuid": "0f425588_a2ac9d8d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-10T18:22:39Z",
+      "side": 1,
+      "message": "Yes, jars can have any class; every class can have a main.  But it\u0027s rather different from what we have been doing in Acumos project libraries, and I\u0027m trying to understand if you\u0027re doing this deliberately, or if it might be something that needs adjustment.",
+      "parentUuid": "c2e398f3_1cba8068",
+      "range": {
+        "startLine": 43,
+        "startChar": 13,
+        "endLine": 43,
+        "endChar": 30
+      },
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6cec44f2_c6aee2d7",
         "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/main/LicenseVerifyMain.java",
         "patchSetId": 1
