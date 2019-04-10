@@ -41,6 +41,7 @@ import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
 import org.acumos.securityverification.domain.Workflow;
+import org.acumos.securityverification.logging.LogConfig;
 import org.acumos.securityverification.transport.SVResonse;
 import org.acumos.securityverification.utils.SVConstants;
 import org.acumos.securityverification.utils.SecurityVerificationJsonParser;
@@ -87,12 +88,13 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	}
 
 	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) {
-
+		
 		Workflow workflow = new Workflow();
-		logger.debug("revisionId:: {} worflowId:: {}", revisionId, worflowId);
-
 		try {
-			ICommonDataServiceRestClient client = getClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
+			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScan");
+			logger.debug("revisionId:: {} worflowId:: {}", revisionId, worflowId);
+			ICommonDataServiceRestClient client = getCcdsClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
+
 			if (client != null) {
 				logger.debug("CCDS CALL GET /solution/{solutionId} ");
 				MLPSolution mlpSolution = client.getSolution(solutionId);
@@ -103,56 +105,44 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 					String mlpRevisionId = null;
 					for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
-						logger.debug(
-								"mlpSolutionRevision.getRevisionId()::--> {}" + mlpSolutionRevision.getRevisionId());
+						logger.debug("mlpSolutionRevision.getRevisionId(): {}", mlpSolutionRevision.getRevisionId());
 						if (mlpSolutionRevision.getRevisionId() != null
 								&& mlpSolutionRevision.getRevisionId().equals(revisionId)) {
 							verificationSiteConfig();
 							String userId = mlpSolutionRevision.getUserId();
 							mlpRevisionId = mlpSolutionRevision.getRevisionId();
-							logger.debug(
-									"mlpSolutionRevision.getVersion():::--> {}" + mlpSolutionRevision.getVersion());
-							// modelTypeCode is PR (predictor) and the toolkitTypeCode is CP (composite
-							// solution) then retrieves the CD (CDUMP) artifact for the revisionId
+							logger.debug("mlpSolutionRevision.getVersion(): {}", mlpSolutionRevision.getVersion());
+							// modelTypeCode is PR (predictor) and toolkitTypeCode is CP (composite-solution)
 							// GET /revision/{revisionId}/artifact
 							if (mlpSolution.getModelTypeCode().equalsIgnoreCase(SVConstants.MODEL_TYPE_CODE)
 									&& mlpSolution.getToolkitTypeCode()
 											.equalsIgnoreCase(SVConstants.TOOL_KIT_TYPE_CODE)) {
-
-								logger.debug("Call CDS to get CDUMP artifact URL..");
-								List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,
-										mlpRevisionId);
+								logger.debug("It is a Composite Solution and solutionId: {}  revisionId: {} ",solutionId, revisionId);
+								List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,mlpRevisionId);
 								String nexusURI = "";
 								nexusURI = mlpArtifactList.stream()
 										.filter(mlpArt -> mlpArt.getArtifactTypeCode()
 												.equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_CDUMP))
 										.findFirst().get().getUri();
-								logger.debug("mlpArtifact nexusURI::-- {}" + nexusURI);
+								logger.debug("mlpArtifact nexusURI: {}", nexusURI);
 
 								ByteArrayOutputStream byteArrayOutputStream = null;
 								NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl,
 										nexusClientUsername, nexusClientPwd);
 
 								byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
-								logger.debug("getBluePrintNexus: byteArrayOutputStream length:-- {}"
-										+ byteArrayOutputStream.size());
-								logger.debug("byteArrayOutputStream.toString():::---> {}"
-										+ byteArrayOutputStream.toString());
+								logger.debug("getBluePrintNexus: byteArrayOutputStream length: {}",
+										byteArrayOutputStream.size());
+								logger.debug("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
 
-								// TODO need to be removed CDUMP json file
 								SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-								// using the member nodeSolutionId, retrieves the list of revisions for the
-								// solutionId
-								SecurityVerificationCdump securityVerificationCdump = parseJSON
-										.parseCdumpJsonFile(byteArrayOutputStream.toString());
-								List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = securityVerificationCdump
-										.getNodes();
+								// using the member nodeSolutionId, retrieves the list of revisions for the solutionId
+								SecurityVerificationCdump securityVerificationCdump = parseJSON.parseCdumpJsonFile(byteArrayOutputStream.toString());
+								List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = securityVerificationCdump.getNodes();
 								if (securityVerificationCdumpNodes != null) {
 									for (SecurityVerificationCdumpNode securityVerificationCdumpNode : securityVerificationCdumpNodes) {
 										logger.debug("------CDUMP CHILD NODE -------------------");
-										List<MLPSolutionRevision> mlpCdumpSolutionRevisions = client
-												.getSolutionRevisions(
-														securityVerificationCdumpNode.getNodeSolutionId());
+										List<MLPSolutionRevision> mlpCdumpSolutionRevisions = client.getSolutionRevisions(securityVerificationCdumpNode.getNodeSolutionId());
 										for (MLPSolutionRevision mlpCdumpSolutionRevision : mlpCdumpSolutionRevisions) {
 
 											if (securityVerificationCdumpNode.getNodeVersion()
@@ -172,11 +162,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 														securityVerificationCdumpNode.getNodeVersion(),
 														mlpCdumpSolutionRevision.getRevisionId(),
 														mlpCdumpSolutionRevision.getVersion());
-												// TODO Call to scan invocation logic
-												// ACUMOS-2558: TBD verifiedVulnerability or verifiedLicense are null
-												// and unable to find validationStatusCode in MLPSolutionRevision.
-												mlpCdumpSolutionRevision.getVerifiedLicense();
-												mlpCdumpSolutionRevision.getVerifiedVulnerability();
 												workflowPermissionDetermination(worflowId, workflow, client, userId,
 														securityVerificationCdumpNode, mlpCdumpSolutionRevision);
 											}
@@ -184,11 +169,51 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 									}
 								}
 							} else {
-								logger.debug(
-										" executes the Scan: TRUE it is a simple model and the S-V library executes the Scan Invocation Logic");
-								// TODO scan invocation logic
-								workflow.setWorkflowAllowed(true);
-								ResponseEntity<SVResonse> svResonse = invokesScan(solutionId, revisionId, worflowId);
+								logger.debug("It is a Simple model and solutionId: {}  revisionId: {} ",solutionId, revisionId);
+								List<MLPSolutionRevision> mlpCdumpSolutionRevisions = client
+										.getSolutionRevisions(solutionId);
+								for (MLPSolutionRevision mlpCdumpSolutionRevision : mlpCdumpSolutionRevisions) {
+
+									if (mlpSolutionRevision.getRevisionId() != null
+											&& mlpSolutionRevision.getRevisionId().equals(revisionId)) {
+										List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,
+												mlpRevisionId);
+										String nexusURI = "";
+										nexusURI = mlpArtifactList.stream()
+												.filter(mlpArt -> mlpArt.getArtifactTypeCode()
+														.equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_CDUMP))
+												.findFirst().get().getUri();
+										logger.debug("mlpArtifact nexusURI: {}", nexusURI);
+										ByteArrayOutputStream byteArrayOutputStream = null;
+										NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl,
+												nexusClientUsername, nexusClientPwd);
+										byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
+										logger.debug("getBluePrintNexus: byteArrayOutputStream length: {}",
+												byteArrayOutputStream.size());
+										logger.debug("byteArrayOutputStream.toString(): {}",
+												byteArrayOutputStream.toString());
+										SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+										// using the member nodeSolutionId, retrieves the list of revisions for the solutionId
+										SecurityVerificationCdump securityVerificationCdump = parseJSON
+												.parseCdumpJsonFile(byteArrayOutputStream.toString());
+										List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = securityVerificationCdump
+												.getNodes();
+										if (securityVerificationCdumpNodes != null) {
+											for (SecurityVerificationCdumpNode securityVerificationCdumpNode : securityVerificationCdumpNodes) {
+												logger.debug("------CDUMP CHILD NODE -------------------");
+												List<MLPSolutionRevision> mlpCdumpSolutionRevisionsSimpleModel = client.getSolutionRevisions(securityVerificationCdumpNode.getNodeSolutionId());
+												for (MLPSolutionRevision mlpCdumpSolutionRevisionSimpleModel : mlpCdumpSolutionRevisionsSimpleModel) {
+													if (securityVerificationCdumpNode.getNodeVersion().equalsIgnoreCase(mlpCdumpSolutionRevision.getVersion())) {
+														workflowPermissionDetermination(worflowId, workflow, client,userId, securityVerificationCdumpNode,
+																mlpCdumpSolutionRevisionSimpleModel);
+													}
+												}
+											}
+										}
+									}
+
+								}
+
 							}
 
 						} else {
@@ -202,6 +227,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				}
 
 			}
+			LogConfig.clearMDCDetails();
 		} catch (Exception e) {
 			logger.error("Exception", e);
 			workflow.setWorkflowAllowed(false);
@@ -214,15 +240,20 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			ICommonDataServiceRestClient client, String userId,
 			SecurityVerificationCdumpNode securityVerificationCdumpNode, MLPSolutionRevision mlpCdumpSolutionRevision)
 			throws RightToUseException {
+
 		ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
-		ResponseEntity<SVResonse> svResonse = null;
+		ResponseEntity<SVResonse> svResponse = null;
+		boolean rtuFlag = false;
+		boolean workFlowAllowed = true;
+		StringBuilder reason = new StringBuilder();
+
 		if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
 			VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
 					securityVerificationCdumpNode.getNodeSolutionId(), userId);
 			licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
 			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRTU(licenseDownloadRequest);
 			// returns true or false if rtu exists
-			workflow.setWorkflowAllowed(verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD));
+			rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
 		}
 		if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
 			VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
@@ -230,42 +261,57 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
 			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRTU(licenseDownloadRequest);
 			// returns true or false if rtu exists
-			workflow.setWorkflowAllowed(verifyUserRTU.isAllowed(LicenseAction.DEPLOY));
+			rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
 		}
 
-		if (isValidInvokeScan(licenseScan, worflowId)) {
-			svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(),
-					mlpCdumpSolutionRevision.getRevisionId(), worflowId);
-			workflow.setWorkflowAllowed(false);
-			workflow.setReason("license scan incomplete|security scan failure");
+		workFlowAllowed = rtuFlag;
+		if (!rtuFlag) {
+			reason.append("No Right to use");
 		}
-		if (isValidInvokeScan(securityScan, worflowId)) {
-			svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(),
+
+		if (isValidInvokeScan(licenseScan, worflowId) || isValidInvokeScan(securityScan, worflowId)) {
+			svResponse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(),
 					mlpCdumpSolutionRevision.getRevisionId(), worflowId);
-			workflow.setWorkflowAllowed(false);
-			workflow.setReason("license scan incomplete|security scan failure");
+			logger.debug(" InvokesScan result StatusCode: {}  StatusCodeValue: {}", svResponse.getStatusCode(),
+					svResponse.getStatusCodeValue());
 		}
-		if (isValidInvokeScan(licenseVerify, worflowId)) {
-			svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(),
-					mlpCdumpSolutionRevision.getRevisionId(), worflowId);
-			workflow.setWorkflowAllowed(false);
-			workflow.setReason("license scan incomplete|security scan failure");
+
+		if (!isValidWorkFlow(licenseVerify, worflowId)) {
+			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
+					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("in-progress")) {
+				if (reason.length() > 1) {
+					reason.append(",");
+				}
+				reason.append("license scan in-progress");
+			}
+			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
+					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("failed")) {
+				if (reason.length() > 1) {
+					reason.append(",");
+				}
+				reason.append("license scan failed");
+			}
 		}
-		if (isValidInvokeScan(securityVerify, worflowId)) {
-			svResonse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(),
-					mlpCdumpSolutionRevision.getRevisionId(), worflowId);
-			workflow.setWorkflowAllowed(false);
-			workflow.setReason("license scan incomplete|security scan failure");
+
+		if (workFlowAllowed && !isValidWorkFlow(licenseVerify, worflowId)) {
+			workFlowAllowed = false;
 		}
+
+		if (workFlowAllowed && !isValidWorkFlow(securityVerify, worflowId)) {
+			workFlowAllowed = false;
+		}
+
+		workflow.setWorkflowAllowed(workFlowAllowed);
+		workflow.setReason(reason.toString());
 	}
 
 	private void verificationSiteConfig() throws Exception {
 		logger.debug("Inside verificationSiteConfig method call");
 		SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-		ICommonDataServiceRestClient client = getClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
+		ICommonDataServiceRestClient client = getCcdsClient(cdmsClientUrl, cdmsClientUsername, cdmsClientPwd);
 		JSONObject siteConfigDataJsonObj = new JSONObject();
 		if (client != null) {
-			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVConstants.CONFIGKEY);
+			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVConstants.SITE_VERIFICATION_KEY);
 			if (mlpSiteConfig != null) {
 				siteConfigDataJsonObj = parseJSON.stringToJsonObject(mlpSiteConfig.getConfigValue().toString());
 			} else {
@@ -284,16 +330,22 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	}
 
 	private boolean isValidInvokeScan(Map<String, String> siteConfigMap, String workFlowId) {
-		if (siteConfigMap.containsKey(workFlowId) && siteConfigMap.get(workFlowId).equals("true")) {
+		if (siteConfigMap.containsKey(workFlowId) && siteConfigMap.get(workFlowId).equals(SVConstants.TRUE)) {
 			return true;
 		}
 		return false;
 	}
 
-	private ICommonDataServiceRestClient getClient(final String cdmsClientUrl, final String cdmsClientUsername,
+	private boolean isValidWorkFlow(Map<String, String> siteConfigMap, String workFlowId) {
+		if (siteConfigMap.containsKey(workFlowId) && siteConfigMap.get(workFlowId).equals(SVConstants.TRUE)) {
+			return true;
+		}
+		return false;
+	}
+
+	private ICommonDataServiceRestClient getCcdsClient(final String cdmsClientUrl, final String cdmsClientUsername,
 			final String cdmsClientPwd) {
-		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(cdmsClientUrl, cdmsClientUsername,
-				cdmsClientPwd, null);
+		ICommonDataServiceRestClient client = CommonDataServiceRestClientImpl.getInstance(cdmsClientUrl, cdmsClientUsername,cdmsClientPwd);
 		return client;
 	}
 
@@ -325,17 +377,17 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			String securityVerificationApiUrl) {
 		StringBuilder url = new StringBuilder();
 		url.append(securityVerificationApiUrl);
-		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.FORWARD_SLASH);
 		url.append(SVConstants.SOLUTIONID);
-		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.FORWARD_SLASH);
 		url.append(nodeSolutionId);
-		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.FORWARD_SLASH);
 		url.append(SVConstants.REVISIONID);
-		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.FORWARD_SLASH);
 		url.append(revisionId);
-		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.FORWARD_SLASH);
 		url.append(SVConstants.WORKFLOWID);
-		url.append(SVConstants.BACKSLASH);
+		url.append(SVConstants.FORWARD_SLASH);
 		url.append(worflowId);
 		return url.toString();
 	}

@@ -25,10 +25,9 @@ public interface ISecurityVerificationService {
 	/**This method makes call to license_scan and dump_model shell for security verification.
 	 * @param solutionId
 	 * @param revisionId
-	 * @return string 
 	 * @throws Exception
 	 */
-	public String securityVerification(String solutionId, String revisionId)  throws Exception;
+	public void securityVerification(String solutionId, String revisionId)  throws Exception;
 	
 	/**This method call CCDS site-config to add the site-cinfig json in database.  
 	 * @return site-config json string.
