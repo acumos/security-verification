@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bcc52c86_ea2fd39e",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-04-10T03:45:11Z",
+      "side": 1,
+      "message": "Please confirm with Chris. On creating a new entry to c_right_to_use the rtuid is set as null inside CDS and generated automatically. Is this required here still for create?",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
