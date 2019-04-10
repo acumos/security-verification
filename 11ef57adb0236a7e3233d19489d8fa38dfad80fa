@@ -16,6 +16,24 @@
       "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "953d8e8a_6d4c4f5a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseCreator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-10T03:52:50Z",
+      "side": 1,
+      "message": "If you do not pass into CreateRtuRequest.setRtuId then getRtuId will default to Random().nextLong() .. not sure about what Chris did .. maybe we can remove it if CDS handles. I was just supporting case where we want to pass RTUid from license client.",
+      "parentUuid": "bcc52c86_ea2fd39e",
+      "revId": "11ef57adb0236a7e3233d19489d8fa38dfad80fa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
