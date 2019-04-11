@@ -1,0 +1,188 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "86a84ec0_07761cd1",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICreatedRtu.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "Is this intended to capture a response/result?  Maybe you could use one of those words as a suffix?",
+      "range": {
+        "startLine": 30,
+        "startChar": 17,
+        "endLine": 30,
+        "endChar": 28
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a394977_921073e4",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/LicenseVerification.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "If you want the constructor to be hidden from clients then make the access private.  This is really a code/comment contradiction here.",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 34,
+        "endChar": 32
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fffcfa47_57088a2d",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "If your method will not close the input stream, then this needs to close the stream that it opened.",
+      "range": {
+        "startLine": 46,
+        "startChar": 11,
+        "endLine": 46,
+        "endChar": 30
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6f60c2d_e87eace7",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "I don\u0027t believe that readTree closes the input stream.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 42
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4ac1573e_d4b4bfa3",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "Why do you create the object so early?  Wait until you need it.  This is not C/C++ where you have to assuage the compiler by declaring all your storage space at the outset of a method :/",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 78
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "551934e3_1dc615b2",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/LicenseJsonValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "Create results here",
+      "range": {
+        "startLine": 83,
+        "startChar": 4,
+        "endLine": 83,
+        "endChar": 11
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3a851e1a_b6f2d3c0",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/model/LicenseJsonValidationResults.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "This is truly a worthless javadoc comment.  Is this added by some plugin?  That is not doing you any favors, filling space with text (not meaning).",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 42
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "579979aa_59a2c833",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-11T20:22:45Z",
+      "side": 1,
+      "message": "well, maybe this is a little TOO anonymous. My point was not that the VARIABLE name was redundant.  My point was that the FILE NAME has \"schema\" in it twice which looks kinda weird.",
+      "range": {
+        "startLine": 35,
+        "startChar": 30,
+        "endLine": 35,
+        "endChar": 39
+      },
+      "revId": "60f93338bfdde7bcacd2db80b260461ba7dd34bf",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
