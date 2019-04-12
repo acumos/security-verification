@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e642c64e_0ec62f39",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseDataUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-12T11:49:50Z",
+      "side": 1,
+      "message": "I still think you should remove unused parameters",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 52
+      },
+      "revId": "28b3249e70b425adc2fda43b680f35edfe6cdca2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
