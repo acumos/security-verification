@@ -1,6 +1,5 @@
-
 /*-
-* ===============LICENSE_START================================================
+ * ===============LICENSE_START================================================
  * Acumos Apache-2.0
  * ============================================================================
  * Copyright (C) 2019 Nordix Foundation.
@@ -18,23 +17,13 @@
  * limitations under the License.
  * ===============LICENSE_END==================================================
  */
+
 package org.acumos.licensemanager.client.model;
 
-/**
- * <p>
- * Actions that require a license / right to use.
- * </p>
- *
- * @version 0.0.2
- */
+/** Actions that require a license / right to use. */
 public enum LicenseAction {
-  /**
-   * Download action in the portal
-   * Or through docker pull.
-   */
+  /** Download action in the portal Or through docker pull. */
   DOWNLOAD,
-  /**
-   *  Deploy action in the portal.
-   */
+  /** Deploy action in the portal. */
   DEPLOY
 }
