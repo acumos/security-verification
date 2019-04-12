@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e038f4b_b57ecf3a",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/model/ICreateRtu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-12T18:32:34Z",
+      "side": 1,
+      "message": "Just at first glance it seems really, really strange to make an Interface serializable.  Concrete classes, sure.  Are you certain you want this??  Sonar demanded this?  Remember sometimes Sonar is brain dead.",
+      "range": {
+        "startLine": 27,
+        "startChar": 59,
+        "endLine": 27,
+        "endChar": 71
+      },
+      "revId": "12c70d85dbfddc4abef3ccfd66dd647c4a5a6ade",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eec2a520_c0c43a48",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/jsonvalidator/resource/LicenseJsonSchema.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-12T18:32:34Z",
+      "side": 1,
+      "message": "You may be 99.99% confident that the factory closes the stream, but I would STILL wrap this in try-with-resources to ensure it 100% is closed.",
+      "range": {
+        "startLine": 51,
+        "startChar": 0,
+        "endLine": 51,
+        "endChar": 86
+      },
+      "revId": "12c70d85dbfddc4abef3ccfd66dd647c4a5a6ade",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
