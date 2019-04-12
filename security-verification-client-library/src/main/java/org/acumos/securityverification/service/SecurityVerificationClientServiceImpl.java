@@ -251,7 +251,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
 					securityVerificationCdumpNode.getNodeSolutionId(), userId);
 			licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
-			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRTU(licenseDownloadRequest);
+			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 			// returns true or false if rtu exists
 			rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
 		}
@@ -259,7 +259,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
 					securityVerificationCdumpNode.getNodeSolutionId(), userId);
 			licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
-			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRTU(licenseDownloadRequest);
+			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 			// returns true or false if rtu exists
 			rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
 		}

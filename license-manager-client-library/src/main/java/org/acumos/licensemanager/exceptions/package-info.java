@@ -18,8 +18,5 @@
  * ===============LICENSE_END==================================================
  */
 
-/**
- *
- * Package with exception classes.
- */
+/** Package with exception classes. */
 package org.acumos.licensemanager.exceptions;

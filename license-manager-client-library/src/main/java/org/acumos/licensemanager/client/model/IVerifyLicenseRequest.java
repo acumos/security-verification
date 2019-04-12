@@ -1,4 +1,3 @@
-
 /*-
  * ===============LICENSE_START================================================
  * Acumos Apache-2.0
@@ -24,25 +23,16 @@ package org.acumos.licensemanager.client.model;
 import java.util.List;
 
 /**
- * <p>
- * A request object that must be created before calling
- * {@link org.acumos.licensemanager.client.model
- *  .ILicenseVerifier#verifyRTU(IVerifyLicenseRequest)}.
- * </p>
- *
- *CreatedRtu
- *
- * @version 0.0.2
+ * A request object that must be created before calling {@link
+ * org.acumos.licensemanager.client.model .ILicenseVerifier#verifyRtu(IVerifyLicenseRequest)}.
+ * CreatedRtu
  */
 public interface IVerifyLicenseRequest extends ICommonLicenseRequest {
 
   /**
-   * <p>
    * Get the list of actions to be verified.
-   * </p>
    *
    * @return a {@link java.util.List} object.
    */
   List<LicenseAction> getActions();
-
 }

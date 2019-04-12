@@ -20,78 +20,50 @@
 
 package org.acumos.licensemanager.client.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
-/**
- * <p>
- * CreateRTURequest class.
- * </p>
- *
- * CreatedRtu
- *
- * @version 0.0.2
- */
-public class CreateRTURequest extends BaseLicenseRequest
-  implements ICreateRTURequest {
+/** CreateRtu class. */
+public class CreateRtuRequest extends BaseLicenseRequest implements ICreateRtu, Serializable {
 
+  private static final long serialVersionUID = -8649516345536462977L;
 
-  /**
-   * rtu refs to apply to each RTU.
-   */
+  /** rtu refs to apply to each RTU. */
   private List<String> rtuRefsAsStr = new ArrayList<String>();
 
-  /**
-   *  siteWide RTU.
-   */
+  /** siteWide RTU. */
   private boolean siteWideRtu = false;
 
-  /**
-   * rtuId for identifying rtu.
-   */
-  private Long rtuIdCds;
+  /** Constructor for CreateRTURequest. */
+  public CreateRtuRequest() {}
 
   /**
-   * <p>
    * Constructor for CreateRTURequest.
-   * </p>
-   */
-  public CreateRTURequest() {
-
-  }
-
-  /**
-   * <p>
-   * Constructor for CreateRTURequest.
-   * </p>
    *
    * @param solId a {@link java.lang.String} object.
-   * @param uIds  an array of {@link java.lang.String} objects.
+   * @param userIds an array of {@link java.lang.String} objects.
    */
-  public CreateRTURequest(final String solId, final String[] uIds) {
+  public CreateRtuRequest(final String solId, final String[] userIds) {
     setSolutionId(solId);
-    setUserIds(Arrays.asList(uIds));
+    setUserIds(Arrays.asList(userIds));
   }
 
   /**
-   * <p>
    * Constructor for CreateRTURequest.
-   * </p>
    *
    * @param solId a {@link java.lang.String} object.
-   * @param uId   a {@link java.lang.String} object.
+   * @param userIds a {@link java.lang.String} object.
    */
-  public CreateRTURequest(final String solId, final String uId) {
+  public CreateRtuRequest(final String solId, final String userIds) {
     setSolutionId(solId);
-    addUserId(uId);
+    addUserId(userIds);
   }
-
 
   @Override
-  public final List<String> getRTURefs() {
+  public final List<String> getRtuRefs() {
     if (rtuRefsAsStr.isEmpty()) {
       rtuRefsAsStr.add(UUID.randomUUID().toString());
     }
@@ -99,10 +71,9 @@ public class CreateRTURequest extends BaseLicenseRequest
   }
 
   /**
-   * In Boreas only supporting one generated UUID for the
-   * right to use. If you want to add additional rtuRefs
-   * you can use this api to update and all refs will be created.
-   * This is not a required property when creating a right to use.
+   * In Boreas only supporting one generated UUID for the right to use. If you want to add
+   * additional rtuRefs you can use this api to update and all refs will be created. This is not a
+   * required property when creating a right to use.
    *
    * @param rtuRefs UUID for each right to use
    * @see org.acumos.cds.domain.MLPRightToUse#rtuReferences
@@ -112,9 +83,7 @@ public class CreateRTURequest extends BaseLicenseRequest
   }
 
   /**
-   * <p>
    * Provide rtu references as String.
-   * </p>
    *
    * @param rtuRefs an array of {@link java.lang.String} objects.
    */
@@ -123,35 +92,13 @@ public class CreateRTURequest extends BaseLicenseRequest
   }
 
   @Override
-  public final Long getRTUId() {
-    if (rtuIdCds == null) {
-      return new Random().nextLong();
-    }
-    return rtuIdCds;
-  }
-
-  /**
-   * <p>
-   * Sets the RTUId.
-   * </p>
-   *
-   * @param rtuId id for the right to use
-   * @see org.acumos.cds.domain.MLPRightToUse#rtuId
-   */
-  public final void setRtuId(final long rtuId) {
-    rtuIdCds = rtuId;
-  }
-
-  @Override
   public final boolean isSiteWide() {
     return siteWideRtu;
   }
 
   /**
-   * <p>
-   * Set to true if you want a solution to have a site wide right to use.
-   * This avoid having to create a RTU for every user.
-   * </p>
+   * Set to true if you want a solution to have a site wide right to use. This avoid having to
+   * create a RTU for every user.
    *
    * @param siteWide create rtu for solution for entire site
    * @see org.acumos.cds.domain.MLPRightToUse#site
@@ -159,5 +106,4 @@ public class CreateRTURequest extends BaseLicenseRequest
   public final void setSiteWide(final boolean siteWide) {
     siteWideRtu = siteWide;
   }
-
 }

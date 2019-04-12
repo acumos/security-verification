@@ -22,31 +22,17 @@ package org.acumos.licensemanager.client.model;
 
 import org.acumos.licensemanager.exceptions.RightToUseException;
 
-/**
- * <p>
- * An object that verifies the license by using the right to use authority.
- * </p>
- *
- * @version 0.0.2
- */
+/** An object that verifies the license by using the right to use authority. */
 public interface ILicenseVerifier {
 
   /**
-   * <p>
-   * Checks for siteWide RTU for a solutionId
-   * If no siteWide RTU exists check for userId.
-   * </p>
+   * Checks for siteWide RTU for a solutionId If no siteWide RTU exists check for userId.
    *
-   * @param licenseDownloadRequest a
-   *   {@link org.acumos.licensemanager.client.model.IVerifyLicenseRequest}
-   *  object.
-   * @return a
-   *   {@link org.acumos.licensemanager.client.model.ILicenseVerification}
-   *   object.
-   * @throws org.acumos.licensemanager.exceptions.RightToUseException
-   *  when exception was not able to be verified
+   * @param licenseDownloadRequest a {@link
+   *     org.acumos.licensemanager.client.model.IVerifyLicenseRequest} object.
+   * @return a {@link org.acumos.licensemanager.client.model.ILicenseVerification} object.
+   * @throws RightToUseException if any.
    */
-  ILicenseVerification verifyRTU(
-      IVerifyLicenseRequest licenseDownloadRequest)
-        throws RightToUseException;
+  ILicenseVerification verifyRtu(IVerifyLicenseRequest licenseDownloadRequest)
+      throws RightToUseException;
 }

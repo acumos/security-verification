@@ -23,129 +23,140 @@ package org.acumos.licensemanager.client;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
-
 import org.acumos.cds.client.CommonDataServiceRestClientMockImpl;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPUser;
-import org.acumos.licensemanager.client.model.CreateRTURequest;
-import org.acumos.licensemanager.client.model.ICreatedRtu;
+import org.acumos.licensemanager.client.model.CreateRtuRequest;
+import org.acumos.licensemanager.client.model.ICreatedRtuResponse;
 import org.acumos.licensemanager.client.model.ILicenseCreator;
 import org.acumos.licensemanager.exceptions.RightToUseException;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
- * License Manager Client Unit tests - Test creation of the RTU and RTU
- * references - Test reading and verifying license/right to use exists.
+ * License Manager Client Unit tests - Test creation of the RTU and RTU references - Test reading
+ * and verifying license/right to use exists.
  */
 public class LicenseCreatorTest {
 
-	// TODO add invalid test which checks for log message
+  private class MockDatabaseClient extends CommonDataServiceRestClientMockImpl {
 
+    List<MLPRightToUse> nextRtuResponse = new ArrayList<MLPRightToUse>();
 
-	@Test
-	public void licenseCreator() throws RightToUseException {
-		// URL url = new URL("http", hostname, port, contextPath);
-		// logger.info("createClient: URL is {}", url);
-		CommonDataServiceRestClientMockImpl client = new CommonDataServiceRestClientMockImpl("url", "user", "pass");
-		String userId = "dummyuserid";
+    public MockDatabaseClient(String webapiString, String user, String pass) {
+      super(webapiString, user, pass);
+    }
 
-		// mock user for rtu test
-		MLPUser user = new MLPUser();
-		client.setLoginUser(user);
-		client.setUserById(user);
-		client.setUser(user);
+    @Override
+    public MLPRightToUse createRightToUse(MLPRightToUse rightToUse) {
+      // set as right to use response
+      nextRtuResponse.add(rightToUse);
+      setRightToUseList(nextRtuResponse);
+      super.createRightToUse(rightToUse);
+      return rightToUse;
+    }
+  }
+  // TODO add invalid test which checks for log message
 
-		// mock solution to use for rtu test
-		MLPSolution solution = new MLPSolution();
-		String solutionId = UUID.randomUUID().toString();
-		solution.setSolutionId(solutionId);
-		client.setSolution(solution);
-		client.setSolutionById(solution);
+  MockDatabaseClient client;
 
-		// mock revision for solution
-		MLPSolutionRevision solRev = new MLPSolutionRevision();
-		client.setSolutionRevisionById(solRev);
-		client.setSolutionRevision(solRev);
+  @Before
+  public void setupDbClient() {
+    client = new MockDatabaseClient("url", "user", "pass");
+  }
 
-		// create
-		ILicenseCreator licenseSrvc = new LicenseCreator(client);
-		CreateRTURequest licenseDownloadRequest = new CreateRTURequest(solutionId, userId);
-		ICreatedRtu verifyUserRTU;
+  @Test
+  public void licenseCreator() throws RightToUseException {
+    // URL url = new URL("http", hostname, port, contextPath);
+    // logger.info("createClient: URL is {}", url);
+    final String userId = "dummyuserid";
+    // mock user for rtu test
+    MLPUser user = new MLPUser();
+    client.setLoginUser(user);
+    client.setUserById(user);
+    client.setUser(user);
 
-		verifyUserRTU = licenseSrvc.createRTU(licenseDownloadRequest);
-		assertEquals(true, verifyUserRTU != null);
-		assertEquals(true, verifyUserRTU.isCreated());
-		assertEquals(false, verifyUserRTU.isUpdated());
-		assertEquals(solutionId, verifyUserRTU.getRequest().getSolutionId());
-		List<MLPRightToUse> rtus = verifyUserRTU.getRtus();
-		assertEquals(true, rtus != null && rtus.size() == 1);
-		client.setRightToUseList(rtus);
+    // mock solution to use for rtu test
+    MLPSolution solution = new MLPSolution();
+    String solutionId = UUID.randomUUID().toString();
+    solution.setSolutionId(solutionId);
+    client.setSolution(solution);
+    client.setSolutionById(solution);
 
+    // mock revision for solution
+    MLPSolutionRevision solRev = new MLPSolutionRevision();
+    client.setSolutionRevisionById(solRev);
+    client.setSolutionRevision(solRev);
 
-		// update
-		CreateRTURequest licenseDownloadRequest2 = new CreateRTURequest();
-		// solutionId, userId
-		licenseDownloadRequest2.setSiteWide(true);
-		licenseDownloadRequest2.setSolutionId(solutionId);
-		licenseDownloadRequest2.addUserId(userId);
-		licenseDownloadRequest2.setRtuId(new Random().nextLong());
-		licenseDownloadRequest2.setRtuRefs(new String[] { UUID.randomUUID().toString() });
-		ICreatedRtu verifyUserRTU2 = licenseSrvc.createRTU(licenseDownloadRequest2);
-		assertEquals(true, verifyUserRTU2 != null);
-		assertEquals("expect rtu is updated not created", false, verifyUserRTU2.isCreated());
-		assertEquals(true, verifyUserRTU2.isUpdated());
-		assertEquals(solutionId, verifyUserRTU2.getRequest().getSolutionId());
-		assertEquals(true, client.getRightToUses(solutionId, userId).size() > 0);
-		// assertEquals(0, verifyUserRTU2.getRtuException().size());
+    // create
+    ILicenseCreator licenseSrvc = new LicenseCreator(client);
+    CreateRtuRequest licenseDownloadRequest = new CreateRtuRequest(solutionId, userId);
+    ICreatedRtuResponse verifyUserRTU = licenseSrvc.createRtu(licenseDownloadRequest);
+    assertEquals(true, verifyUserRTU != null);
+    assertEquals(true, verifyUserRTU.isCreated());
+    assertEquals(false, verifyUserRTU.isUpdated());
+    assertEquals(solutionId, verifyUserRTU.getRequest().getSolutionId());
+    List<MLPRightToUse> rtus = verifyUserRTU.getRtus();
+    assertEquals(true, rtus != null && rtus.size() == 1);
+    client.setRightToUseList(rtus);
 
-	}
+    // update
+    CreateRtuRequest licenseDownloadRequest2 = new CreateRtuRequest();
+    // solutionId, userId
+    licenseDownloadRequest2.setSiteWide(true);
+    licenseDownloadRequest2.setSolutionId(solutionId);
+    licenseDownloadRequest2.addUserId(userId);
+    licenseDownloadRequest2.setRtuRefs(new String[] {UUID.randomUUID().toString()});
+    ICreatedRtuResponse verifyUserRtu2 = licenseSrvc.createRtu(licenseDownloadRequest2);
+    assertEquals(true, verifyUserRtu2 != null);
+    assertEquals("expect rtu is updated not created", false, verifyUserRtu2.isCreated());
+    assertEquals(true, verifyUserRtu2.isUpdated());
+    assertEquals(solutionId, verifyUserRtu2.getRequest().getSolutionId());
+    assertEquals(true, client.getRightToUses(solutionId, userId).size() > 0);
+    // assertEquals(0, verifyUserRTU2.getRtuException().size());
 
-	@Test()
-	public void invalidNoRequestArgumentTest() throws RightToUseException {
-		CommonDataServiceRestClientMockImpl client = new CommonDataServiceRestClientMockImpl("url", "user", "pass");
-		ILicenseCreator licenseSrvc = new LicenseCreator(client);
+  }
 
-		try {
-			licenseSrvc.createRTU(null);
-			fail("expected illegal argument exception");
-		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals("request is not defined",illegalArgument.getMessage());
-		}
-	}
+  @Test()
+  public void invalidNoRequestArgumentTest() throws RightToUseException {
+    ILicenseCreator licenseSrvc = new LicenseCreator(client);
 
-	@Test()
-	public void invalidNoSolutionIdArgumentTest() throws RightToUseException {
-		CommonDataServiceRestClientMockImpl client = new CommonDataServiceRestClientMockImpl("url", "user", "pass");
-		ILicenseCreator licenseSrvc = new LicenseCreator(client);
-		CreateRTURequest creationrequest = new CreateRTURequest();
+    try {
+      licenseSrvc.createRtu(null);
+      fail("expected illegal argument exception");
+    } catch (IllegalArgumentException illegalArgument) {
+      assertEquals("request is not defined", illegalArgument.getMessage());
+    }
+  }
 
-		try {
-			licenseSrvc.createRTU(creationrequest);
-			fail("expected illegal argument exception");
-		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals("request solution id is not defined",illegalArgument.getMessage());
-		}
-	}
+  @Test()
+  public void invalidNoSolutionIdArgumentTest() throws RightToUseException {
+    ILicenseCreator licenseSrvc = new LicenseCreator(client);
+    CreateRtuRequest creationrequest = new CreateRtuRequest();
 
-	@Test()
-	public void invalidNoUserIdArgumentTest() throws RightToUseException {
-		CommonDataServiceRestClientMockImpl client = new CommonDataServiceRestClientMockImpl("url", "user", "pass");
-		ILicenseCreator licenseSrvc = new LicenseCreator(client);
-		CreateRTURequest creationrequest = new CreateRTURequest();
-		creationrequest.setSolutionId("dummysolutionid");
-		try {
-			licenseSrvc.createRTU(creationrequest);
-			fail("expected illegal argument exception");
-		} catch (IllegalArgumentException illegalArgument) {
-			assertEquals("request userId or siteWide is not defined",illegalArgument.getMessage());
-		}
-	}
+    try {
+      licenseSrvc.createRtu(creationrequest);
+      fail("expected illegal argument exception");
+    } catch (IllegalArgumentException illegalArgument) {
+      assertEquals("request solution id is not defined", illegalArgument.getMessage());
+    }
+  }
 
-
-	
+  @Test()
+  public void invalidNoUserIdArgumentTest() throws RightToUseException {
+    ILicenseCreator licenseSrvc = new LicenseCreator(client);
+    CreateRtuRequest creationrequest = new CreateRtuRequest();
+    creationrequest.setSolutionId("dummysolutionid");
+    try {
+      licenseSrvc.createRtu(creationrequest);
+      fail("expected illegal argument exception");
+    } catch (IllegalArgumentException illegalArgument) {
+      assertEquals("request userId or siteWide is not defined", illegalArgument.getMessage());
+    }
+  }
 }
