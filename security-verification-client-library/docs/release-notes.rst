@@ -16,19 +16,64 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-===================================
-Security Verification Release Notes
-===================================
+================================================
+Security Verification (SV) Library Release Notes
+================================================
 
 ----------------------------
-Version 0.0.3, 05 April 2019 
+Version 0.1.0, 12 April 2019
 ----------------------------
 
-* S-V Library base module (`ACUMOS-2555 <https://jira.acumos.org/browse/ACUMOS-2555>`_)
+* `4113: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4113/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `4101: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4101/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `4091: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4091/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
 
 ----------------------------
-Version 0.0.1, 04 April 2019 
+Version 0.0.3, 05 April 2019
 ----------------------------
 
-* S-V Library scan invocation logic (`ACUMOS-2558 <https://jira.acumos.org/browse/ACUMOS-2558>`_)
+* `4085: Updated release note <https://gerrit.acumos.org/r/#/c/4085/>`_
 
+  * `ACUMOS-2555: S-V Library base module <https://jira.acumos.org/browse/ACUMOS-2555>`_
+
+* `4065: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4065/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+----------------------------
+Version 0.0.1, 04 April 2019
+----------------------------
+
+* `3990: S-V library implementation <https://gerrit.acumos.org/r/#/c/3990/>`_
+
+  * `ACUMOS-1956: S-V library implementation <https://jira.acumos.org/browse/ACUMOS-1956>`_
+  * `ACUMOS-2546: Reorganize security-verification git repo to support multiple maven projects <https://jira.acumos.org/browse/ACUMOS-2546>`_
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `3977: S-V library implementation <https://gerrit.acumos.org/r/#/c/3977/>`_
+
+  * `ACUMOS-1956: S-V library implementation <https://jira.acumos.org/browse/ACUMOS-1956>`_
+  * `ACUMOS-2546: Reorganize security-verification git repo to support multiple maven projects <https://jira.acumos.org/browse/ACUMOS-2546>`_
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `3948: S-V library implementation <https://gerrit.acumos.org/r/#/c/3948/>`_
+
+  * `ACUMOS-1956: S-V library implementation <https://jira.acumos.org/browse/ACUMOS-1956>`_
+  * `ACUMOS-2555: S-V Library base module <https://jira.acumos.org/browse/ACUMOS-2555>`_
+  * `ACUMOS-2557: S-V Library solution/revision processing <https://jira.acumos.org/browse/ACUMOS-2557>`_
+  * `ACUMOS-2558: S-V Library scan invocation logic <https://jira.acumos.org/browse/ACUMOS-2558>`_
+  * `ACUMOS-2546: Reorganize security-verification git repo to support multiple maven projects <https://jira.acumos.org/browse/ACUMOS-2546>`_
+
+* `3914: S-V library implementation <https://gerrit.acumos.org/r/#/c/3914/>`_
+
+  * `ACUMOS-2555: S-V Library base module <https://jira.acumos.org/browse/ACUMOS-2555>`_
+  * `ACUMOS-2557: S-V Library solution/revision processing <https://jira.acumos.org/browse/ACUMOS-2557>`_
+  * `ACUMOS-2558: S-V Library scan invocation logic <https://jira.acumos.org/browse/ACUMOS-2558>`_
