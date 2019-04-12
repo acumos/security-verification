@@ -22,6 +22,30 @@
       "revId": "28b3249e70b425adc2fda43b680f35edfe6cdca2",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "49eeb496_acaadb80",
+        "filename": "license-manager-client-library/src/main/java/org/acumos/licensemanager/client/LicenseDataUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-12T16:25:34Z",
+      "side": 1,
+      "message": "agreed -- fixed",
+      "parentUuid": "e642c64e_0ec62f39",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 52
+      },
+      "revId": "28b3249e70b425adc2fda43b680f35edfe6cdca2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
