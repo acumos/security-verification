@@ -104,7 +104,7 @@ function extract_licenses() {
     fi
   ((i++))
   done
-  json="${json%?}]}"
+  json="$(echo ${json}]} | sed 's/,]}/]}/g')"
   echo $json >$OUT/scanresult.json
   if [[ "$root_license" != "" ]]; then
     sed -i -- "s/\"name\":\"\"/\"name\":\"$root_license\"/" $OUT/scanresult.json
@@ -131,13 +131,13 @@ function update_reason() {
 }
 
 function verify_compatibility() {
-  root_license=$(jq '.root_license.name' $OUT/scanresult.json)
+  root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
   compatible_licenses=$(jq '.compatibleLicenses | length' scanresult/config/compatible_licenses.json)
   local i=0
-  local root_name=$(jq ".compatibleLicenses[$i].name" scanresult/config/compatible_licenses.json)
+  local root_name=$(jq -r ".compatibleLicenses[$i].name" scanresult/config/compatible_licenses.json)
   while [[ "$root_license" != "$root_name" && $i -lt $compatible_licenses ]]; do
     ((i++))
-    root_name=$(jq ".compatibleLicenses[$i].name" scanresult/config/compatible_licenses.json)
+    root_name=$(jq -r ".compatibleLicenses[$i].name" scanresult/config/compatible_licenses.json)
   done
   if [[ $i -le $compatible_licenses ]]; then
     echo "Checking all licenses found for compatibility with Root license $root_name"
@@ -146,13 +146,13 @@ function verify_compatibility() {
     files=$(jq '.files | length' $OUT/scanresult.json)
     local j=0
     while [[ $j -lt $files ]]; do
-      path=$(jq ".files[$j].path" $OUT/scanresult.json)
+      path=$(jq -r ".files[$j].path" $OUT/scanresult.json)
       licenses=$(jq ".files[$j].licenses | length" $OUT/scanresult.json)
       local k=0
       while [[ $k -lt $licenses ]]; do
-        name=$(jq ".files[$j].licenses[$k].name" $OUT/scanresult.json)
+        name=$(jq -r ".files[$j].licenses[$k].name" $OUT/scanresult.json)
         local l=0
-        while [[ "$name" != "$(jq ".compatibleLicenses[$i].compatible[$l].name" scanresult/config/compatible_licenses.json)" && $l -lt $compatibles ]]; do
+        while [[ "$name" != "$(jq -r ".compatibleLicenses[$i].compatible[$l].name" scanresult/config/compatible_licenses.json)" && $l -lt $compatibles ]]; do
           ((l++))
         done
         if [[ $l -eq $compatibles ]]; then
@@ -185,7 +185,7 @@ function verify_allowed() {
 }
 
 function verify_root_license() {
-  if [[ "$(jq '.root_license.name' $OUT/scanresult.json)" == "" ]]; then
+  if [[ "$(jq -r '.root_license.name' $OUT/scanresult.json)" == "" ]]; then
     verifiedLicense=false
     update_reason "no license.txt document found"
     echo "No license.txt found in root folder"
@@ -211,7 +211,7 @@ function verify_license() {
     done
     ((i++))
   done
-  if [[ "$(jq '.root_license.name' $OUT/scanresult.json)" != "" ]]; then
+  if [[ "$(jq -r '.root_license.name' $OUT/scanresult.json)" != "" ]]; then
     verify_compatibility
   fi
   sed -i -- "s/^{/{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",/" $OUT/scanresult.json
