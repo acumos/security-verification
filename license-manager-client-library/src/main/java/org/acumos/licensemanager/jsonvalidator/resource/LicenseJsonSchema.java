@@ -24,9 +24,16 @@ import com.networknt.schema.JsonSchema;
 import com.networknt.schema.JsonSchemaFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** LicenseJsonSchema class. */
 public final class LicenseJsonSchema {
+
+  /** Logger for any exception handling. */
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
   /** Do not instantiate. */
   private LicenseJsonSchema() {}
@@ -35,7 +42,7 @@ public final class LicenseJsonSchema {
   private static final String JSONSCHEMANAME = "/license.schema.json";
 
   /** JsonSchema object for validation of license schema. */
-  private static JsonSchema JSONSCHEMA;
+  private static JsonSchema jsonSchema;
 
   /**
    * Get the license json schema as JsonSchema.
@@ -44,12 +51,17 @@ public final class LicenseJsonSchema {
    * @throws java.io.IOException if any.
    */
   public static JsonSchema getSchema() throws IOException {
-    if (JSONSCHEMA != null) {
-      return JSONSCHEMA;
+    if (jsonSchema != null) {
+      return jsonSchema;
     }
     JsonSchemaFactory factory = JsonSchemaFactory.getInstance();
-    InputStream is = LicenseJsonSchema.class.getResource(JSONSCHEMANAME).openStream();
-    JSONSCHEMA = factory.getSchema(is);
-    return JSONSCHEMA;
+    try {
+      InputStream is = LicenseJsonSchema.class.getResource(JSONSCHEMANAME).openStream();
+      jsonSchema = factory.getSchema(is);
+    } catch (IOException e) {
+      LOGGER.error("unable to process license schema {}", e);
+    }
+
+    return jsonSchema;
   }
 }
