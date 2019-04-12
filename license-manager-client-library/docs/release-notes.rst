@@ -20,6 +20,15 @@
 License Manager Client Library Release Notes
 ============================================
 
+Version 0.0.3, 09 April 2019
+----------------------------
+
+* Adding support for validating license.json
+* `ACUMOS-2731 <https://jira.acumos.org/browse/ACUMOS-2731>`_
+* Checkstyle - based on google checks -- a couple compatibity issue
+* ILicenseVerifier.verifyRTU -> ILicenseVerifier.verfiyRtu (case change)
+* ILicenseCreator.createRTU -> ILicenseCreator.createRtu (case change)
+
 Version 0.0.2, 20 March 2018
 ----------------------------
 

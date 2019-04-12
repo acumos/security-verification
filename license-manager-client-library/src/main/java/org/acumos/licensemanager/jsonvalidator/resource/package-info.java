@@ -18,25 +18,5 @@
  * ===============LICENSE_END==================================================
  */
 
-package org.acumos.licensemanager.client.model;
-
-import java.util.Map;
-
-/** ILicenseVerification interface. CreatedRtu */
-public interface ILicenseVerification {
-
-  /**
-   * Returns the list of actions for which are allowed to use.
-   *
-   * @return a {@link java.util.Map} object.
-   */
-  Map<LicenseAction, Boolean> getAllowedToUse();
-
-  /**
-   * Convenience method to pass a license action and return true if a RTU exists.
-   *
-   * @param action a {@link org.acumos.licensemanager.client.model.LicenseAction} object.
-   * @return a boolean.
-   */
-  boolean isAllowed(LicenseAction action);
-}
+/** Resources required for supporting json validator. */
+package org.acumos.licensemanager.jsonvalidator.resource;
