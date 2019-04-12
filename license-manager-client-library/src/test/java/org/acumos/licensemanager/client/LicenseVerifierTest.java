@@ -206,7 +206,7 @@ public class LicenseVerifierTest {
       licenseVerifier.verifyRtu(licenseDownloadRequest);
       fail("expected illegal argument exception");
     } catch (IllegalArgumentException illegalArgument) {
-      assertEquals(illegalArgument.getMessage(), "request user id is not defined");
+      assertEquals("request user id is not defined", illegalArgument.getMessage());
     }
   }
 
@@ -239,7 +239,7 @@ public class LicenseVerifierTest {
       licenseVerifier.verifyRtu(licenseDownloadRequest);
       fail("expected illegal argument exception");
     } catch (IllegalArgumentException illegalArgument) {
-      assertEquals(illegalArgument.getMessage(), "request action is not defined");
+      assertEquals("request action is not defined", illegalArgument.getMessage());
     }
   }
 }
