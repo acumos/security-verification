@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class LicenseJsonException extends Exception implements Serializable {
 
   /** Internal exception being wrapped by RTU exception. */
-  private Exception jsonParseException;
+  private final Exception jsonParseException;
 
   /**
    * Creates exception for any RTU operation error.
@@ -46,6 +46,7 @@ public class LicenseJsonException extends Exception implements Serializable {
    */
   public LicenseJsonException(final String message) {
     super(message);
+    jsonParseException = null;
   }
 
   /**
