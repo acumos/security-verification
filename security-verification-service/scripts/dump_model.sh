@@ -133,8 +133,6 @@ function get_description() {
 }
 
 WORK_DIR=$(pwd)
-apt-get update
-apt-get install -qq wget jq zip
 solutionId=$1
 revisionId=$2
 folder=$3
