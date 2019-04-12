@@ -35,7 +35,7 @@ public final class LicenseJsonSchema {
   private static final String JSONSCHEMANAME = "/license.schema.json";
 
   /** JsonSchema object for validation of license schema. */
-  private static JsonSchema JSONSCHEMA;
+  private static JsonSchema jsonSchema;
 
   /**
    * Get the license json schema as JsonSchema.
@@ -44,12 +44,12 @@ public final class LicenseJsonSchema {
    * @throws java.io.IOException if any.
    */
   public static JsonSchema getSchema() throws IOException {
-    if (JSONSCHEMA != null) {
-      return JSONSCHEMA;
+    if (jsonSchema != null) {
+      return jsonSchema;
     }
     JsonSchemaFactory factory = JsonSchemaFactory.getInstance();
     InputStream is = LicenseJsonSchema.class.getResource(JSONSCHEMANAME).openStream();
-    JSONSCHEMA = factory.getSchema(is);
-    return JSONSCHEMA;
+    jsonSchema = factory.getSchema(is);
+    return jsonSchema;
   }
 }
