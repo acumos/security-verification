@@ -20,10 +20,11 @@
 
 package org.acumos.licensemanager.client.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 /** Construct a request to create a RTU. */
-public interface ICreateRtu extends ICommonLicenseRequest {
+public interface ICreateRtu extends ICommonLicenseRequest, Serializable {
 
   /**
    * Optional - a list of Strings which will be converted to {@link
