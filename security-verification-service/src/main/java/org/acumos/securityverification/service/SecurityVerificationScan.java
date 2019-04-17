@@ -32,8 +32,6 @@ import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPDocument;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.nexus.client.NexusArtifactClient;
-import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.exception.AcumosServiceException;
 import org.acumos.securityverification.utils.SVServiceConstants;
 import org.acumos.securityverification.utils.SecurityVerificationServiceUtils;
@@ -63,7 +61,7 @@ public class SecurityVerificationScan implements Runnable {
 		UUID uidNumber = UUID.randomUUID();
 		String folder = uidNumber.toString();
 		try {
-			updateVerifiedLicenseStatus(solutionId, "in-progress");
+			updateVerifiedLicenseStatus(solutionId, "IP");
 			SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_DUMP_MODEL, solutionId,
 					revisionId, folder, env);
 			SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_LICENSE_SCAN, solutionId,
@@ -80,10 +78,10 @@ public class SecurityVerificationScan implements Runnable {
 			logger.debug("scanCodeJsonFile: {}", scanCodeJsonFile);
 			uploadToArtifact(solutionId, revisionId, scanCodeJsonFile);
 			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("ture")) {
-				updateVerifiedLicenseStatus(solutionId, "successful");
+				updateVerifiedLicenseStatus(solutionId, "SU");
 			}
 			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("false")) {
-				updateVerifiedLicenseStatus(solutionId, "failed");
+				updateVerifiedLicenseStatus(solutionId, "FA");
 			}
 
 		} catch (Exception e) {
