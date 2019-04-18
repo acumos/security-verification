@@ -144,10 +144,8 @@ cdsUri="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT"
 nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT"
 nexusRepo=$ACUMOS_NEXUS_MAVEN_REPO
 
-if [[ -e $folder ]]; then
-  rm -rf $folder
-fi
-mkdir -p $folder
+rm -rf ./$folder
+mkdir ./$folder
 cd $folder
 mkdir cds
 get_solution

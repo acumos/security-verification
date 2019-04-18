@@ -31,7 +31,6 @@ while [[ $i -lt $sols ]] ; do
   while [[ $j -lt $revs ]] ; do
     rid=$(jq -r ".[$j].revisionId" revs.json)
     echo $sid $rid
-    mkdir $rid
     bash dump_model.sh $sid $rid $rid
     bash license_scan.sh $sid $rid $rid
     j=$((j+1))
