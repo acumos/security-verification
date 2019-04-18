@@ -63,15 +63,31 @@ EOF
 EOF
 }
 
+function get_allowed_license_type() {
+  local license_name=$1
+  local n=$(jq -r '.allowedLicense | length' scanresult/config/allowed_licenses.json)
+  local i=0
+  local allowed_name
+  allowed_license_type=""
+  while [[ $i -lt $n ]]; do
+    allowed_name=$(jq -r ".allowedLicense[$i].name" scanresult/config/allowed_licenses.json)
+    if [[ "$allowed_name" == "$license_name" ]]; then
+      allowed_license_type=$(jq -r ".allowedLicense[$i].type" scanresult/config/allowed_licenses.json)
+    fi
+    i=$((i+1))
+  done
+}
+
 function extract_licenses() {
   local root_license=""
+  local root_license_type=""
   echo "" >all_licenses
   local files=$(jq '.files | length' $1)
-  json='{"root_license":{"name":""},"files":['
+  json='{"files":['
   local i=0
   # check each file reference for licenses and build a json object for those that do
   while [[ $i -lt $files ]]; do
-    local file_path=$(jq ".files[$i].path" $1 | sed 's/""/"/g')
+    local file_path=$(jq -r ".files[$i].path" $1 | sed "s~$revisionId/~~")
     local lics=$(jq ".files[$i].licenses | length" $1)
     if [[ $lics -gt 0 ]]; then
       local result="$file_path: "
@@ -79,7 +95,7 @@ function extract_licenses() {
       local file_licenses=""
       local j=0
       while [[ $j -lt $lics ]]; do
-        name=$(jq ".files[$i].licenses[$j].short_name" $1 | sed 's/ /-/g' | tr -d '"')
+        name=$(jq -r ".files[$i].licenses[$j].short_name" $1 | sed 's/ /-/g')
         # Ignore licenses for bugs
         # https://github.com/nexB/scancode-toolkit/issues/1408
         # https://github.com/nexB/scancode-toolkit/issues/1409
@@ -89,25 +105,35 @@ function extract_licenses() {
             echo "$name" >file_licenses
             echo "$name " >>all_licenses
             result="$result $name"
-            if [[ "$root_license" == "" && $(echo $file_path | cut -d '/' -f 2 | grep -c -i -E '^license.txt') -gt 0 ]]; then
+            if [[ "$root_license" == "" && $(echo $file_path | cut -d '/' -f 2 | grep -c -i -E '^license.json') -gt 0 ]]; then
               root_license=$name
+              allowed_license_type=""
+              get_allowed_license_type $name
               echo "Root license $root_license found"
+              if [[ "$allowed_license_type" != "" ]]; then
+                root_license_type=$allowed_license_type
+                echo "Root license is of allowed type $root_license_type"
+              else
+                echo "Root license type is unknown (not found in allowedLicense table)"
+              fi
             fi
           fi
         fi
-        ((j++))
+        j=$((j+1))
       done
       echo $result
       file_licenses=$(echo $file_licenses | sed 's/^,//')
       # add the file entry to the json structure
-      json="${json}{\"path\":$file_path,\"licenses\":[$file_licenses]},"
+      json="${json}{\"path\":\"$file_path\",\"licenses\":[$file_licenses]},"
     fi
-  ((i++))
+  i=$((i+1))
   done
   json="$(echo ${json}]} | sed 's/,]}/]}/g')"
   echo $json >$OUT/scanresult.json
   if [[ "$root_license" != "" ]]; then
-    sed -i -- "s/\"name\":\"\"/\"name\":\"$root_license\"/" $OUT/scanresult.json
+    sed -i -- "s~^{~{\"root_license\":{\"type\":\"$root_license_type\",\"name\":\"$root_license\"},~" $OUT/scanresult.json
+  else
+    sed -i -- "s~^{~{\"root_license\":{\"type\":\"\",\"name\":\"\"},~" $OUT/scanresult.json
   fi
   # Count number of references to each license
   licenses=$(sort all_licenses | uniq)
@@ -115,7 +141,7 @@ function extract_licenses() {
   for license in $licenses; do
     count=$(grep -c $license all_licenses)
     echo "$license: $count"
-    ((i++))
+    i=$((i+1))
   done
   local license_count=$i
   echo "license_count: $license_count"
@@ -136,7 +162,7 @@ function verify_compatibility() {
   local i=0
   local root_name=$(jq -r ".compatibleLicenses[$i].name" scanresult/config/compatible_licenses.json)
   while [[ "$root_license" != "$root_name" && $i -lt $compatible_licenses ]]; do
-    ((i++))
+    i=$((i+1))
     root_name=$(jq -r ".compatibleLicenses[$i].name" scanresult/config/compatible_licenses.json)
   done
   if [[ $i -le $compatible_licenses ]]; then
@@ -161,7 +187,7 @@ function verify_compatibility() {
         fi
         ((k++))
       done
-      ((j++))
+      j=$((j+1))
     done
   else
     verifiedLicense=false
@@ -176,7 +202,7 @@ function verify_allowed() {
   local allowed_licenses=$(jq '.allowedLicense | length' scanresult/config/allowed_licenses.json)
   local i=0
   while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".allowedLicense[$i].name" scanresult/config/allowed_licenses.json)" ]]; do
-    ((i++))
+    i=$((i+1))
   done
   if [[ $i -eq allowed_licenses ]]; then
     verifiedLicense=false
@@ -185,12 +211,18 @@ function verify_allowed() {
 }
 
 function verify_root_license() {
-  if [[ "$(jq -r '.root_license.name' $OUT/scanresult.json)" == "" ]]; then
+  local root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
+  if [[ "$root_license" == "" ]]; then
     verifiedLicense=false
-    update_reason "no license.txt document found"
-    echo "No license.txt found in root folder"
+    update_reason "no license artifact found, or license is unrecognized"
   else
-    echo "Verified presence of license.txt in root folder"
+    local root_license_type=$(jq -r '.root_license.type' $OUT/scanresult.json)
+    if [[ "$root_license_type" == "" ]]; then
+      verifiedLicense=false
+      update_reason "root license ($root_license) is not allowed"
+    else
+      echo "Verified presence of allowed root license ($root_license) of type ($root_license_type)"
+    fi
   fi
 }
 
@@ -207,9 +239,9 @@ function verify_license() {
     local j=0
     while [[ $j -lt $licenses ]]; do
       verify_allowed $file $(jq ".files[$i].licenses[$j].name" $OUT/scanresult.json)
-      ((j++))
+      j=$((j+1))
     done
-    ((i++))
+    i=$((i+1))
   done
   if [[ "$(jq -r '.root_license.name' $OUT/scanresult.json)" != "" ]]; then
     verify_compatibility

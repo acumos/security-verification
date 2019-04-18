@@ -78,7 +78,10 @@ function get_artifacts() {
     name=$(jq -r ".[$i].name" cds/artifacts.json)
     uri=$(jq -r ".[$i].uri" cds/artifacts.json)
     type=$(jq -r ".[$i].artifactTypeCode" cds/artifacts.json)
-    if [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
+    if [[ "$name" == "license.json" ]]; then
+      log "Downloading license.json"
+      wget -O license.json $nexusUri/repository/$nexusRepo/$uri
+    elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
       log "Downloading model.zip"
       wget -O model.zip $nexusUri/repository/$nexusRepo/$uri
       unzip -d model-zip model.zip
