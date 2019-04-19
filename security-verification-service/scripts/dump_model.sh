@@ -138,14 +138,13 @@ function get_description() {
 WORK_DIR=$(pwd)
 solutionId=$1
 revisionId=$2
+# scan/<guid>
 folder=$3
 cdsCreds="$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
 cdsUri="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT"
 nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT"
 nexusRepo=$ACUMOS_NEXUS_MAVEN_REPO
 
-rm -rf ./$folder
-mkdir ./$folder
 cd $folder
 mkdir cds
 get_solution
@@ -153,4 +152,5 @@ get_revision
 get_artifacts
 get_documents
 get_description
+bash /maven/scan/license_scan.sh /maven/$folder
 cd $WORK_DIR
