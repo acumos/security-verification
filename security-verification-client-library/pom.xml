@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-client</artifactId>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.0.9-SNAPSHOT</version>
 	<name>security-verification-client-library</name>
 	<description>Acumos Security Verification Client Library</description>
 		

@@ -39,6 +39,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 public class SecurityVerificationScan implements Runnable {
@@ -90,7 +91,6 @@ public class SecurityVerificationScan implements Runnable {
 
 	}
 
-	
 	private void uploadToArtifact(String solutionId, String revisionId, File file)
 			throws AcumosServiceException, FileNotFoundException {
 		long fileSizeByKB = file.length();
@@ -99,7 +99,7 @@ public class SecurityVerificationScan implements Runnable {
 			ICommonDataServiceRestClient client = getCcdsClient();
 			MLPSolution mlpSolution = client.getSolution(solutionId);
 			String userId = mlpSolution.getUserId();
-			UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput();
+			UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
 			MLPDocument document = uploadArtifactSVOutput.addRevisionDocument(solutionId, revisionId,
 					AccessTypeCode.PR.toString(), userId, file);
 		}

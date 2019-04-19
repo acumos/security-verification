@@ -41,24 +41,22 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.maven.wagon.ConnectionException;
 import org.apache.maven.wagon.ResourceDoesNotExistException;
 import org.apache.maven.wagon.TransferFailedException;
-import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.apache.maven.wagon.authentication.AuthenticationException;
+import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 public class UploadArtifactSVOutput {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	@Autowired
 	private Environment env;
-
-	public void setEnvironment(Environment env1) {
-		env = env1;
+	
+	public UploadArtifactSVOutput(Environment env2){
+		this.env = env2;
 	}
-
+	
 	public MLPDocument addRevisionDocument(String solutionId, String revisionId, String accessType, String userId,
 			File file) throws AcumosServiceException, FileNotFoundException {
 
