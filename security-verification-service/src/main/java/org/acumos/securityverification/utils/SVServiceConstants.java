@@ -43,6 +43,7 @@ public class SVServiceConstants {
 	public static final String NEXUS_CLIENT_URL = "nexus.client.url";
 	public static final String NEXUS_CLIENT_USER = "nexus.client.username";
 	public static final String NEXUS_CLIENT_PWD = "nexus.client.pwd";
+	public static final String NEXUS_CLIENT_PROXY = "nexus.proxy";
 	
 	
 	// Site config Json tag

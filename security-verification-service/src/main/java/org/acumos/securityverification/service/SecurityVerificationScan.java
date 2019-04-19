@@ -29,7 +29,6 @@ import java.util.UUID;
 import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
-import org.acumos.cds.domain.MLPDocument;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.securityverification.exception.AcumosServiceException;
@@ -39,7 +38,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 public class SecurityVerificationScan implements Runnable {
@@ -100,8 +98,7 @@ public class SecurityVerificationScan implements Runnable {
 			MLPSolution mlpSolution = client.getSolution(solutionId);
 			String userId = mlpSolution.getUserId();
 			UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-			MLPDocument document = uploadArtifactSVOutput.addRevisionDocument(solutionId, revisionId,
-					AccessTypeCode.PR.toString(), userId, file);
+			uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId,AccessTypeCode.PR.toString(), userId, file);
 		}
 	}
 
