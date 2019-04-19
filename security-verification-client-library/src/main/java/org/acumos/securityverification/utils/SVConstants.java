@@ -50,6 +50,7 @@ public class SVConstants {
 	
 	//CDUMP Json tag
 	public static final String ARTIFACT_TYPE_CDUMP= "CD";
+	public static final String ARTIFACT_TYPE_SCANRESULT = "SR";
 	public static final String JSON_FILE_NAME= "ACUMOS-CDUMP.json";
 	public static final String MODEL_TYPE_CODE= "PR";
 	public static final String TOOL_KIT_TYPE_CODE= "CP";

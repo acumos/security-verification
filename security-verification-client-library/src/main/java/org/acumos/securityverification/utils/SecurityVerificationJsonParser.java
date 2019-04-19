@@ -20,6 +20,7 @@
 
 package org.acumos.securityverification.utils;
 
+import java.io.FileReader;
 import java.io.StringReader;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
@@ -173,4 +174,23 @@ public class SecurityVerificationJsonParser {
 			throw e;
 		}
 	}
+
+	public static String scanResultRootLicenseType(String scanResultJson) throws Exception {
+		logger.debug("Inside scanResultRootLicenseType");
+		JSONObject rootLicense = null;
+		String type = null;
+		try {
+			Object obj = new JSONParser().parse(new StringReader(scanResultJson));
+			JSONObject jo = (JSONObject) obj;
+			rootLicense = (JSONObject) jo.get("root_license");
+			type = (String) rootLicense.get("type");
+			logger.debug("verifiedLicenseStatus: {}", rootLicense);
+			logger.debug("type: {}", type);
+		} catch (Exception e) {
+			logger.debug("Exception: {}", e);
+			throw e;
+		}
+		return type;
+	}
+
 }

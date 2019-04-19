@@ -20,6 +20,7 @@
 package org.acumos.securityverification.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,13 @@ import org.acumos.securityverification.logging.LogConfig;
 import org.acumos.securityverification.transport.SVResonse;
 import org.acumos.securityverification.utils.SVConstants;
 import org.acumos.securityverification.utils.SecurityVerificationJsonParser;
+import org.apache.maven.wagon.ConnectionException;
+import org.apache.maven.wagon.ResourceDoesNotExistException;
+import org.apache.maven.wagon.TransferFailedException;
+import org.apache.maven.wagon.authentication.AuthenticationException;
+import org.apache.maven.wagon.authorization.AuthorizationException;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -163,7 +170,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 														mlpCdumpSolutionRevision.getRevisionId(),
 														mlpCdumpSolutionRevision.getVersion());
 												workflowPermissionDetermination(worflowId, workflow, client, userId,
-														securityVerificationCdumpNode, mlpCdumpSolutionRevision);
+														securityVerificationCdumpNode, mlpCdumpSolutionRevision,revisionId);
 											}
 										}
 									}
@@ -205,7 +212,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 												for (MLPSolutionRevision mlpCdumpSolutionRevisionSimpleModel : mlpCdumpSolutionRevisionsSimpleModel) {
 													if (securityVerificationCdumpNode.getNodeVersion().equalsIgnoreCase(mlpCdumpSolutionRevision.getVersion())) {
 														workflowPermissionDetermination(worflowId, workflow, client,userId, securityVerificationCdumpNode,
-																mlpCdumpSolutionRevisionSimpleModel);
+																mlpCdumpSolutionRevisionSimpleModel,revisionId);
 													}
 												}
 											}
@@ -238,32 +245,63 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 	private void workflowPermissionDetermination(String worflowId, Workflow workflow,
 			ICommonDataServiceRestClient client, String userId,
-			SecurityVerificationCdumpNode securityVerificationCdumpNode, MLPSolutionRevision mlpCdumpSolutionRevision)
-			throws RightToUseException {
+			SecurityVerificationCdumpNode securityVerificationCdumpNode, MLPSolutionRevision mlpCdumpSolutionRevision,String revisionId)
+			throws Exception {
 
 		ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
 		ResponseEntity<SVResonse> svResponse = null;
-		boolean rtuFlag = false;
+		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
 		StringBuilder reason = new StringBuilder();
 
-		if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
-			VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
-					securityVerificationCdumpNode.getNodeSolutionId(), userId);
-			licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
-			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
-			// returns true or false if rtu exists
-			rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
-		}
-		if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
-			VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
-					securityVerificationCdumpNode.getNodeSolutionId(), userId);
-			licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
-			ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
-			// returns true or false if rtu exists
-			rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
-		}
+		 List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);
+		for (MLPArtifact mlpArtifact : mlpArtifactList) {
+			if (mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_SCANRESULT)
+					|| mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
 
+				String nexusURI = "";
+				nexusURI = mlpArtifactList.stream().filter(
+						mlpArt -> mlpArt.getArtifactTypeCode().equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_SCANRESULT))
+						.findFirst().get().getUri();
+				logger.debug("mlpArtifact nexusURI: {}", nexusURI);
+
+				ByteArrayOutputStream byteArrayOutputStream = null;
+				try {
+					NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl, nexusClientUsername,
+							nexusClientPwd);
+					byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
+				} catch (Exception e) {
+					logger.debug("Exception", e);
+					throw e;
+				}
+				logger.debug("get scanresult from Nexus: byteArrayOutputStream length: {}",
+						byteArrayOutputStream.size());
+				logger.debug("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
+
+				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+				String scanResultRootLicenseType = parseJSON.scanResultRootLicenseType(byteArrayOutputStream.toString());
+
+				if (scanResultRootLicenseType != null && scanResultRootLicenseType != "SPDX") {
+					if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
+						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
+								securityVerificationCdumpNode.getNodeSolutionId(), userId);
+						licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
+						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+						// returns true or false if rtu exists
+						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
+					}
+					if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
+						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
+								securityVerificationCdumpNode.getNodeSolutionId(), userId);
+						licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
+						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+						// returns true or false if rtu exists
+						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
+					}
+				}
+			}
+		}
+		 
 		workFlowAllowed = rtuFlag;
 		if (!rtuFlag) {
 			reason.append("No Right to use");
