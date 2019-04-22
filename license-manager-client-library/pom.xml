@@ -2,9 +2,9 @@
   ===============LICENSE_START=======================================================
   Acumos Apache-2.0
   ===================================================================================
-  Copyright (C) 2019 Ericsson Software Technology AB. All rights reserved.
+  Copyright (C) 2019 Nordix Foundation
   ===================================================================================
-  This Acumos software file is distributed by AT&T and Tech Mahindra
+  This Acumos software file is distributed by Nordix Foundation
   under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
@@ -22,7 +22,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.security-verification.license-manager</groupId>
 	<artifactId>license-manager-client-library</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>License Manager Client Library</name>
 	<description>The Client library assists in verifying that the user has the rights to use commercial models. Developed by EST.tech.</description>
 	<properties>
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>org.acumos.common-dataservice</groupId>
 			<artifactId>cmn-data-svc-client</artifactId>
-			<version>2.2.0</version>
+			<version>2.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -107,8 +107,8 @@
 					<inceptionYear>2019</inceptionYear>
 					<organizationName><![CDATA[Nordix Foundation.]]></organizationName>
 					<projectName>Acumos Apache-2.0</projectName>
-					<canUpdateCopyright>true</canUpdateCopyright>
-					<canUpdateDescription>true</canUpdateDescription>
+					<canUpdateCopyright>false</canUpdateCopyright>
+					<canUpdateDescription>false</canUpdateDescription>
 					<canUpdateLicense>true</canUpdateLicense>
 					<emptyLineAfterHeader>true</emptyLineAfterHeader>
 					<includes>

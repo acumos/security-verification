@@ -286,9 +286,15 @@
 										</files>
 									</inline>
 								</assembly>
+								<env>
+									<JAVA_OPTS>-Xms128m -Xmx512m</JAVA_OPTS>
+								</env>
+								<workdir>/maven</workdir>
 								<cmd>
 									<!-- CDATA prevents Eclipse from breaking/reformatting the line -->
-									 <shell><![CDATA[cd /maven;java -Xms128m -Xmx512m -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
+									<shell>
+										<![CDATA[java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]>
+									</shell>
 								</cmd>
 							</build>
 						</image>

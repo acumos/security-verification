@@ -1,9 +1,9 @@
 .. ===============LICENSE_START=======================================================
 .. Acumos CC-BY-4.0
 .. ===================================================================================
-.. Copyright (C) 2019 Ericsson Software Technology AB. All rights reserved.
+.. Copyright (C) 2019 Nordix Foundation
 .. ===================================================================================
-.. This Acumos documentation file is distributed by AT&T and Tech Mahindra
+.. This Acumos documentation file is distributed by Nordix Foundation
 .. under the Creative Commons Attribution 4.0 International License (the "License");
 .. you may not use this file except in compliance with the License.
 .. You may obtain a copy of the License at
@@ -19,6 +19,12 @@
 ============================================
 License Manager Client Library Release Notes
 ============================================
+
+Version 0.0.4, 19 April 2019
+----------------------------
+* Updated license headers
+* Updated to CDS 2.2.1 to be compatible with portal
+* Documentation cleanup
 
 Version 0.0.3, 09 April 2019
 ----------------------------
