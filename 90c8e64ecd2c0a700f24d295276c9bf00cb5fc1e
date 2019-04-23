@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c60ff625_2d00037d",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-23T19:24:30Z",
+      "side": 1,
+      "message": "Why do we need 777 permissions for entire maven folder? I am confused why you need to give world writable access to this directory. \n\nAlso the jira doesn\u0027t describe the issue just the fix. The logs directory is a volume so not sure why we are not describing it as a volume \n\nI believe /maven/logs is a mounted volume based on docker compose and kubernetes setup in system-integration. Maybe we should be using VOLUME directive in docker vs mkdir",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 45
+      },
+      "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
