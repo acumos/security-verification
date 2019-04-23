@@ -46,6 +46,30 @@
       "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9e726dbb_65dcdbdb",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-23T19:59:21Z",
+      "side": 1,
+      "message": "Yes that all makes sense.\n I see what you are trying to do based on reading the parent story. When I make this change and run as unprivileged user and run SV I am seeing error. \n\nsv-scanning-service_1        | E: List directory /var/lib/apt/lists/partial is missing. - Acquire (13: Permission denied)",
+      "parentUuid": "73c960a8_41e516ca",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 45
+      },
+      "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
