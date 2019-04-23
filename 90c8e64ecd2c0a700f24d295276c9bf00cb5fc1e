@@ -22,6 +22,30 @@
       "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "73c960a8_41e516ca",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-04-23T19:29:28Z",
+      "side": 1,
+      "message": "Some processes write files in the local directory, not just to the logs subdirectory; that is only possible for a non-root user if the directory is writable.\n\nThe /maven/logs area varies by deployment.  In our azure dev labs, we use the docker-compose volume feature, which is what the docker peeps recommend; the permissions are set inside the container, not by the volume. In contrast, the AIO uses bind mounts to expose a linux filesystem, and that filesystem sets the permissions.",
+      "parentUuid": "c60ff625_2d00037d",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 45
+      },
+      "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
