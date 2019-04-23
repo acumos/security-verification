@@ -70,6 +70,30 @@
       "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3dc49b8c_b644fedd",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-23T20:05:58Z",
+      "side": 1,
+      "message": "maybe related to docker compose file having override for CMD docker directive that was installing command line tools such as curl, wget, git. Not sure if base image requires these.",
+      "parentUuid": "9e726dbb_65dcdbdb",
+      "range": {
+        "startLine": 291,
+        "startChar": 0,
+        "endLine": 291,
+        "endChar": 45
+      },
+      "revId": "90c8e64ecd2c0a700f24d295276c9bf00cb5fc1e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
