@@ -94,6 +94,30 @@
     },
     {
       "key": {
+        "uuid": "e092009a_4a23bda3",
+        "filename": "license-manager-client-library/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-24T00:24:24Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "7a03144e_55a2285a",
+      "range": {
+        "startLine": 44,
+        "startChar": 16,
+        "endLine": 44,
+        "endChar": 17
+      },
+      "revId": "eaefd58e0896948778df3126d5a34c282b5db8fc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "aa5fe435_431aed87",
         "filename": "license-manager-client-library/src/license/acumos/header.txt",
         "patchSetId": 1
@@ -117,6 +141,30 @@
     },
     {
       "key": {
+        "uuid": "425f7eb8_d1097739",
+        "filename": "license-manager-client-library/src/license/acumos/header.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-24T00:24:24Z",
+      "side": 1,
+      "message": "why is this not OK?",
+      "parentUuid": "aa5fe435_431aed87",
+      "range": {
+        "startLine": 1,
+        "startChar": 44,
+        "endLine": 1,
+        "endChar": 61
+      },
+      "revId": "eaefd58e0896948778df3126d5a34c282b5db8fc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "24712ded_e43f296e",
         "filename": "license-manager-client-library/src/license/acumos/license.txt",
         "patchSetId": 1
@@ -128,6 +176,30 @@
       "writtenOn": "2019-04-23T22:40:11Z",
       "side": 1,
       "message": "Ditto",
+      "range": {
+        "startLine": 1,
+        "startChar": 44,
+        "endLine": 1,
+        "endChar": 61
+      },
+      "revId": "eaefd58e0896948778df3126d5a34c282b5db8fc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9077e9d8_e5797b8a",
+        "filename": "license-manager-client-library/src/license/acumos/license.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-04-24T00:24:24Z",
+      "side": 1,
+      "message": "ditto",
+      "parentUuid": "24712ded_e43f296e",
       "range": {
         "startLine": 1,
         "startChar": 44,
