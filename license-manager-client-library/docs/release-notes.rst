@@ -1,24 +1,34 @@
-.. ===============LICENSE_START=======================================================
+.. ===============LICENSE_START================================================
 .. Acumos CC-BY-4.0
-.. ===================================================================================
-.. Copyright (C) 2019 Ericsson Software Technology AB. All rights reserved.
-.. ===================================================================================
-.. This Acumos documentation file is distributed by AT&T and Tech Mahindra
-.. under the Creative Commons Attribution 4.0 International License (the "License");
+.. ============================================================================
+.. Copyright (C) 2019 Nordix Foundation
+.. ============================================================================
+.. This Acumos documentation file is distributed by Nordix Foundation.
+.. under the Creative Commons Attribution 4.0 International License
+.. (the "License");
 .. you may not use this file except in compliance with the License.
 .. You may obtain a copy of the License at
 ..
-.. http://creativecommons.org/licenses/by/4.0
+..      http://creativecommons.org/licenses/by/4.0
 ..
 .. This file is distributed on an "AS IS" BASIS,
 .. WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 .. See the License for the specific language governing permissions and
 .. limitations under the License.
-.. ===============LICENSE_END=========================================================
+.. ===============LICENSE_END==================================================
+..
 
 ============================================
 License Manager Client Library Release Notes
 ============================================
+
+Version 0.0.4, 19 April 2019
+----------------------------
+* Updated license headers
+* `ACUMOS-2794 <https://jira.acumos.org/browse/ACUMOS-2794>`_
+* Documentation cleanup `ACUMOS-2795 <https://jira.acumos.org/browse/ACUMOS-2795>`_
+* Updated to CDS 2.2.2 to be compatible with portal `ACUMOS-2793 <https://jira.acumos.org/browse/ACUMOS-2793>`_
+* Api Docs move from wiki - `ACUMOS-2792 <https://jira.acumos.org/browse/ACUMOS-2792>`_
 
 Version 0.0.3, 09 April 2019
 ----------------------------

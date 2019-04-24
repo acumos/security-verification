@@ -4,7 +4,7 @@
  * ============================================================================
  * Copyright (C) 2019 Nordix Foundation.
  * ============================================================================
- * This Acumos software file is distributed by AT&T and Tech Mahindra
+ * This Acumos software file is distributed by Nordix Foundation
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -47,6 +47,13 @@ public class LicenseJsonValidator implements ILicenseJsonValidator {
     objectMappper = mapper;
   }
 
+  private ObjectMapper getObjectMapper() {
+    if (objectMappper == null) {
+      objectMappper = new ObjectMapper();
+    }
+    return objectMappper;
+  }
+
   @Override
   public LicenseJsonValidationResults validateLicenseJson(String jsonString)
       throws LicenseJsonException {
@@ -72,13 +79,6 @@ public class LicenseJsonValidator implements ILicenseJsonValidator {
       throw new LicenseJsonException("issue reading input", e);
     }
     return validate(node);
-  }
-
-  private ObjectMapper getObjectMapper() {
-    if (objectMappper == null) {
-      objectMappper = new ObjectMapper();
-    }
-    return objectMappper;
   }
 
   @Override
