@@ -141,7 +141,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 								logger.debug("getBluePrintNexus: byteArrayOutputStream length: {}",
 										byteArrayOutputStream.size());
 								logger.debug("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
-
+								
 								SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
 								// using the member nodeSolutionId, retrieves the list of revisions for the solutionId
 								SecurityVerificationCdump securityVerificationCdump = parseJSON.parseCdumpJsonFile(byteArrayOutputStream.toString());
