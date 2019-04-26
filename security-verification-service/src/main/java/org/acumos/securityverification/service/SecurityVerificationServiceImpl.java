@@ -53,25 +53,22 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
 			if (StringUtils.isEmpty(mlpSiteConfig)) {
 				logger.debug("initialize site_config");
-				createSiteConfig();
+				createSiteConfig(client);
 			}
 		}
 	}
 
 	@Override
-	public void securityVerification(String solutionId, String revisionId) throws Exception {
+	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client) throws Exception {
 		logger.debug("Inside securityVerification");
-		SecurityVerificationScan securityVerificationRunner = new SecurityVerificationScan(solutionId, revisionId, env);
+		SecurityVerificationScan securityVerificationRunner = new SecurityVerificationScan(solutionId, revisionId, env, client);
 		Thread t = new Thread(securityVerificationRunner);
 		t.start();
 	}
 
 	@Override
-	public String createSiteConfig() {
-
-		ICommonDataServiceRestClient client = getCcdsClient();
-		MLPSiteConfig mlpSiteConfigFromDB = null;
-		if (client != null) {
+	public String createSiteConfig(ICommonDataServiceRestClient client) {
+			MLPSiteConfig mlpSiteConfigFromDB = null;
 			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
 			if (StringUtils.isEmpty(mlpSiteConfig)) {
 				String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
@@ -80,12 +77,10 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 				config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);
 				config.setConfigValue(siteConfigJsonFromConfiguration);
 				logger.debug("Before createSiteConfig...");
-				String ss = "";
 				mlpSiteConfigFromDB = (MLPSiteConfig) client.createSiteConfig(config);
 				logger.debug("After createSiteConfig...");
 			}
-		}
-		return mlpSiteConfigFromDB.getConfigValue();
+			return mlpSiteConfigFromDB!=null ? mlpSiteConfigFromDB.getConfigValue() : "site_config verification already exist";
 	}
 
 	private ICommonDataServiceRestClient getCcdsClient() {
@@ -94,5 +89,5 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD), null);
 		return client;
-	}
+	}	
 }

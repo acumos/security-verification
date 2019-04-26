@@ -141,7 +141,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 								logger.debug("getBluePrintNexus: byteArrayOutputStream length: {}",
 										byteArrayOutputStream.size());
 								logger.debug("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
-
+								
 								SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
 								// using the member nodeSolutionId, retrieves the list of revisions for the solutionId
 								SecurityVerificationCdump securityVerificationCdump = parseJSON.parseCdumpJsonFile(byteArrayOutputStream.toString());
@@ -176,7 +176,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 									}
 								}
 							} else {
-								logger.debug("It is a Simple model and solutionId: {}  revisionId: {} ",solutionId, revisionId);
+								logger.debug("It is a Simple model and solutionId: {}  revisionId: {} ", solutionId,
+										revisionId);
 								List<MLPSolutionRevision> mlpCdumpSolutionRevisions = client
 										.getSolutionRevisions(solutionId);
 								for (MLPSolutionRevision mlpCdumpSolutionRevision : mlpCdumpSolutionRevisions) {
@@ -186,37 +187,56 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 										List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,
 												mlpRevisionId);
 										String nexusURI = "";
-										nexusURI = mlpArtifactList.stream()
-												.filter(mlpArt -> mlpArt.getArtifactTypeCode()
-														.equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_CDUMP))
-												.findFirst().get().getUri();
-										logger.debug("mlpArtifact nexusURI: {}", nexusURI);
-										ByteArrayOutputStream byteArrayOutputStream = null;
-										NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl,
-												nexusClientUsername, nexusClientPwd);
-										byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
-										logger.debug("getBluePrintNexus: byteArrayOutputStream length: {}",
-												byteArrayOutputStream.size());
-										logger.debug("byteArrayOutputStream.toString(): {}",
-												byteArrayOutputStream.toString());
-										SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-										// using the member nodeSolutionId, retrieves the list of revisions for the solutionId
-										SecurityVerificationCdump securityVerificationCdump = parseJSON
-												.parseCdumpJsonFile(byteArrayOutputStream.toString());
-										List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = securityVerificationCdump
-												.getNodes();
-										if (securityVerificationCdumpNodes != null) {
-											for (SecurityVerificationCdumpNode securityVerificationCdumpNode : securityVerificationCdumpNodes) {
-												logger.debug("------CDUMP CHILD NODE -------------------");
-												List<MLPSolutionRevision> mlpCdumpSolutionRevisionsSimpleModel = client.getSolutionRevisions(securityVerificationCdumpNode.getNodeSolutionId());
-												for (MLPSolutionRevision mlpCdumpSolutionRevisionSimpleModel : mlpCdumpSolutionRevisionsSimpleModel) {
-													if (securityVerificationCdumpNode.getNodeVersion().equalsIgnoreCase(mlpCdumpSolutionRevision.getVersion())) {
-														workflowPermissionDetermination(worflowId, workflow, client,userId, securityVerificationCdumpNode,
-																mlpCdumpSolutionRevisionSimpleModel,revisionId);
+										boolean cdumpFlag = false;
+										for (MLPArtifact mlpArtifact : mlpArtifactList) {
+											if (mlpArtifact.getArtifactTypeCode()
+													.equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_CDUMP)) {
+												cdumpFlag = true;
+												break;
+											}
+										}
+										if (cdumpFlag) {
+											nexusURI = mlpArtifactList.stream()
+													.filter(mlpArt -> mlpArt.getArtifactTypeCode()
+															.equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_CDUMP))
+													.findFirst().get().getUri();
+											logger.debug("mlpArtifact nexusURI: {}", nexusURI);
+											ByteArrayOutputStream byteArrayOutputStream = null;
+											NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl,
+													nexusClientUsername, nexusClientPwd);
+											byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
+											logger.debug("getBluePrintNexus: byteArrayOutputStream length: {}",
+													byteArrayOutputStream.size());
+											logger.debug("byteArrayOutputStream.toString(): {}",
+													byteArrayOutputStream.toString());
+											SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+											// using the member nodeSolutionId, retrieves the list of revisions for the solutionId
+											SecurityVerificationCdump securityVerificationCdump = parseJSON
+													.parseCdumpJsonFile(byteArrayOutputStream.toString());
+											List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = securityVerificationCdump
+													.getNodes();
+											if (securityVerificationCdumpNodes != null) {
+												for (SecurityVerificationCdumpNode securityVerificationCdumpNode : securityVerificationCdumpNodes) {
+													logger.debug("------CDUMP CHILD NODE -------------------");
+													List<MLPSolutionRevision> mlpCdumpSolutionRevisionsSimpleModel = client
+															.getSolutionRevisions(
+																	securityVerificationCdumpNode.getNodeSolutionId());
+													for (MLPSolutionRevision mlpCdumpSolutionRevisionSimpleModel : mlpCdumpSolutionRevisionsSimpleModel) {
+														if (securityVerificationCdumpNode.getNodeVersion()
+																.equalsIgnoreCase(
+																		mlpCdumpSolutionRevision.getVersion())) {
+															workflowPermissionDetermination(worflowId, workflow, client,
+																	userId, securityVerificationCdumpNode,
+																	mlpCdumpSolutionRevisionSimpleModel, revisionId);
+														}
 													}
 												}
 											}
+										} else {
+											workflow.setWorkflowAllowed(false);
+											workflow.setReason("Artifact type cdump not found");
 										}
+
 									}
 
 								}

@@ -47,5 +47,5 @@ public class SVServiceConstants {
 	
 	
 	// Site config Json tag
-	public static final String SITE_VERIFICATION_KEY = "site_config";
+	public static final String SITE_VERIFICATION_KEY = "verification";
 }
