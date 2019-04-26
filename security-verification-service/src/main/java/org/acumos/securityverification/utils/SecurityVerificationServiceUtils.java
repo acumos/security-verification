@@ -20,12 +20,8 @@
 package org.acumos.securityverification.utils;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeUnit;
@@ -44,15 +40,6 @@ public class SecurityVerificationServiceUtils {
 			isEmpty = true;
 		}
 		return isEmpty;
-	}
-
-	public static String getFileExtension(File file) {
-		logger.debug("getFileExtension()");
-		String fileName = file.getName();
-		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-			return fileName.substring(fileName.lastIndexOf(".") + 1);
-		else
-			return "";
 	}
 
 	public static byte[] executeScript(String scriptFile, String solutionId, String revisionId, String folder,
@@ -159,41 +146,4 @@ public class SecurityVerificationServiceUtils {
 		File file = new File(path);
 		return file;
 	}
-
-	public static InputStream readScript(String folder, String jsonFile) throws Exception {
-
-		logger.debug("Insed readScript, Started reading the file {}", jsonFile);
-		File scancode_file = new File(
-				SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder + jsonFile);
-		InputStream scancodeStream;
-		FileReader fr = null;
-		BufferedReader br = null;
-		try {
-			scancodeStream = new DataInputStream(new FileInputStream(scancode_file));
-			fr = new FileReader(scancode_file);
-			br = new BufferedReader(fr);
-			String line;
-			logger.debug("Reading text file using FileReader");
-			StringBuilder filedata = new StringBuilder();
-			while ((line = br.readLine()) != null) {
-				filedata.append(line);
-				filedata.append("\n");
-			}
-			logger.debug("Scan result {}", filedata.toString());
-		} catch (IOException e) {
-			logger.error("readScript failed {}", e);
-			throw e;
-		} finally {
-			if (null != br) {
-				br.close();
-			}
-			if (null != fr) {
-				fr.close();
-			}
-
-		}
-
-		return scancodeStream;
-	}
-
 }

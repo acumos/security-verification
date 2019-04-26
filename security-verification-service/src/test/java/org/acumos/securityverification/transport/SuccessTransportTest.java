@@ -17,24 +17,35 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.service;
+package org.acumos.securityverification.transport;
 
-import org.acumos.cds.client.ICommonDataServiceRestClient;
+import static org.junit.Assert.assertNotNull;
 
-public interface ISecurityVerificationService {
+import org.junit.Test;
 
-	/**This method makes call to license_scan and dump_model shell for security verification.
-	 * @param solutionId
-	 * @param revisionId
-	 * @param client 
-	 * @throws Exception
-	 */
-	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client)  throws Exception;
-	
-	/**This method call CCDS site-config to add the site-cinfig json in database.  
-	 * @param client 
-	 * @return site-config json string.
-	 */
-	public String createSiteConfig(ICommonDataServiceRestClient client);
-	
+public class SuccessTransportTest {
+
+	private int status;
+	private Object data;
+
+	@Test
+	public void testSuccessTransport() {
+		SuccessTransport successTransport = new SuccessTransport();
+		data = new Object();
+		successTransport.setStatus(status);
+		successTransport.setData(data);
+		assertNotNull(successTransport);
+		assertNotNull(successTransport.getStatus());
+		assertNotNull(successTransport.getData());
+
+	}
+
+	@Test
+	public void testSuccessTransportIntObject() {
+		SuccessTransport successTransport = new SuccessTransport(status, data);
+		data = new Object();
+		assertNotNull(successTransport);
+		assertNotNull(successTransport.getStatus());
+	}
+
 }

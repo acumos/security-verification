@@ -20,19 +20,16 @@
 
 package org.acumos.securityverification.utils;
 
-import java.io.FileReader;
 import java.io.StringReader;
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -142,19 +139,6 @@ public class SecurityVerificationJsonParser {
 			}
 		}
 		return verificationObjectMap;
-	}
-
-	/**
-	 * @param jsonObject
-	 * @param key
-	 * @param subClassNameKey
-	 * @return
-	 */
-	public String parseSiteConfigJson(JSONObject jsonObject, String key, String subClassNameKey) {
-
-		JSONObject verificationObject = (JSONObject) jsonObject.get(key);
-		JSONObject subObject = (JSONObject) verificationObject.get(subClassNameKey);
-		return (String) subObject.get(key);
 	}
 
 	/**

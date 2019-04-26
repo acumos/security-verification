@@ -23,6 +23,8 @@ import java.lang.invoke.MethodHandles;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.securityverification.logging.LogConfig;
 import org.acumos.securityverification.service.ISecurityVerificationService;
 import org.acumos.securityverification.transport.ErrorTransport;
@@ -32,6 +34,7 @@ import org.acumos.securityverification.utils.SVServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,6 +49,13 @@ public class SecurityVerificationServiceController extends AbstractController {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 	
 	@Autowired
+	private Environment env;
+
+	public void setEnvironment(Environment env1) {
+		env = env1;
+	}
+	
+	@Autowired
 	ISecurityVerificationService securityVerificationService;
 
 	@ApiOperation(value = "Security Verification Service Scan.", response = SuccessTransport.class)
@@ -57,7 +67,8 @@ public class SecurityVerificationServiceController extends AbstractController {
 		logger.debug("Inside securityVerification service scan solutionId  {}  revisionId  {}", solutionId, revisionId);
 		try {
 			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScan");
-			securityVerificationService.securityVerification(solutionId, revisionId);
+			ICommonDataServiceRestClient client = getCcdsClient();
+			securityVerificationService.securityVerification(solutionId, revisionId, client);
 			LogConfig.clearMDCDetails();
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
@@ -73,7 +84,10 @@ public class SecurityVerificationServiceController extends AbstractController {
 		logger.debug("Inside siteConfigVerification adding default SiteConfig Verification Json");
 		try {
 			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScan");
-			String siteConfigJson = securityVerificationService.createSiteConfig();
+			ICommonDataServiceRestClient client = getCcdsClient();
+			String siteConfigJson = null;
+			if(client!=null)
+			siteConfigJson = securityVerificationService.createSiteConfig(client);
 			LogConfig.clearMDCDetails();
 			return new SuccessTransport(HttpServletResponse.SC_OK, siteConfigJson);
 		} catch (Exception ex) {
@@ -81,6 +95,14 @@ public class SecurityVerificationServiceController extends AbstractController {
 			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSiteConfig failed", ex);
 		}
 
+	}
+	
+	private ICommonDataServiceRestClient getCcdsClient() {
+		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(
+				env.getProperty(SVServiceConstants.CDMS_CLIENT_URL),
+				env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
+				env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD), null);
+		return client;
 	}
 
 }

@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.acumos.cds.AccessTypeCode;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
@@ -44,14 +43,17 @@ public class SecurityVerificationScan implements Runnable {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	String solutionId;
-	String revisionId;
-	Environment env;
-
-	SecurityVerificationScan(String solutionId, String revisionId, Environment env1) {
+	private String solutionId;
+	private String revisionId;
+	private Environment env;
+	private ICommonDataServiceRestClient client;
+	
+	SecurityVerificationScan(String solutionId, String revisionId, Environment env1,
+			ICommonDataServiceRestClient client) {
 		this.solutionId = solutionId;
 		this.revisionId = revisionId;
 		this.env = env1;
+		this.client = client;
 	}
 
 	@Override
@@ -91,34 +93,26 @@ public class SecurityVerificationScan implements Runnable {
 
 	private void uploadToArtifact(String solutionId, String revisionId, File file)
 			throws AcumosServiceException, FileNotFoundException {
-		long fileSizeByKB = file.length();
-		if (fileSizeByKB > 0) {
-			logger.debug("in side if conditoin fileSizeByKB  {}", fileSizeByKB);
-			ICommonDataServiceRestClient client = getCcdsClient();
-			MLPSolution mlpSolution = client.getSolution(solutionId);
-			String userId = mlpSolution.getUserId();
-			UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-			uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId,AccessTypeCode.PR.toString(), userId, file);
+		if (file != null) {
+			long fileSizeByKB = file.length();
+			if (fileSizeByKB > 0) {
+				logger.debug("in side if conditoin fileSizeByKB  {}", fileSizeByKB);
+				MLPSolution mlpSolution = client.getSolution(solutionId);
+				String userId = mlpSolution.getUserId();
+				UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
+				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, AccessTypeCode.PR.toString(), userId,
+						file);
+			}
 		}
 	}
 
 	private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
-
-		ICommonDataServiceRestClient client = getCcdsClient();
 		List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
 		for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
 			mlpSolutionRevision.setVerifiedLicense(verifiedLicense);
 			client.updateSolutionRevision(mlpSolutionRevision);
 		}
 
-	}
-
-	private ICommonDataServiceRestClient getCcdsClient() {
-		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(
-				env.getProperty(SVServiceConstants.CDMS_CLIENT_URL),
-				env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
-				env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD), null);
-		return client;
 	}
 
 	private String scanOutJsonLocation(String folder,String jsonFlieName) {

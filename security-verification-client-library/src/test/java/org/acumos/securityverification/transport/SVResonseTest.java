@@ -17,24 +17,19 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.service;
+package org.acumos.securityverification.transport;
 
-import org.acumos.cds.client.ICommonDataServiceRestClient;
+import static org.junit.Assert.assertNotNull;
 
-public interface ISecurityVerificationService {
+import org.junit.Test;
 
-	/**This method makes call to license_scan and dump_model shell for security verification.
-	 * @param solutionId
-	 * @param revisionId
-	 * @param client 
-	 * @throws Exception
-	 */
-	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client)  throws Exception;
-	
-	/**This method call CCDS site-config to add the site-cinfig json in database.  
-	 * @param client 
-	 * @return site-config json string.
-	 */
-	public String createSiteConfig(ICommonDataServiceRestClient client);
-	
+public class SVResonseTest {
+
+	@Test
+	public void testGetScanSucess() {
+		SVResonse svResonse = new SVResonse();
+		svResonse.setScanSucess("scanSucess");
+		assertNotNull(svResonse);
+		assertNotNull(svResonse.getScanSucess());
+	}
 }
