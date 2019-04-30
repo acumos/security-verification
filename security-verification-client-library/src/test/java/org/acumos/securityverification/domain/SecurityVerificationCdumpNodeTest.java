@@ -17,24 +17,25 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.service;
+package org.acumos.securityverification.domain;
 
-import org.acumos.cds.client.ICommonDataServiceRestClient;
+import static org.junit.Assert.assertNotNull;
 
-public interface ISecurityVerificationService {
+import org.junit.Test;
 
-	/**This method makes call to license_scan and dump_model shell for security verification.
-	 * @param solutionId
-	 * @param revisionId
-	 * @param client 
-	 * @throws Exception
-	 */
-	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client)  throws Exception;
-	
-	/**This method call CCDS site-config to add the site-cinfig json in database.  
-	 * @param client 
-	 * @return site-config json string.
-	 */
-	public String createSiteConfig(ICommonDataServiceRestClient client);
-	
+public class SecurityVerificationCdumpNodeTest {
+
+	@Test
+	public void testSecurityVerificationCdumpNode() {
+		SecurityVerificationCdumpNode securityVerificationCdumpNode = new SecurityVerificationCdumpNode();
+		securityVerificationCdumpNode.setName("name");
+		securityVerificationCdumpNode.setNodeId("nodeId");
+		securityVerificationCdumpNode.setNodeSolutionId("nodeSolutionId");
+		securityVerificationCdumpNode.setNodeVersion("nodeVersion");
+		assertNotNull(securityVerificationCdumpNode);
+		assertNotNull(securityVerificationCdumpNode.getName());
+		assertNotNull(securityVerificationCdumpNode.getNodeId());
+		assertNotNull(securityVerificationCdumpNode.getNodeSolutionId());
+		assertNotNull(securityVerificationCdumpNode.getNodeVersion());
+	}
 }

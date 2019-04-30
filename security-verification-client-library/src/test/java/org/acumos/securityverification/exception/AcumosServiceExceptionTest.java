@@ -17,33 +17,26 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.utils;
+package org.acumos.securityverification.exception;
 
-import java.io.File;
-import java.lang.invoke.MethodHandles;
+import org.junit.Assert;
+import org.junit.Test;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+public class AcumosServiceExceptionTest {
 
-public class SVCUtils {
+	@Test
+	public void acumosServiceExceptionTParam() {
 
-	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+		String errorCode = "500";
+		Throwable cause = null;
+		AcumosServiceException acumosServiceException = new AcumosServiceException();
+		acumosServiceException.setErrorCode(errorCode);
 
-	public static boolean isEmptyOrNullString(String input) {
-		logger.debug("isEmptyOrNullString()");
-		boolean isEmpty = false;
-		if (null == input || 0 == input.trim().length()) {
-			isEmpty = true;
-		}
-		return isEmpty;
-	}
-
-	public static String getFileExtension(File file) {
-		logger.debug("getFileExtension()");
-		String fileName = file.getName();
-		if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0)
-			return fileName.substring(fileName.lastIndexOf(".") + 1);
-		else
-			return "";
+		Assert.assertNotNull(acumosServiceException);
+		Assert.assertNotNull(acumosServiceException.getErrorCode());
+		Assert.assertNotNull(new AcumosServiceException("custom exception"));
+		Assert.assertNotNull(new AcumosServiceException(errorCode, "custom exception"));
+		Assert.assertNotNull(new AcumosServiceException());
+		Assert.assertNotNull(new AcumosServiceException("custom exception", cause));
 	}
 }

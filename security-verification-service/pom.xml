@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-service</artifactId>
-	<version>0.0.10-SNAPSHOT</version>
+	<version>0.0.11-SNAPSHOT</version>
 	<name>Security Verification Service</name>
 	<description>Acumos Security Verification Service for artifacts uploaded with a model</description>
 
@@ -15,7 +15,7 @@
 		<version>2.1.1.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -85,7 +85,7 @@
 			<artifactId>wagon-http-lightweight</artifactId>
 			<version>${wagonVersion}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -122,7 +122,6 @@
 			<groupId>com.github.docker-java</groupId>
 			<artifactId>docker-java</artifactId>
 			<version>3.0.6</version>
-
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -179,7 +178,30 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<!-- Spring sets the <version>4.11</version> -->
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>1.10.19</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-core</artifactId>
+			<version>1.6.4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+			<version>1.6.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons-core</artifactId>
+			<version>1.1.0.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -268,16 +290,16 @@
 								<assembly>
 									<inline>
 										<files>
-										   <file>  
-												<source>scripts/dump_model.sh</source> 
-												<outputDirectory />                                                                                                 
-												<destName>scan/dump_model.sh</destName>                                                                                        
+											<file>
+												<source>scripts/dump_model.sh</source>
+												<outputDirectory />
+												<destName>scan/dump_model.sh</destName>
 											</file>
-											<file>  
-												<source>scripts/license_scan.sh</source> 
-												<outputDirectory />                                                                                                 
-												<destName>scan/license_scan.sh</destName>                                                                                        
-											</file> 
+											<file>
+												<source>scripts/license_scan.sh</source>
+												<outputDirectory />
+												<destName>scan/license_scan.sh</destName>
+											</file>
 											<file>
 												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
 												<outputDirectory />
@@ -292,7 +314,7 @@
 								</runCmds>
 								<cmd>
 									<!-- CDATA prevents Eclipse from breaking/reformatting the line -->
-									 <shell><![CDATA[cd /maven;java -Xms128m -Xmx512m -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
+									<shell><![CDATA[cd /maven;java -Xms128m -Xmx512m -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
 								</cmd>
 							</build>
 						</image>

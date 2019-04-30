@@ -60,7 +60,7 @@ public class UploadArtifactSVOutput {
 	
 	public void addCreateArtifact(String solutionId, String revisionId, String accessType, String userId,
 			File file) throws AcumosServiceException, FileNotFoundException {
-
+		
 		logger.debug("Inside the addCreateArtifact");
 
 		long size = file.length();
@@ -116,7 +116,7 @@ public class UploadArtifactSVOutput {
 						"Cannot upload the Artifact to the specified path");
 			}
 		} catch (Exception e) {
-			logger.error("Exception during addRevisionDocument ={}", e);
+			logger.error("Exception during upload to Artifact: ", e);
 			throw new AcumosServiceException(e.getMessage());
 		}
 	}

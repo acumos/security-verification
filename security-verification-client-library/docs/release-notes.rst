@@ -20,6 +20,11 @@
 Security Verification (SV) Library Release Notes
 ================================================
 
+-------------------------------
+Version 0.0.11, 30 April 2019
+-------------------------------
+* Security Verification throwing Unexected Error Message (`ACUMOS-2815 <https://jira.acumos.org/browse/ACUMOS-2815>`_)
+
 ----------------------------
 Version 0.1.0, 12 April 2019
 ----------------------------
