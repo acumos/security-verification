@@ -22,7 +22,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.security-verification.license-manager</groupId>
 	<artifactId>license-manager-client-library</artifactId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 	<name>License Manager Client Library</name>
 	<description>The Client library assists in verifying that the user has the rights to use commercial models. Developed by EST.tech.</description>
 	<properties>
