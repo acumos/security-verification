@@ -21,6 +21,11 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 -------------------------------
+Version 0.0.12, 01 May 2019
+-------------------------------
+* Update license-manager-client-library, security-verification-client and security-verification-service For LF release  (`ACUMOS-2830 <https://jira.acumos.org/browse/ACUMOS-2830>`_)
+
+-------------------------------
 Version 0.0.11, 30 April 2019
 -------------------------------
 * Security Verification throwing Unexected Error Message (`ACUMOS-2815 <https://jira.acumos.org/browse/ACUMOS-2815>`_)

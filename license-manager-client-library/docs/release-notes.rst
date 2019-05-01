@@ -20,6 +20,11 @@
 License Manager Client Library Release Notes
 ============================================
 
+
+Version 0.0.4, 01 May 2019
+-------------------------------
+* Update license-manager-client-library, security-verification-client and security-verification-service For LF release  (`ACUMOS-2830 <https://jira.acumos.org/browse/ACUMOS-2830>`_)
+
 Version 0.0.3, 09 April 2019
 ----------------------------
 
