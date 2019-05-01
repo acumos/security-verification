@@ -1,0 +1,52 @@
+---
+project: 'security-verification'
+project_creation_date: '2018-07-13'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &acumos_security-verification_ptl
+    name: 'Bryan Sullivan'
+    email: 'bryan.sullivan@att.com'
+    company: 'ATT'
+    id: 'blsaws'
+    timezone: 'America/Los_Angeles'
+primary_contact: *acumos_security-verification_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.acumos.org/projects/ACUMOS'
+    key: 'ACUMOS'
+mailing_list:
+    type: 'groups.io'
+    url: 'lists.acumos.org'
+    tag: '<[sub-project_name]>'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#acumos'
+meetings:
+    - type: 'zoom'
+      agenda: ''
+      url: ''
+      server: 'n/a'
+      channel: 'n/a'
+      repeats: 'n/a'
+      time: 'n/a'
+repositories:
+    - 'security-verification'
+committers:
+    - <<: *acumos_security-verification_ptl
+    - name: 'Guy Jacobson'
+      company: 'att'
+      email: 'gj2418@att.com'
+      id: 'guyjacobson'
+      timezone: 'America/New_York'
+    - name: 'Parichay Gupta'
+      email: 'pg0057291@techmahindra.com'
+      company: 'TechMahindra'
+      id: 'parichay12'
+      timezone: 'America/New_York'
+tsc:
+    approval: ''
+    changes:
+        - type: ''
+          name: ''
+          link: ''
