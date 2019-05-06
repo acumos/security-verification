@@ -20,9 +20,7 @@
 package org.acumos.securityverification.service;
 
 import java.lang.invoke.MethodHandles;
-
 import javax.annotation.PostConstruct;
-
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPSiteConfig;
@@ -33,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClientResponseException;
 
 @Service
 public class SecurityVerificationServiceImpl implements ISecurityVerificationService {
@@ -69,7 +68,12 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 	@Override
 	public String createSiteConfig(ICommonDataServiceRestClient client) {
 			MLPSiteConfig mlpSiteConfigFromDB = null;
-			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
+			MLPSiteConfig mlpSiteConfig = null;
+			try {
+				mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
+			} catch (RestClientResponseException ex) {
+				logger.error("getSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
+			}
 			if (StringUtils.isEmpty(mlpSiteConfig)) {
 				String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
 				logger.debug("siteConfig.verification  {} ", siteConfigJsonFromConfiguration);
@@ -77,7 +81,12 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 				config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);
 				config.setConfigValue(siteConfigJsonFromConfiguration);
 				logger.debug("Before createSiteConfig...");
-				mlpSiteConfigFromDB = (MLPSiteConfig) client.createSiteConfig(config);
+				try {
+					mlpSiteConfigFromDB = (MLPSiteConfig) client.createSiteConfig(config);
+				} catch (RestClientResponseException ex) {
+					logger.error("createSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
+					System.out.printf("createSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
+				}
 				logger.debug("After createSiteConfig...");
 			}
 			return mlpSiteConfigFromDB!=null ? mlpSiteConfigFromDB.getConfigValue() : "site_config verification already exist";
