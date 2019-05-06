@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a13f2dfa_8545dfdd",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-06T19:50:00Z",
+      "side": 1,
+      "message": "return here, or rethrow the exception, don\u0027t just continue!",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 91
+      },
+      "revId": "2df2b6f87a2aaf0b8240402f64f88cc8c3043c11",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "60163d2e_fa38112e",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-06T19:50:00Z",
+      "side": 1,
+      "message": "pls remove all System.* method invocations",
+      "range": {
+        "startLine": 88,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 100
+      },
+      "revId": "2df2b6f87a2aaf0b8240402f64f88cc8c3043c11",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a8d348ca_aa8b7fa8",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-06T19:50:00Z",
+      "side": 1,
+      "message": "why is the revision ID repeated here?",
+      "range": {
+        "startLine": 83,
+        "startChar": 91,
+        "endLine": 83,
+        "endChar": 101
+      },
+      "revId": "2df2b6f87a2aaf0b8240402f64f88cc8c3043c11",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "764af8c5_6c611c9f",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-06T19:50:00Z",
+      "side": 1,
+      "message": "pls remove don\u0027t comment out",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 53
+      },
+      "revId": "2df2b6f87a2aaf0b8240402f64f88cc8c3043c11",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
