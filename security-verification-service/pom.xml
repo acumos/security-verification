@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-service</artifactId>
-	<version>0.0.12-SNAPSHOT</version>
+	<version>0.0.13-SNAPSHOT</version>
 	<name>Security Verification Service</name>
 	<description>Acumos Security Verification Service for artifacts uploaded with a model</description>
 
@@ -23,6 +23,7 @@
 		<!-- Stand-alone RESTFul application -->
 		<start-class>org.acumos.securityverification.SecurityVerificationApplication</start-class>
 		<wagonVersion>3.1.0</wagonVersion>
+		<springfox.version>2.6.1</springfox.version>
 		<!-- tests still depend on Azure host -->
 		<skipTests>false</skipTests>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
@@ -38,22 +39,12 @@
 		<dependency>
 			<groupId>org.acumos.common-dataservice</groupId>
 			<artifactId>cmn-data-svc-client</artifactId>
-			<version>2.1.2</version>
+			<version>2.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.acumos.acumos-nexus-client</groupId>
 			<artifactId>acumos-nexus-client</artifactId>
 			<version>2.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<version>1.1.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
-			<artifactId>owasp-java-html-sanitizer</artifactId>
-			<version>20180219.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.att.eelf</groupId>
@@ -63,7 +54,7 @@
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-file</artifactId>
-			<version>3.1.0</version>
+			<version>${wagonVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
@@ -132,8 +123,7 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
-			<version>2.6.1</version>
-
+			<version>${springfox.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -144,8 +134,7 @@
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.6.1</version>
-
+			<version>${springfox.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -282,7 +271,8 @@
 							<name>security-verification:${project.version}</name>
 							<build>
 								<!-- <from>frolvlad/alpine-oraclejdk8:slim</from> -->
-								<from>openjdk:8-jre-slim</from>
+								<!-- <from>openjdk:8-jre-slim</from> -->
+								<dockerFileDir>${project.basedir}</dockerFileDir>
 								<tags>
 									<!-- Add tag with build number -->
 									<tag>${project.version}-b${build.number}</tag>
@@ -290,7 +280,7 @@
 								<assembly>
 									<inline>
 										<files>
-											<file>
+										   <file>
 												<source>scripts/dump_model.sh</source>
 												<outputDirectory />
 												<destName>scan/dump_model.sh</destName>
@@ -299,6 +289,16 @@
 												<source>scripts/license_scan.sh</source>
 												<outputDirectory />
 												<destName>scan/license_scan.sh</destName>
+											</file> 
+											<file>
+												<source>scripts/setup_verification_site_config.sh</source>
+												<outputDirectory />
+												<destName>scan/setup_verification_site_config.sh</destName>
+											</file>
+											<file>
+												<source>scripts/scan_all.sh</source>
+												<outputDirectory />
+												<destName>scan/scan_all.sh</destName>
 											</file>
 											<file>
 												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
@@ -307,21 +307,6 @@
 										</files>
 									</inline>
 								</assembly>
-								<workdir>/maven</workdir>
-								<runCmds>
-									<!-- Ensure logs dir exists and is world writable -->
-									<runCmd>mkdir logs</runCmd>
-									<runCmd>chmod -R 777 /maven</runCmd>
-								</runCmds>
-								<env>
-									<JAVA_OPTS>-Xms128m -Xmx512m</JAVA_OPTS>
-								</env>
-								<cmd>
-									<!-- CDATA prevents Eclipse from breaking/reformatting the line -->
-									<shell>
-										<![CDATA[java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]>
-									</shell>
-								</cmd>
 							</build>
 						</image>
 					</images>

@@ -58,7 +58,7 @@ public class UploadArtifactSVOutput {
 		this.env = env2;
 	}
 	
-	public void addCreateArtifact(String solutionId, String revisionId, String accessType, String userId,
+	public void addCreateArtifact(String solutionId, String revisionId, String catalogId, String userId,
 			File file) throws AcumosServiceException, FileNotFoundException {
 		
 		logger.debug("Inside the addCreateArtifact");
@@ -80,7 +80,7 @@ public class UploadArtifactSVOutput {
 			try {
 				stream = new DataInputStream(new FileInputStream(file));
 				logger.debug("Before nexusClient call sucess..");
-				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, accessType,
+				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, catalogId,
 						extension, size, stream);
 				logger.debug("After nexusClient call sucess..");
 			} catch (IOException | ConnectionException | AuthenticationException | AuthorizationException
@@ -100,7 +100,7 @@ public class UploadArtifactSVOutput {
 				modelArtifact.setName(file.getName());
 				modelArtifact.setDescription(file.getName());
 				modelArtifact.setVersion(uploadInfo.getVersion());
-				modelArtifact.setArtifactTypeCode(accessType);
+				modelArtifact.setArtifactTypeCode(catalogId); 
 				modelArtifact.setUserId(mlpSolutionRevision.getUserId());
 				modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
 				modelArtifact.setSize((int)size);

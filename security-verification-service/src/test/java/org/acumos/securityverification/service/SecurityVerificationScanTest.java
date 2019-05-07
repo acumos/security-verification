@@ -13,7 +13,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPSolutionRevision;
@@ -93,8 +92,9 @@ public class SecurityVerificationScanTest {
 			writer.write(scanResultJson);
 			writer.close();
 
+			String catalogId = "Mi";
 			UploadArtifactSVOutput uploadArtifactSVOutput = mock(UploadArtifactSVOutput.class);
-			doNothing().when(uploadArtifactSVOutput).addCreateArtifact(solutionId, revisionId,AccessTypeCode.PR.toString(), userId, file);
+			doNothing().when(uploadArtifactSVOutput).addCreateArtifact(solutionId, revisionId,catalogId, userId, file);
 			
 			String folder = "fb8f31cc-69d0-46b1-8b68-593a3b55a595";
 			String scanResultJsonFilePath = scanOutJsonLocation(folder, SVServiceConstants.SCAN_RESULT_JSON);

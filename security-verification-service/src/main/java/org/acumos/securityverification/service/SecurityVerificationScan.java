@@ -26,8 +26,8 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.UUID;
 
-import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
+import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.securityverification.exception.AcumosServiceException;
@@ -38,6 +38,7 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 
 public class SecurityVerificationScan implements Runnable {
 
@@ -99,9 +100,19 @@ public class SecurityVerificationScan implements Runnable {
 				logger.debug("in side if conditoin fileSizeByKB  {}", fileSizeByKB);
 				MLPSolution mlpSolution = client.getSolution(solutionId);
 				String userId = mlpSolution.getUserId();
-				UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, AccessTypeCode.PR.toString(), userId,
-						file);
+				
+				// TODO: TBD Is getSolutionCatalogs will return multiple catalog Id ? if yes then on what basis catalogId need to taken.
+				List<MLPCatalog> mlpCatalogList = client.getSolutionCatalogs(solutionId);
+				String catalogId = null;
+				if (StringUtils.isEmpty(mlpCatalogList)) {
+					for (MLPCatalog mlpCatalog : mlpCatalogList) {
+						catalogId = mlpCatalog.getAccessTypeCode();  
+						UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
+						uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, catalogId, userId, file);
+						break;
+					}
+				}
+				
 			}
 		}
 	}
