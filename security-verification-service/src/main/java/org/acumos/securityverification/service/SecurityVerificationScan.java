@@ -26,7 +26,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.UUID;
 
-import org.acumos.cds.AccessTypeCode;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
@@ -100,7 +99,7 @@ public class SecurityVerificationScan implements Runnable {
 				MLPSolution mlpSolution = client.getSolution(solutionId);
 				String userId = mlpSolution.getUserId();
 				UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, AccessTypeCode.PR.toString(), userId,
+				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, userId,
 						file);
 			}
 		}
