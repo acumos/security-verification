@@ -167,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "5ca2cbc6_c00d53df",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-05-07T23:25:59Z",
+      "side": 1,
+      "message": "so we are good?",
+      "parentUuid": "9e2d0816_976b97ee",
+      "range": {
+        "startLine": 83,
+        "startChar": 91,
+        "endLine": 83,
+        "endChar": 101
+      },
+      "revId": "2df2b6f87a2aaf0b8240402f64f88cc8c3043c11",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "764af8c5_6c611c9f",
         "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
         "patchSetId": 1
