@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestClientResponseException;
 
 @Service
 public class SecurityVerificationServiceImpl implements ISecurityVerificationService {
@@ -68,19 +69,30 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 
 	@Override
 	public String createSiteConfig(ICommonDataServiceRestClient client) {
-			MLPSiteConfig mlpSiteConfigFromDB = null;
-			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
-			if (StringUtils.isEmpty(mlpSiteConfig)) {
-				String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
-				logger.debug("siteConfig.verification  {} ", siteConfigJsonFromConfiguration);
-				MLPSiteConfig config = new MLPSiteConfig();
-				config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);
-				config.setConfigValue(siteConfigJsonFromConfiguration);
-				logger.debug("Before createSiteConfig...");
+		MLPSiteConfig mlpSiteConfigFromDB = null;
+		MLPSiteConfig mlpSiteConfig = null;
+		try {
+			mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
+		} catch (RestClientResponseException ex) {
+			logger.error("getSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
+		}
+		if (StringUtils.isEmpty(mlpSiteConfig)) {
+			String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
+			logger.debug("siteConfig.verification  {} ", siteConfigJsonFromConfiguration);
+			MLPSiteConfig config = new MLPSiteConfig();
+			config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);
+			config.setConfigValue(siteConfigJsonFromConfiguration);
+			logger.debug("Before createSiteConfig...");
+			try {
 				mlpSiteConfigFromDB = (MLPSiteConfig) client.createSiteConfig(config);
-				logger.debug("After createSiteConfig...");
+			} catch (RestClientResponseException ex) {
+				logger.error("createSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
 			}
-			return mlpSiteConfigFromDB!=null ? mlpSiteConfigFromDB.getConfigValue() : "site_config verification already exist";
+
+			logger.debug("After createSiteConfig...");
+		}
+		return mlpSiteConfigFromDB != null ? mlpSiteConfigFromDB.getConfigValue()
+				: "site_config verification already exist";
 	}
 
 	private ICommonDataServiceRestClient getCcdsClient() {

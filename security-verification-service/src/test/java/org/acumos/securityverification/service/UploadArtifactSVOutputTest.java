@@ -28,7 +28,6 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.lang.invoke.MethodHandles;
 
-import org.acumos.cds.AccessTypeCode;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.nexus.client.data.UploadArtifactInfo;
@@ -66,19 +65,19 @@ public class UploadArtifactSVOutputTest {
 	public void testIncorectFile() throws Exception {
 		String solutionId = "bf0478bc-0d3f-4433-80b6-d7a0f6db2df2";
 		String revisionId = "ba742c3b-039c-4a8e-b0fc-1aee7d5a9d67";
-		String accessType = AccessTypeCode.PR.toString();
+		String catalogId = "Mi";
 		String userId = "ba742c3b-039c-4a8e-b0fc-1aee7d5a9d64";
 		
 			File file = mock(File.class);
 			UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-			uploadArtifactSVOutput.addCreateArtifact(solutionId,revisionId,accessType,userId,file);
+			uploadArtifactSVOutput.addCreateArtifact(solutionId,revisionId,catalogId,userId,file);
 	}
 	
 	@Test(expected=Exception.class)
 	public void testAddCreateArtifact() throws Exception {
 		String solutionId = "bf0478bc-0d3f-4433-80b6-d7a0f6db2df2";
 		String revisionId = "ba742c3b-039c-4a8e-b0fc-1aee7d5a9d67";
-		String accessType = AccessTypeCode.PR.toString();
+		String catalogId = "Mi";
 		String userId = "ba742c3b-039c-4a8e-b0fc-1aee7d5a9d64";
 		String folder = "fb8f31cc-69d0-46b1-8b68-593a3b55a595";
 		String scanResultJsonFilePath = scanOutJsonLocation(folder, SVServiceConstants.SCAN_RESULT_JSON);
@@ -101,11 +100,11 @@ public class UploadArtifactSVOutputTest {
 		
 			UploadArtifactInfo uploadInfo = mock(UploadArtifactInfo.class);
 			when(env.getProperty("nexus.groupId")).thenReturn("group");
-			when(nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, accessType,
+			when(nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, catalogId,
 					"json", 1245, stream)).thenReturn(uploadInfo);
 			
 			UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-			uploadArtifactSVOutput.addCreateArtifact(solutionId,revisionId,accessType,userId,file);
+			uploadArtifactSVOutput.addCreateArtifact(solutionId,revisionId,catalogId,userId,file);
 	}
 
 	private String getNexusGroupId(String solutionId, String revisionId) {
