@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "9e2d0816_976b97ee",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-07T20:38:08Z",
+      "side": 1,
+      "message": "revisionId is supplied twice in this line - once to getNexusGroupId, once on its own.",
+      "parentUuid": "b6d856e2_5af11c1b",
+      "range": {
+        "startLine": 83,
+        "startChar": 91,
+        "endLine": 83,
+        "endChar": 101
+      },
+      "revId": "2df2b6f87a2aaf0b8240402f64f88cc8c3043c11",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "764af8c5_6c611c9f",
         "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
         "patchSetId": 1
