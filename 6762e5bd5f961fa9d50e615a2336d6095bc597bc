@@ -68,6 +68,98 @@
       "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5c916df3_3a40848e",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationScan.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:22:19Z",
+      "side": 1,
+      "message": "Yes. getSolutionCatalogs returns a list.  A solution may be published to multiple catalogs.",
+      "range": {
+        "startLine": 104,
+        "startChar": 20,
+        "endLine": 104,
+        "endChar": 39
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "67cf554c_1590c20b",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:22:19Z",
+      "side": 1,
+      "message": "Don\u0027t catch and discard!  Must return here, or rethrow.  You cannot simply continue!",
+      "range": {
+        "startLine": 77,
+        "startChar": 9,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd3c65c1_e2584323",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/SecurityVerificationServiceImpl.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:22:19Z",
+      "side": 1,
+      "message": "Again, don\u0027t catch and discard -- stop or rethrow.  Continuing is dangerous, produces a system with strange behavior.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 89,
+        "endChar": 94
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf1a8292_b94a8832",
+        "filename": "security-verification-service/src/main/java/org/acumos/securityverification/service/UploadArtifactSVOutput.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:22:19Z",
+      "side": 1,
+      "message": "This is totally invalid and really strange -- a catalog ID is not a valid artifact type code.  Why is it here?",
+      "range": {
+        "startLine": 103,
+        "startChar": 0,
+        "endLine": 103,
+        "endChar": 50
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
     }
   ]
 }
