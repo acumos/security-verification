@@ -48,7 +48,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 	}
 
 	@PostConstruct
-	private void initialize() {
+	private void initialize() throws Exception {
 		ICommonDataServiceRestClient client = getCcdsClient();
 		if (client != null) {
 			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
@@ -68,13 +68,14 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 	}
 
 	@Override
-	public String createSiteConfig(ICommonDataServiceRestClient client) {
+	public String createSiteConfig(ICommonDataServiceRestClient client) throws Exception {
 		MLPSiteConfig mlpSiteConfigFromDB = null;
 		MLPSiteConfig mlpSiteConfig = null;
 		try {
 			mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
 		} catch (RestClientResponseException ex) {
 			logger.error("getSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
+			throw ex;
 		}
 		if (StringUtils.isEmpty(mlpSiteConfig)) {
 			String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
@@ -87,6 +88,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 				mlpSiteConfigFromDB = (MLPSiteConfig) client.createSiteConfig(config);
 			} catch (RestClientResponseException ex) {
 				logger.error("createSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
+				throw ex;
 			}
 
 			logger.debug("After createSiteConfig...");

@@ -23,6 +23,7 @@ import org.acumos.securityverification.controller.AbstractController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -48,14 +49,15 @@ public class SwaggerConfiguration {
 
 	private ApiInfo apiInfo() {
 		final String version = SecurityVerificationApplication.class.getPackage().getImplementationVersion();
-		ApiInfo apiInfo = new ApiInfo("Acumos Security Verification REST API", "Operations for SecurityVerificationS.", // description
-				version == null ? "version not available" : version, // version
-				"Terms of service", // TOS
-				new Contact("Acumos Team", // name
-						"https://acumos.org/to-be-determined", // URL
-						"contact@acumos.org"), // email
-				"Apache 2.0", // License
-				"https://www.apache.org/licenses/LICENSE-2.0"); // License URL
-		return apiInfo;
+		return new ApiInfoBuilder() //
+				.title("Acumos Security Verification REST API") //
+				.description("Operations for SecurityVerification ")
+				.termsOfServiceUrl("Terms of service") //
+				.contact(new Contact("Acumos Dev Team", //
+						"https://acumos.org/to-be-determined", //
+						"contact@acumos.org")) //
+				.license("Apache 2.0 License").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0") //
+				.version(version == null ? "version not available" : version) //
+				.build();
 	}
 }

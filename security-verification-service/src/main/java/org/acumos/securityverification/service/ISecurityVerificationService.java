@@ -34,7 +34,8 @@ public interface ISecurityVerificationService {
 	/**This method call CCDS site-config to add the site-cinfig json in database.  
 	 * @param client 
 	 * @return site-config json string.
+	 * @throws Exception 
 	 */
-	public String createSiteConfig(ICommonDataServiceRestClient client);
+	public String createSiteConfig(ICommonDataServiceRestClient client) throws Exception;
 	
 }

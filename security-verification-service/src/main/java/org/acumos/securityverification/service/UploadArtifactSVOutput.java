@@ -100,12 +100,11 @@ public class UploadArtifactSVOutput {
 				modelArtifact.setName(file.getName());
 				modelArtifact.setDescription(file.getName());
 				modelArtifact.setVersion(uploadInfo.getVersion());
-				modelArtifact.setArtifactTypeCode(catalogId); 
 				modelArtifact.setUserId(mlpSolutionRevision.getUserId());
 				modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
 				modelArtifact.setSize((int)size);
 				modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
-						
+				
 				dataServiceRestClient.addSolutionRevisionArtifact(null, revisionId, modelArtifact.getArtifactId());
 				logger.debug("getArtifactId {}  getName {}  getUserId {}", modelArtifact.getArtifactId(), modelArtifact.getName(),
 						modelArtifact.getUserId());

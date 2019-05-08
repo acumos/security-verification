@@ -100,7 +100,6 @@ public class SecurityVerificationScan implements Runnable {
 				logger.debug("in side if conditoin fileSizeByKB  {}", fileSizeByKB);
 				MLPSolution mlpSolution = client.getSolution(solutionId);
 				String userId = mlpSolution.getUserId();
-				
 				// TODO: TBD Is getSolutionCatalogs will return multiple catalog Id ? if yes then on what basis catalogId need to taken.
 				List<MLPCatalog> mlpCatalogList = client.getSolutionCatalogs(solutionId);
 				String catalogId = null;
