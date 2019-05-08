@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7b35d84a_6bb302b1",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:19:22Z",
+      "side": 1,
+      "message": "Please upgrade to 2.1.4.RELEASE",
+      "range": {
+        "startLine": 15,
+        "startChar": 11,
+        "endLine": 15,
+        "endChar": 16
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69a79d2c_9c232cb4",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:19:22Z",
+      "side": 1,
+      "message": "please upgrade to 2.9.2",
+      "range": {
+        "startLine": 26,
+        "startChar": 21,
+        "endLine": 26,
+        "endChar": 26
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b762bb18_1d3101ff",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2019-05-08T14:19:22Z",
+      "side": 1,
+      "message": "You should have dropped EELF entirely.  It\u0027s not helpful.  It does not conform to the Borease-release logging standards.",
+      "range": {
+        "startLine": 49,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 15
+      },
+      "revId": "6762e5bd5f961fa9d50e615a2336d6095bc597bc",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
