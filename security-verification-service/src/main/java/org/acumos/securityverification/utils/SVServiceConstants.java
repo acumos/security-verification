@@ -30,7 +30,6 @@ public class SVServiceConstants {
 	public static final String WORKFLOWID = "workflowId";
 	public static final String MAVEN = "maven";
 	public static final String SCRIPTFILE_DUMP_MODEL = "dump_model.sh";
-	public static final String SCRIPTFILE_LICENSE_SCAN = "license_scan.sh";
 	public static final String SCAN_CODE_JSON = "/scancode.json";
 	public static final String SCAN_RESULT_JSON = "/scanresult.json";
 	public static final String SCAN_OUTPUT_LOCATION = "scanOutput";

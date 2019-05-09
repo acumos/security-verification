@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-service</artifactId>
-	<version>0.0.14-SNAPSHOT</version>
+	<version>0.0.15-SNAPSHOT</version>
 	<name>Security Verification Service</name>
 	<description>Acumos Security Verification Service for artifacts uploaded with a model</description>
 
@@ -63,11 +63,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.wagon</groupId>
-			<artifactId>wagon-file</artifactId>
-			<version>${wagonVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.wagon</groupId>
 			<artifactId>wagon-http-lightweight</artifactId>
 			<version>${wagonVersion}</version>
 		</dependency>
@@ -97,17 +92,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>slf4j-api</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.github.docker-java</groupId>
-			<artifactId>docker-java</artifactId>
-			<version>3.0.6</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>

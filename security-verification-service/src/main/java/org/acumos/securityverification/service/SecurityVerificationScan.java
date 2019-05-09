@@ -66,8 +66,6 @@ public class SecurityVerificationScan implements Runnable {
 			updateVerifiedLicenseStatus(solutionId, "IP");
 			SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_DUMP_MODEL, solutionId,
 					revisionId, folder, env);
-			SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_LICENSE_SCAN, solutionId,
-					revisionId, folder, env);
 			// Upload scanresult.json
 			String scanResultJsonFilePath = scanOutJsonLocation(folder, SVServiceConstants.SCAN_RESULT_JSON);
 			File scanResultJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanResultJsonFilePath);

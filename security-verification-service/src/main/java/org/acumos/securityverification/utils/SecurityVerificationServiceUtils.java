@@ -51,6 +51,8 @@ public class SecurityVerificationServiceUtils {
 				+ SVServiceConstants.FORWARD_SLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH
 				+ scriptFile;
 		String folderNameWithLocation = SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder;
+		logger.debug("scriptFileWithLocation: {}, folderNameWithLocation:{} ", scriptFileWithLocation,
+				folderNameWithLocation);
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
 		Process process = null;
@@ -58,67 +60,37 @@ public class SecurityVerificationServiceUtils {
 		try {
 			StringBuilder sb = new StringBuilder();
 
-			String[] cmd1 = { "chmod", "777", scriptFileWithLocation };
+			String[] cmd1 = { "mkdir", SVServiceConstants.MAVEN + SVServiceConstants.FORWARD_SLASH
+					+ SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder };
 			processBuilder = new ProcessBuilder(cmd1);
 			if (processBuilder != null) {
 				process = processBuilder.start();
 				int errCode = process.waitFor();
-				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+				logger.debug("Cmd1 mkdir folder, Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
 				String line = null;
 				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 				while ((line = reader.readLine()) != null) {
 					sb.append(line + System.getProperty("line.separator"));
 				}
-
-				logger.debug("cmd1 >>  {}", sb.toString());
-			}
-			String[] cmd2 = { "mkdir", SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder };
-			processBuilder = new ProcessBuilder(cmd2);
-			if (processBuilder != null) {
-				process = processBuilder.start();
-				int errCode = process.waitFor();
-				logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
-				String line = null;
-				reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-				while ((line = reader.readLine()) != null) {
-					sb.append(line + System.getProperty("line.separator"));
-				}
-				logger.debug("cmd2>>  {}", sb.toString());
+				logger.debug("Cmd1>>  {}", sb.toString());
 			}
 
 			if (scriptFile.equalsIgnoreCase(SVServiceConstants.SCRIPTFILE_DUMP_MODEL)) {
 				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_DUMP_MODEL);
-				String[] dump_model_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,folderNameWithLocation };
+				String[] dump_model_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,
+						folderNameWithLocation };
 				processBuilder = new ProcessBuilder(dump_model_cmd);
 				logger.debug("After call script shell");
 				if (processBuilder != null) {
 					process = processBuilder.start();
 					int errCode = process.waitFor();
-					logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
+					logger.debug("dump_model_cmd script, Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
 					String line = null;
 					reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 					while ((line = reader.readLine()) != null) {
 						sb.append(line + System.getProperty("line.separator"));
 					}
 					logger.debug("dump_model_cmd>>  {}", sb.toString());
-				}
-				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
-						SVServiceConstants.FORWARD_SLASH, folder);
-			} else {
-				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_LICENSE_SCAN);
-				String[] license_scan_cmd = { "bash", scriptFileWithLocation, folderNameWithLocation };
-				processBuilder = new ProcessBuilder(license_scan_cmd);
-				logger.debug("After call script shell");
-				if (processBuilder != null) {
-					process = processBuilder.start();
-					int errCode = process.waitFor();
-					logger.debug("Echo command executed, any errors? " + (errCode == 0 ? "No" : "Yes"));
-					String line = null;
-					reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-					while ((line = reader.readLine()) != null) {
-						sb.append(line + System.getProperty("line.separator"));
-					}
-					logger.debug("license_scan_cmd>>  {}", sb.toString());
 				}
 				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
 						SVServiceConstants.FORWARD_SLASH, folder);
