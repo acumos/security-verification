@@ -21,6 +21,14 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 -------------------------------
+Version 0.0.15, 10 May 2019
+-------------------------------
+* SecurityVerificationServiceImpl.createSiteConfig (`ACUMOS-2865 <https://jira.acumos.org/browse/ACUMOS-2865>`_)
+* Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
+* Dependencies should be installed part of the docker image of the component rather than directly in yaml file (`ACUMOS-2845 <https://jira.acumos.org/browse/ACUMOS-2845>`_)
+* update security verification for cds 2.2.2 (`ACUMOS-2886 <https://jira.acumos.org/browse/ACUMOS-2886>`_)
+
+-------------------------------
 Version 0.0.12, 01 May 2019
 -------------------------------
 * Update license-manager-client-library, security-verification-client and security-verification-service For LF release  (`ACUMOS-2830 <https://jira.acumos.org/browse/ACUMOS-2830>`_)
