@@ -58,7 +58,7 @@ public class UploadArtifactSVOutput {
 		this.env = env2;
 	}
 	
-	public void addCreateArtifact(String solutionId, String revisionId, String catalogId, String userId,
+	public void addCreateArtifact(String solutionId, String revisionId, String version, String userId,
 			File file) throws AcumosServiceException, FileNotFoundException {
 		
 		logger.debug("Inside the addCreateArtifact");
@@ -80,7 +80,7 @@ public class UploadArtifactSVOutput {
 			try {
 				stream = new DataInputStream(new FileInputStream(file));
 				logger.debug("Before nexusClient call sucess..");
-				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, catalogId,
+				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, version,
 						extension, size, stream);
 				logger.debug("After nexusClient call sucess..");
 			} catch (IOException | ConnectionException | AuthenticationException | AuthorizationException

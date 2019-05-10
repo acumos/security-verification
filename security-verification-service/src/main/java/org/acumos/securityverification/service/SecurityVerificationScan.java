@@ -23,10 +23,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.acumos.cds.client.ICommonDataServiceRestClient;
+import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
@@ -98,22 +101,34 @@ public class SecurityVerificationScan implements Runnable {
 				logger.debug("in side if conditoin fileSizeByKB  {}", fileSizeByKB);
 				MLPSolution mlpSolution = client.getSolution(solutionId);
 				String userId = mlpSolution.getUserId();
-				// TODO: TBD Is getSolutionCatalogs will return multiple catalog Id ? if yes then on what basis catalogId need to taken.
-				List<MLPCatalog> mlpCatalogList = client.getSolutionCatalogs(solutionId);
-				String catalogId = null;
-				if (StringUtils.isEmpty(mlpCatalogList)) {
-					for (MLPCatalog mlpCatalog : mlpCatalogList) {
-						catalogId = mlpCatalog.getAccessTypeCode();  
-						UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-						uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, catalogId, userId, file);
-						break;
-					}
+				List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);//solutionIdIgnored
+				String version = null;
+				List<Integer> mlpArtifactVersionList = new ArrayList<>();
+				for (MLPArtifact mlpArtifact : mlpArtifactList) {
+					mlpArtifactVersionList.add(Integer.parseInt(mlpArtifact.getVersion()));
 				}
-				
+				version = String.valueOf(findMaxVersionPlusOne(mlpArtifactVersionList));
+				UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
+				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, version, userId, file);
 			}
 		}
 	}
 
+	private Integer findMaxVersionPlusOne(List<Integer> list) 
+    { 
+        // check list is empty or not 
+        if (list == null || list.size() == 0) { 
+            return Integer.MIN_VALUE; 
+        } 
+        // create a new list to avoid modification in the original list 
+        List<Integer> sortedlist = new ArrayList<>(list); 
+        // sort list in natural order 
+        Collections.sort(sortedlist); 
+        // last element in the sorted list would be maximum 
+        int version = sortedlist.get(sortedlist.size() - 1) + 1;
+        return version; 
+    } 
+	
 	private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
 		List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
 		for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
