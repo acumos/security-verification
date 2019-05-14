@@ -106,7 +106,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 					for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
 						logger.debug("mlpSolutionRevision.getRevisionId(): {}", mlpSolutionRevision.getRevisionId());
 						if (mlpSolutionRevision.getRevisionId() != null
-								&& mlpSolutionRevision.getRevisionId().equals(revisionId)) {
+								&&  revisionId!= null && mlpSolutionRevision.getRevisionId().equals(revisionId)) {
 							verificationSiteConfig();
 							String userId = mlpSolutionRevision.getUserId();
 							mlpRevisionId = mlpSolutionRevision.getRevisionId();
