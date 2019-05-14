@@ -78,7 +78,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 			throw ex;
 		}
 		if (StringUtils.isEmpty(mlpSiteConfig)) {
-			String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.configValue");
+			String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
 			logger.debug("siteConfig.verification  {} ", siteConfigJsonFromConfiguration);
 			MLPSiteConfig config = new MLPSiteConfig();
 			config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);

@@ -21,9 +21,9 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 -------------------------------
-Version 0.0.16, 10 May 2019
+Version 0.0.17, 14 May 2019
 -------------------------------
-* update security verification for cds 2.2.2 (`ACUMOS-2886 <https://jira.acumos.org/browse/ACUMOS-2886>`_)
+* Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
 
 -------------------------------
 Version 0.0.15, 10 May 2019
