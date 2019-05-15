@@ -61,7 +61,7 @@ public class UploadArtifactSVOutput {
 	public void addCreateArtifact(String solutionId, String revisionId, String version, String userId,
 			File file) throws AcumosServiceException, FileNotFoundException {
 		
-		logger.debug("Inside the addCreateArtifact");
+		logger.debug("Inside the addCreateArtifact, solutionId: {} revisionId: {} version: {} userId: {}",solutionId,revisionId,version,userId);
 
 		long size = file.length();
 		String name = FilenameUtils.getBaseName(file.getName());
@@ -79,10 +79,10 @@ public class UploadArtifactSVOutput {
 			InputStream stream = null;
 			try {
 				stream = new DataInputStream(new FileInputStream(file));
-				logger.debug("Before nexusClient call sucess..");
+				logger.debug("Before nexusClient.uploadArtifact call");
 				uploadInfo = nexusClient.uploadArtifact(getNexusGroupId(solutionId, revisionId), name, version,
 						extension, size, stream);
-				logger.debug("After nexusClient call sucess..");
+				logger.debug("After nexusClient.uploadArtifact call");
 			} catch (IOException | ConnectionException | AuthenticationException | AuthorizationException
 					| TransferFailedException | ResourceDoesNotExistException e) {
 				logger.error("Failed to upload the artifact", e);
@@ -94,7 +94,7 @@ public class UploadArtifactSVOutput {
 			}
 
 			if (uploadInfo != null) {
-				logger.debug("Inside uploadInfo..");
+				logger.debug("ScanResult Json uploadToArtifact Successfully");
 				MLPSolutionRevision  mlpSolutionRevision = dataServiceRestClient.getSolutionRevision(solutionId,revisionId);
 				MLPArtifact modelArtifact = new MLPArtifact();
 				modelArtifact.setName(file.getName());
@@ -121,8 +121,9 @@ public class UploadArtifactSVOutput {
 	}
 
 	private String getNexusGroupId(String solutionId, String revisionId) {
+		logger.debug("Inside getNexusGroupId");
 		String group = env.getProperty("nexus.groupId");
-
+		logger.debug("nexus.groupId: {}",group);
 		if (SecurityVerificationServiceUtils.isEmptyOrNullString(group))
 			throw new IllegalArgumentException("Missing property value for nexus groupId.");
 		// This will created the nexus file upload path as groupId/solutionId/revisionId. Ex.. "org/acumos/solutionId/revisionId".
@@ -130,6 +131,7 @@ public class UploadArtifactSVOutput {
 	}
 
 	private ICommonDataServiceRestClient getCcdsClient() {
+		logger.debug("Inside getCcdsClient");
 		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_URL),
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
@@ -138,6 +140,7 @@ public class UploadArtifactSVOutput {
 	}
 
 	private NexusArtifactClient getNexusClient() {
+		logger.debug("Inside getNexusClient");
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
 		repositoryLocation.setUrl(env.getProperty(SVServiceConstants.NEXUS_CLIENT_URL));

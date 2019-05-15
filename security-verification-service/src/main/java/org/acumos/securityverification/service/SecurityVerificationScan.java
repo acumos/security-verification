@@ -74,7 +74,6 @@ public class SecurityVerificationScan implements Runnable {
 			File scanResultJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanResultJsonFilePath);
 			logger.debug("scanResultJsonFile: {}", scanResultJsonFile);
 			uploadToArtifact(solutionId, revisionId, scanResultJsonFile);
-			logger.debug("ScanResult Json uploadToArtifact successfully");
 			// Upload scancode.json
 			String scanCodeJsonFilePath = scanOutJsonLocation(folder, SVServiceConstants.SCAN_CODE_JSON);
 			File scanCodeJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanCodeJsonFilePath);
@@ -95,10 +94,11 @@ public class SecurityVerificationScan implements Runnable {
 
 	private void uploadToArtifact(String solutionId, String revisionId, File file)
 			throws AcumosServiceException, FileNotFoundException {
+		logger.debug("Inside uploadToArtifact");
 		if (file != null) {
 			long fileSizeByKB = file.length();
 			if (fileSizeByKB > 0) {
-				logger.debug("in side if conditoin fileSizeByKB  {}", fileSizeByKB);
+				logger.debug("In side if conditoin fileSizeByKB  {}", fileSizeByKB);
 				MLPSolution mlpSolution = client.getSolution(solutionId);
 				String userId = mlpSolution.getUserId();
 				List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);//solutionIdIgnored
@@ -107,29 +107,30 @@ public class SecurityVerificationScan implements Runnable {
 				for (MLPArtifact mlpArtifact : mlpArtifactList) {
 					mlpArtifactVersionList.add(Integer.parseInt(mlpArtifact.getVersion()));
 				}
-				version = String.valueOf(findMaxVersionPlusOne(mlpArtifactVersionList));
+				version = String.valueOf(findMaxVersion(mlpArtifactVersionList));
 				UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
 				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, version, userId, file);
 			}
 		}
 	}
 
-	private Integer findMaxVersionPlusOne(List<Integer> list) 
-    { 
-        // check list is empty or not 
-        if (list == null || list.size() == 0) { 
-            return Integer.MIN_VALUE; 
-        } 
-        // create a new list to avoid modification in the original list 
-        List<Integer> sortedlist = new ArrayList<>(list); 
-        // sort list in natural order 
-        Collections.sort(sortedlist); 
-        // last element in the sorted list would be maximum 
-        int version = sortedlist.get(sortedlist.size() - 1) + 1;
-        return version; 
-    } 
+	private Integer findMaxVersion(List<Integer> list) {
+		logger.debug("Inside findMaxVersion");
+		// check list is empty or not
+		if (list == null || list.size() == 0) {
+			return Integer.MIN_VALUE;
+		}
+		// create a new list to avoid modification in the original list
+		List<Integer> sortedlist = new ArrayList<>(list);
+		// sort list in natural order
+		Collections.sort(sortedlist);
+		// last element in the sorted list would be maximum
+		int version = sortedlist.get(sortedlist.size() - 1);
+		return version;
+	}
 	
 	private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
+		logger.debug("Inside updateVerifiedLicenseStatus, solutionId: {} Status: {}",solutionId, verifiedLicense);
 		List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
 		for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
 			mlpSolutionRevision.setVerifiedLicense(verifiedLicense);
@@ -139,6 +140,7 @@ public class SecurityVerificationScan implements Runnable {
 	}
 
 	private String scanOutJsonLocation(String folder,String jsonFlieName) {
+		logger.debug("Inside scanOutJsonLocation");
 		StringBuilder scanJsonOutFliePath = new StringBuilder();
 		scanJsonOutFliePath.append(SVServiceConstants.SECURITY_SCAN);
 		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
@@ -148,6 +150,7 @@ public class SecurityVerificationScan implements Runnable {
 	}
 
 	private String scanResultVerifiedLicensStatus(String jsonFilePath) throws Exception {
+		logger.debug("Inside scanResultVerifiedLicensStatus");
 		String verifiedLicenseStatus =null;
 		try {
 		    JSONParser parser = new JSONParser();

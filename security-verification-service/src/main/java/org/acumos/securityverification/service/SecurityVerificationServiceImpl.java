@@ -69,6 +69,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 
 	@Override
 	public String createSiteConfig(ICommonDataServiceRestClient client) throws Exception {
+		logger.debug("Inside createSiteConfig");
 		MLPSiteConfig mlpSiteConfigFromDB = null;
 		MLPSiteConfig mlpSiteConfig = null;
 		try {
@@ -78,26 +79,27 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 			throw ex;
 		}
 		if (StringUtils.isEmpty(mlpSiteConfig)) {
+			logger.debug("getSiteConfig verification is empty");
 			String siteConfigJsonFromConfiguration = env.getProperty("siteConfig.verification");
-			logger.debug("siteConfig.verification  {} ", siteConfigJsonFromConfiguration);
+			logger.debug("siteConfig.verification env: {} ", siteConfigJsonFromConfiguration);
 			MLPSiteConfig config = new MLPSiteConfig();
 			config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);
 			config.setConfigValue(siteConfigJsonFromConfiguration);
-			logger.debug("Before createSiteConfig...");
 			try {
+				logger.debug("Before createSiteConfig");
 				mlpSiteConfigFromDB = (MLPSiteConfig) client.createSiteConfig(config);
+				logger.debug("After createSiteConfig created");
 			} catch (RestClientResponseException ex) {
 				logger.error("createSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
 				throw ex;
 			}
-
-			logger.debug("After createSiteConfig...");
 		}
 		return mlpSiteConfigFromDB != null ? mlpSiteConfigFromDB.getConfigValue()
 				: "site_config verification already exist";
 	}
 
 	private ICommonDataServiceRestClient getCcdsClient() {
+		logger.debug("Inside getCcdsClient");
 		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_URL),
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),

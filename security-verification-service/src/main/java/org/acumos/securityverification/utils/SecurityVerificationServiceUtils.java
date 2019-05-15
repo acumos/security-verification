@@ -35,6 +35,7 @@ public class SecurityVerificationServiceUtils {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	public static boolean isEmptyOrNullString(String input) {
+		logger.debug("Inside isEmptyOrNullString");
 		boolean isEmpty = false;
 		if (null == input || 0 == input.trim().length()) {
 			isEmpty = true;
@@ -47,21 +48,20 @@ public class SecurityVerificationServiceUtils {
 		logger.debug("Inside executeScript scriptFile:{} solutionId:{} revisionId:{}", scriptFile, solutionId,
 				revisionId);
 
-		String scriptFileWithLocation = SVServiceConstants.FORWARD_SLASH + SVServiceConstants.MAVEN
+		String scriptFileName = SVServiceConstants.FORWARD_SLASH + SVServiceConstants.MAVEN
 				+ SVServiceConstants.FORWARD_SLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH
 				+ scriptFile;
-		String folderNameWithLocation = SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder;
-		logger.debug("scriptFileWithLocation: {}, folderNameWithLocation:{} ", scriptFileWithLocation,
-				folderNameWithLocation);
+		String folderName = SVServiceConstants.FORWARD_SLASH + SVServiceConstants.MAVEN
+				+ SVServiceConstants.FORWARD_SLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder;
 		byte[] result = null;
 		ProcessBuilder processBuilder = null;
 		Process process = null;
 		BufferedReader reader = null;
 		try {
 			StringBuilder sb = new StringBuilder();
-
-			String[] cmd1 = { "mkdir", SVServiceConstants.MAVEN + SVServiceConstants.FORWARD_SLASH
-					+ SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder };
+			String createFolder = SVServiceConstants.MAVEN + SVServiceConstants.FORWARD_SLASH + SVServiceConstants.SECURITY_SCAN + SVServiceConstants.FORWARD_SLASH + folder;
+			logger.debug("Execute Command: mkdir {}", createFolder);
+			String[] cmd1 = { "mkdir", createFolder };
 			processBuilder = new ProcessBuilder(cmd1);
 			if (processBuilder != null) {
 				process = processBuilder.start();
@@ -76,9 +76,9 @@ public class SecurityVerificationServiceUtils {
 			}
 
 			if (scriptFile.equalsIgnoreCase(SVServiceConstants.SCRIPTFILE_DUMP_MODEL)) {
-				logger.debug("Execute {} script", SVServiceConstants.SCRIPTFILE_DUMP_MODEL);
-				String[] dump_model_cmd = { "bash", scriptFileWithLocation, solutionId, revisionId,
-						folderNameWithLocation };
+				logger.debug("Execute Command: bash {} {} {} {}", scriptFileName, solutionId, revisionId,folderName);
+
+				String[] dump_model_cmd = { "bash", scriptFileName, solutionId, revisionId,folderName };
 				processBuilder = new ProcessBuilder(dump_model_cmd);
 				logger.debug("After call script shell");
 				if (processBuilder != null) {
@@ -115,6 +115,7 @@ public class SecurityVerificationServiceUtils {
 	}
 
 	public static File readScanOutput(String path) {
+		logger.debug("Inside readScanOutput");
 		File file = new File(path);
 		return file;
 	}
