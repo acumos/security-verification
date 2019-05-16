@@ -26,10 +26,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.acumos.cds.CodeNameType;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPCodeNamePair;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
@@ -47,12 +52,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpStatusCodeException;
 
 public class UploadArtifactSVOutput {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private Environment env;
+	
+	Map<String, String> artifactsDetails = new HashMap<>();
 	
 	public UploadArtifactSVOutput(Environment env2){
 		this.env = env2;
@@ -66,7 +74,7 @@ public class UploadArtifactSVOutput {
 		long size = file.length();
 		String name = FilenameUtils.getBaseName(file.getName());
 		String extension = FilenameUtils.getExtension(file.getName());
-		logger.debug("Inside the addCreateArtifact: {} \n size: {} \n extension: {} \n name: {} ", name, size, extension, name);
+		logger.debug("addCreateArtifact filename: {} size: {}, extension: {}, name: {} ", name, size, extension, name);
 		
 		ICommonDataServiceRestClient dataServiceRestClient = getCcdsClient();
 		if (SecurityVerificationServiceUtils.isEmptyOrNullString(extension))
@@ -94,7 +102,10 @@ public class UploadArtifactSVOutput {
 			}
 
 			if (uploadInfo != null) {
-				logger.debug("ScanResult Json uploadToArtifact Successfully");
+				logger.debug(
+						"scanresult.json uploadToArtifact response Info: getArtifactId: {}, getGroupId: {}, getPackaging: {}, getVersion: {}, getArtifactMvnPath: {} ",
+						uploadInfo.getArtifactId(), uploadInfo.getGroupId(), uploadInfo.getPackaging(),
+						uploadInfo.getVersion(), uploadInfo.getArtifactMvnPath());
 				MLPSolutionRevision  mlpSolutionRevision = dataServiceRestClient.getSolutionRevision(solutionId,revisionId);
 				MLPArtifact modelArtifact = new MLPArtifact();
 				modelArtifact.setName(file.getName());
@@ -103,12 +114,22 @@ public class UploadArtifactSVOutput {
 				modelArtifact.setUserId(mlpSolutionRevision.getUserId());
 				modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
 				modelArtifact.setSize((int)size);
-				modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
+				modelArtifact.setArtifactTypeCode("SR");//TODO TBD
+                          
 				
-				dataServiceRestClient.addSolutionRevisionArtifact(null, revisionId, modelArtifact.getArtifactId());
-				logger.debug("getArtifactId {}  getName {}  getUserId {}", modelArtifact.getArtifactId(), modelArtifact.getName(),
-						modelArtifact.getUserId());
-
+				modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
+				try {
+				logger.debug("addSolutionRevisionArtifact for " + file.getName() + " called");
+				dataServiceRestClient.addSolutionRevisionArtifact(solutionId, revisionId, modelArtifact.getArtifactId());
+				logger.debug( "addSolutionRevisionArtifact for " + file.getName() + " successful");
+				} catch (HttpStatusCodeException e) {
+					logger.error("Fail to call addSolutionRevisionArtifact: " + e);
+					throw new AcumosServiceException(AcumosServiceException.ErrorCode.INTERNAL_SERVER_ERROR,
+							"Fail to call addSolutionRevisionArtifact for " + file.getName() + " - "
+									+ e.getResponseBodyAsString(),
+							e);
+				}
+				
 			} else {
 				logger.error("Cannot upload the Artifact to the specified path");
 				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION,
@@ -120,9 +141,25 @@ public class UploadArtifactSVOutput {
 		}
 	}
 
+	private String getArtifactTypeCode(String artifactTypeName) {
+		String typeCode = artifactsDetails.get(artifactTypeName);
+		return typeCode;
+	}
+
+	private Map<String, String> getArtifactsDetails(ICommonDataServiceRestClient dataServiceRestClient) {
+		List<MLPCodeNamePair> typeCodeList = dataServiceRestClient.getCodeNamePairs(CodeNameType.ARTIFACT_TYPE);
+		Map<String, String> artifactsDetails = new HashMap<>();
+		if (!typeCodeList.isEmpty()) {
+			for (MLPCodeNamePair codeNamePair : typeCodeList) {
+				artifactsDetails.put(codeNamePair.getName(), codeNamePair.getCode());
+			}
+		}
+		return artifactsDetails;
+	}
+	
 	private String getNexusGroupId(String solutionId, String revisionId) {
 		logger.debug("Inside getNexusGroupId");
-		String group = env.getProperty("nexus.groupId");
+		String group = env.getProperty(SVServiceConstants.NEXUS_GROUPID);
 		logger.debug("nexus.groupId: {}",group);
 		if (SecurityVerificationServiceUtils.isEmptyOrNullString(group))
 			throw new IllegalArgumentException("Missing property value for nexus groupId.");

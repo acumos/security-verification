@@ -142,6 +142,9 @@ public class SecurityVerificationScan implements Runnable {
 	private String scanOutJsonLocation(String folder,String jsonFlieName) {
 		logger.debug("Inside scanOutJsonLocation");
 		StringBuilder scanJsonOutFliePath = new StringBuilder();
+		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
+		scanJsonOutFliePath.append(SVServiceConstants.MAVEN);
+		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
 		scanJsonOutFliePath.append(SVServiceConstants.SECURITY_SCAN);
 		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
 		scanJsonOutFliePath.append(folder);
@@ -158,7 +161,7 @@ public class SecurityVerificationScan implements Runnable {
 	        String json = data.toJSONString();
 	    	logger.trace("scanresult.Json: {}",json);
 			 verifiedLicenseStatus = (String) data.get("verifiedLicense");
-			logger.debug("verifiedLicenseStatus: {}",verifiedLicenseStatus);
+			logger.debug("scanresult.Json: verifiedLicenseStatus: {}",verifiedLicenseStatus);
 		} catch (Exception e) {
 			 logger.debug("Exception: {}",e);
 			 throw e;

@@ -80,7 +80,7 @@ public class SecurityVerificationServiceUtils {
 
 				String[] dump_model_cmd = { "bash", scriptFileName, solutionId, revisionId,folderName };
 				processBuilder = new ProcessBuilder(dump_model_cmd);
-				logger.debug("After call script shell");
+				logger.debug("Please wait scan is in-progress");
 				if (processBuilder != null) {
 					process = processBuilder.start();
 					int errCode = process.waitFor();
@@ -92,8 +92,7 @@ public class SecurityVerificationServiceUtils {
 					}
 					logger.debug("dump_model_cmd>>  {}", sb.toString());
 				}
-				logger.debug("Scan result location {}{}{}", SVServiceConstants.SECURITY_SCAN,
-						SVServiceConstants.FORWARD_SLASH, folder);
+				logger.debug("Scan result location: {}", folderName);
 			}
 
 		} finally {
