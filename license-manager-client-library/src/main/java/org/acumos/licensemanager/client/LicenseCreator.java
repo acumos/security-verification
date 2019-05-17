@@ -81,11 +81,21 @@ public class LicenseCreator implements ILicenseCreator {
     if (rtus != null && !rtus.isEmpty()) {
       // in Boreas we will not update RTU if added for solution and user
       updateRtu(request, response, rtus);
-      return response;
+      grantRtuToUsers(request, response);
     } else {
       createRightToUse(request, response);
+      grantRtuToUsers(request, response);
     }
     return response;
+  }
+
+  private void grantRtuToUsers(final ICreateRtu request, CreatedRtu response)
+      throws RightToUseException {
+    if (!request.getUserIds().isEmpty() && !response.getRtus().isEmpty()) {
+      for (MLPRightToUse rtu : response.getRtus()) {
+        grantRtuToUser(request.getUserIds().get(0), rtu.getRtuId());
+      }
+    }
   }
 
   /**
@@ -102,12 +112,32 @@ public class LicenseCreator implements ILicenseCreator {
     rightToUse.setCreated(Instant.now());
 
     try {
+      // create rtu for the solution
       MLPRightToUse completeRtu = dataClient.createRightToUse(rightToUse);
       response.addRtu(completeRtu);
       response.setCreated(true);
     } catch (RestClientResponseException ex) {
       LOGGER.error("createRightToUse failed, server reports: {}", ex.getResponseBodyAsString());
       throw new RightToUseException("createRightToUse failed", ex);
+    }
+  }
+
+  /**
+   * Update Right to use if an existing RTU exists will create a new RTU.
+   *
+   * @param request creation request
+   * @param response responds with information about the rtu creation
+   * @throws RightToUseException when then creation of RTU was unsuccessful
+   */
+  private void grantRtuToUser(final String userId, final Long rtuId) throws RightToUseException {
+
+    try {
+      // allow user to have access
+      dataClient.addUserToRtu(userId, rtuId);
+    } catch (RestClientResponseException ex) {
+      LOGGER.error(
+          "allowSolutionUserAccess failed, server reports: {}", ex.getResponseBodyAsString());
+      throw new RightToUseException("allowSolutionUserAccess failed", ex);
     }
   }
 

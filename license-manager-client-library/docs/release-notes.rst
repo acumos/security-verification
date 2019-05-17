@@ -22,16 +22,20 @@
 License Manager Client Library Release Notes
 ============================================
 
+Version 0.0.7, 17 May 2019
+--------------------------
+* Update license-manager to support associating Rtu to userId. (`ACUMOS-2896 <https://jira.acumos.org/browse/ACUMOS-2896>`_)
+
 Version 0.0.6, 14 May 2019
--------------------------------
+--------------------------
 * Update license-manager-client-library version as security-verification version changes (`ACUMOS-2887 <https://jira.acumos.org/browse/ACUMOS-2887>`_)
 
 Version 0.0.5, 10 May 2019
--------------------------------
+--------------------------
 * Update license-manager-client-library version as security-verification version changes (`ACUMOS-2887 <https://jira.acumos.org/browse/ACUMOS-2887>`_)
 
 Version 0.0.4, 01 May 2019
--------------------------------
+--------------------------
 * Update license-manager-client-library, security-verification-client and security-verification-service For LF release  (`ACUMOS-2830 <https://jira.acumos.org/browse/ACUMOS-2830>`_)
 * Updated license headers `ACUMOS-2794 <https://jira.acumos.org/browse/ACUMOS-2794>`_
 * Documentation cleanup `ACUMOS-2795 <https://jira.acumos.org/browse/ACUMOS-2795>`_

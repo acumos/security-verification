@@ -35,13 +35,4 @@ public interface ICreateRtu extends ICommonLicenseRequest, Serializable {
    * @see org.acumos.cds.domain.MLPRtuReference
    */
   List<String> getRtuRefs();
-
-  /**
-   * If set to true then the request to create a RTU will apply to every user using the acumos
-   * platform. If set to false then the RTU being created is a user specific RTU. Default is false.
-   *
-   * @return Is the right to use specific to a user or applicable site wide
-   * @see org.acumos.cds.domain.MLPRightToUse#site
-   */
-  boolean isSiteWide();
 }

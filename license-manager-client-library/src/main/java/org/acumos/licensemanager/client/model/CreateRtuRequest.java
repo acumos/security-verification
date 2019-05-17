@@ -34,9 +34,6 @@ public class CreateRtuRequest extends BaseLicenseRequest implements ICreateRtu, 
   /** rtu refs to apply to each RTU. */
   private List<String> rtuRefsAsStr = new ArrayList<String>();
 
-  /** siteWide RTU. */
-  private boolean siteWideRtu = false;
-
   /** Constructor for CreateRTURequest. */
   public CreateRtuRequest() {}
 
@@ -89,21 +86,5 @@ public class CreateRtuRequest extends BaseLicenseRequest implements ICreateRtu, 
    */
   public final void setRtuRefs(final String[] rtuRefs) {
     this.rtuRefsAsStr.addAll(Arrays.asList(rtuRefs));
-  }
-
-  @Override
-  public final boolean isSiteWide() {
-    return siteWideRtu;
-  }
-
-  /**
-   * Set to true if you want a solution to have a site wide right to use. This avoid having to
-   * create a RTU for every user.
-   *
-   * @param siteWide create rtu for solution for entire site
-   * @see org.acumos.cds.domain.MLPRightToUse#site
-   */
-  public final void setSiteWide(final boolean siteWide) {
-    siteWideRtu = siteWide;
   }
 }

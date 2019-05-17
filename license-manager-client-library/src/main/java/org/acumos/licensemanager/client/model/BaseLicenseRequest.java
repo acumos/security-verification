@@ -31,6 +31,9 @@ public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
   /** userIds to create RTUs for. */
   private List<String> userIdsCds = new ArrayList<String>();
 
+  /** siteWide RTU. */
+  private boolean siteWideRtu = false;
+
   /**
    * Set the solution ID used in CCDS queries.
    *
@@ -66,5 +69,21 @@ public abstract class BaseLicenseRequest implements ICommonLicenseRequest {
   @Override
   public final List<String> getUserIds() {
     return userIdsCds;
+  }
+
+  @Override
+  public final boolean isSiteWide() {
+    return siteWideRtu;
+  }
+
+  /**
+   * Set to true if you want a solution to have a site wide right to use. This avoid having to
+   * create a RTU for every user.
+   *
+   * @param siteWide create rtu for solution for entire site
+   * @see org.acumos.cds.domain.MLPRightToUse#site
+   */
+  public final void setSiteWide(final boolean siteWide) {
+    siteWideRtu = siteWide;
   }
 }

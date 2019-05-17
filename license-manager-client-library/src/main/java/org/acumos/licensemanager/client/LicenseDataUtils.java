@@ -22,10 +22,8 @@ package org.acumos.licensemanager.client;
 
 import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPRightToUse;
@@ -33,6 +31,7 @@ import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.licensemanager.client.model.ICommonLicenseRequest;
 import org.acumos.licensemanager.client.model.ICreateRtu;
+import org.acumos.licensemanager.client.model.RtuSearchRequest;
 import org.acumos.licensemanager.exceptions.RightToUseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +103,19 @@ class LicenseDataUtils {
     List<MLPRightToUse> rtus = new ArrayList<MLPRightToUse>(0);
     try {
       // only supporting one userid at a time
-      rtus = dataClient.getRightToUses(request.getSolutionId(), request.getUserIds().get(0));
+      // site wide rtu only
+      if (request.getUserIds().isEmpty() && request.isSiteWide()) {
+        RtuSearchRequest searchRequest = new RtuSearchRequest();
+        searchRequest.setSolutionId(request.getSolutionId());
+        searchRequest.setSite(request.isSiteWide());
+        RestPageResponse<MLPRightToUse> searchRightToUses =
+            dataClient.searchRightToUses(
+                searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
+        rtus = searchRightToUses.getContent();
+      } else {
+        rtus = dataClient.getRightToUses(request.getSolutionId(), request.getUserIds().get(0));
+      }
+
     } catch (RestClientResponseException ex) {
       LOGGER.error("getRightToUses failed, server reports: {}", ex.getResponseBodyAsString());
       throw new RightToUseException("getRightToUses Failed", ex);
@@ -125,12 +136,12 @@ class LicenseDataUtils {
       throws RightToUseException {
     List<MLPRightToUse> rtus = new ArrayList<MLPRightToUse>();
     try {
-      Map<String, Object> queryParams = new HashMap<String, Object>();
-      queryParams.put("site", true);
-      queryParams.put("solutionId", request.getSolutionId());
-
+      RtuSearchRequest searchRequest = new RtuSearchRequest();
+      searchRequest.setSolutionId(request.getSolutionId());
+      searchRequest.setSite(true);
       RestPageResponse<MLPRightToUse> rtuPageResponse =
-          dataClient.searchRightToUses(queryParams, false, null);
+          dataClient.searchRightToUses(
+              searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
       rtus = rtuPageResponse.getContent();
     } catch (RestClientResponseException ex) {
       LOGGER.error("getRightToUses failed, server reports: {}", ex.getResponseBodyAsString());

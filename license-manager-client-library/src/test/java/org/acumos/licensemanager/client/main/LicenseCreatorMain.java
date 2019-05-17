@@ -22,6 +22,7 @@ package org.acumos.licensemanager.client.main;
 
 import java.lang.invoke.MethodHandles;
 import java.net.URL;
+import java.util.ArrayList;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.licensemanager.client.LicenseCreator;
@@ -89,10 +90,12 @@ public class LicenseCreatorMain {
 
       rtuRequest.setSolutionId(args[0]);
       if (args.length > 1) {
-        rtuRequest.addUserId(args[1]);
-      }
-      if (args.length > 2) {
-        rtuRequest.setSiteWide(true);
+        if (args[1].indexOf("siteWide") != -1) {
+          rtuRequest.setSiteWide(true);
+          rtuRequest.setUserIds(new ArrayList<String>());
+        } else {
+          rtuRequest.addUserId(args[1]);
+        }
       }
 
       ICreatedRtuResponse rtuRes = licenseCreator.createRtu(rtuRequest);

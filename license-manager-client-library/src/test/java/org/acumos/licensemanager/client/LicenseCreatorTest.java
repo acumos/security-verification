@@ -75,6 +75,7 @@ public class LicenseCreatorTest {
     // URL url = new URL("http", hostname, port, contextPath);
     // logger.info("createClient: URL is {}", url);
     final String userId = "dummyuserid";
+    final String userId2 = "dummeruserid2";
     // mock user for rtu test
     MLPUser user = new MLPUser();
     client.setLoginUser(user);
@@ -118,6 +119,20 @@ public class LicenseCreatorTest {
     assertEquals(true, verifyUserRtu2.isUpdated());
     assertEquals(solutionId, verifyUserRtu2.getRequest().getSolutionId());
     assertEquals(true, client.getRightToUses(solutionId, userId).size() > 0);
+    // assertEquals(0, verifyUserRTU2.getRtuException().size());
+    client.setRightToUseList(null);
+
+    CreateRtuRequest licenseDownloadRequest3 = new CreateRtuRequest();
+    // solutionId, userId
+    licenseDownloadRequest3.setSiteWide(false);
+    licenseDownloadRequest3.setSolutionId(solutionId);
+    licenseDownloadRequest3.addUserId(userId2);
+    licenseDownloadRequest3.setRtuRefs(new String[] {UUID.randomUUID().toString()});
+    ICreatedRtuResponse verifyUserRtu3 = licenseSrvc.createRtu(licenseDownloadRequest3);
+    assertEquals(true, verifyUserRtu3 != null);
+    assertEquals("expect rtu is created not updated", true, verifyUserRtu3.isCreated());
+    assertEquals(solutionId, verifyUserRtu3.getRequest().getSolutionId());
+    assertEquals(true, client.getRightToUses(solutionId, userId2).size() > 0);
     // assertEquals(0, verifyUserRTU2.getRtuException().size());
 
   }
