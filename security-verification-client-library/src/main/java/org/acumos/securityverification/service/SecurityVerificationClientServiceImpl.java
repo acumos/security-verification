@@ -271,13 +271,15 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 					svResponse.getStatusCodeValue());
 		}
 
-		if (!isValidWorkFlow(licenseVerify, worflowId)) {
+		logger.info("Before isValidWorkFlow:licenseVerify ");
+		if (isValidWorkFlow(licenseVerify, worflowId)) {
 			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
 					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("in-progress")) {
 				logger.info("license scan in-progress");
 				if (reason.length() > 1) {
 					reason.append(",");
 				}
+				workFlowAllowed = false;
 				reason.append("license scan in-progress");
 				
 			}
@@ -287,17 +289,18 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				if (reason.length() > 1) {
 					reason.append(",");
 				}
+				workFlowAllowed = false;
 				reason.append("license scan failed");
 			}
 		}
 
-		if (workFlowAllowed && !isValidWorkFlow(licenseVerify, worflowId)) {
+		/*if (workFlowAllowed && !isValidWorkFlow(licenseVerify, worflowId)) {
 			workFlowAllowed = false;
-		}
+		}*/
 
-		if (workFlowAllowed && !isValidWorkFlow(securityVerify, worflowId)) {
+		/*if (workFlowAllowed && !isValidWorkFlow(securityVerify, worflowId)) {
 			workFlowAllowed = false;
-		}
+		}*/
 
 		workflow.setWorkflowAllowed(workFlowAllowed);
 		workflow.setReason(reason.toString());
@@ -373,14 +376,37 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			svResponse = invokesScan(solutionId, revisionId, worflowId);
 			logger.info(" InvokesScan result StatusCode: {}  StatusCodeValue: {}", svResponse.getStatusCode(),svResponse.getStatusCodeValue());
 		}
-
-		if (workFlowAllowed && !isValidWorkFlow(licenseVerify, worflowId)) {
+		
+		MLPSolutionRevision mlpSolutionRevision = client.getSolutionRevision(solutionId, revisionId);
+		logger.info("Before isValidWorkFlow:licenseVerify ");
+		if (isValidWorkFlow(licenseVerify, worflowId)) {
+			if (mlpSolutionRevision.getVerifiedLicense() != null
+					&& mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
+				logger.info("license scan in-progress, mlpSolutionRevision.getVerifiedLicense: {}", mlpSolutionRevision.getVerifiedLicense());
+				if (reason.length() > 1) {
+					reason.append(",");
+				}
+				workFlowAllowed = false;
+				reason.append("license scan in-progress");
+			}
+			if (mlpSolutionRevision.getVerifiedLicense() != null
+					&& mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
+				logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}", mlpSolutionRevision.getVerifiedLicense());
+				if (reason.length() > 1) {
+					reason.append(",");
+				}
+				workFlowAllowed = false;
+				reason.append("license scan failed");
+			}
+		}
+		
+		/*if (workFlowAllowed && !isValidWorkFlow(licenseVerify, worflowId)) {
 			workFlowAllowed = false;
 		}
 
 		if (workFlowAllowed && !isValidWorkFlow(securityVerify, worflowId)) {
 			workFlowAllowed = false;
-		}
+		}*/
 
 		workflow.setWorkflowAllowed(workFlowAllowed);
 		workflow.setReason(reason.toString());

@@ -114,8 +114,7 @@ public class UploadArtifactSVOutput {
 				modelArtifact.setUserId(mlpSolutionRevision.getUserId());
 				modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
 				modelArtifact.setSize((int)size);
-				modelArtifact.setArtifactTypeCode("SR");//TODO TBD
-                          
+				modelArtifact.setArtifactTypeCode("SR");                        
 				
 				modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
 				try {

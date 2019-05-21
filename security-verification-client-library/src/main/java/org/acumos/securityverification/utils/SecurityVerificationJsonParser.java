@@ -167,9 +167,12 @@ public class SecurityVerificationJsonParser {
 			Object obj = new JSONParser().parse(new StringReader(scanResultJson));
 			JSONObject jo = (JSONObject) obj;
 			rootLicense = (JSONObject) jo.get("root_license");
-			type = (String) rootLicense.get("type");
 			logger.debug("verifiedLicenseStatus: {}", rootLicense);
-			logger.debug("type: {}", type);
+			if(rootLicense != null && rootLicense.get("type")!= null) {
+				type = (String) rootLicense.get("type");	
+				logger.debug("type: {}", type);
+			}
+			
 		} catch (Exception e) {
 			logger.debug("Exception: {}", e);
 			throw e;
