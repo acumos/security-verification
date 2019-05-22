@@ -79,7 +79,7 @@ public class SecurityVerificationScan implements Runnable {
 			File scanCodeJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanCodeJsonFilePath);
 			logger.debug("scanCodeJsonFile: {}", scanCodeJsonFile);
 			uploadToArtifact(solutionId, revisionId, scanCodeJsonFile);
-			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("ture")) {
+			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("true")) {
 				updateVerifiedLicenseStatus(solutionId, "SU");
 			}
 			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("false")) {
