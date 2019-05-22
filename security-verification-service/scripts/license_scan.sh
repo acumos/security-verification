@@ -17,13 +17,19 @@
 #
 # Usage:
 # $ bash license_scan.sh <folder>
-#   solutionId: ID of Acumos model
-#   revisionId: ID of Acumos model revision
 #   folder: folder where the model data was dumped via dump_model.sh
 #
 # per https://github.com/nexB/scancode-toolkit
 
+
+function log() {
+  fname=$(caller 0 | awk '{print $2}')
+  fline=$(caller 0 | awk '{print $1}')
+  echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+}
+
 function initialize() {
+  log "initializing allowed_licenses.json and compatible_licenses.json"
   cat <<EOF >/tmp/allowed_licenses.json
 { "allowedLicense": [
   { "type":"SPDX", "name":"Apache-2.0" },
@@ -63,6 +69,7 @@ EOF
 }
 
 function get_allowed_license_type() {
+  log "get_allowed_license_type $1"
   local license_name=$1
   local n=$(jq -r '.allowedLicense | length' /tmp/allowed_licenses.json)
   local i=0
@@ -78,6 +85,7 @@ function get_allowed_license_type() {
 }
 
 function extract_licenses() {
+  log "extract_licenses"
   local root_license=""
   local root_license_type=""
   echo "" >all_licenses
@@ -111,9 +119,9 @@ function extract_licenses() {
               echo "Root license $root_license found"
               if [[ "$allowed_license_type" != "" ]]; then
                 root_license_type=$allowed_license_type
-                echo "Root license is of allowed type $root_license_type"
+                log "root license is of allowed type $root_license_type"
               else
-                echo "Root license type is unknown (not found in allowedLicense table)"
+                log "root license type is unknown (not found in allowedLicense table)"
               fi
             fi
           fi
@@ -139,12 +147,12 @@ function extract_licenses() {
   local i=0
   for license in $licenses; do
     count=$(grep -c $license all_licenses)
-    echo "$license: $count"
+    log "$license: $count"
     i=$((i+1))
   done
   local license_count=$i
-  echo "license_count: $license_count"
-  echo "root license: $root_license"
+  log "license_count($license_count)"
+  log "root license($root_license)"
 }
 
 function update_reason() {
@@ -153,9 +161,11 @@ function update_reason() {
   else
     reason="$reason, $1"
   fi
+  log "license_scan failure reason($reason)"
 }
 
 function verify_compatibility() {
+  log "verify_compatibility($root_name)"
   root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
   compatible_licenses=$(jq '.compatibleLicenses | length' /tmp/compatible_licenses.json)
   local i=0
@@ -165,7 +175,6 @@ function verify_compatibility() {
     root_name=$(jq -r ".compatibleLicenses[$i].name" /tmp/compatible_licenses.json)
   done
   if [[ $i -le $compatible_licenses ]]; then
-    echo "Checking all licenses found for compatibility with Root license $root_name"
     compatibles=$(jq ".compatibleLicenses[$i].compatible | length" /tmp/compatible_licenses.json)
     local license
     files=$(jq '.files | length' $OUT/scanresult.json)
@@ -182,7 +191,7 @@ function verify_compatibility() {
         done
         if [[ $l -eq $compatibles ]]; then
           verifiedLicense=false
-          update_reason "$path license ($name) is incompatible with root license $root_name"
+          update_reason "$path license($name) is incompatible with root license $root_name"
         fi
         ((k++))
       done
@@ -198,6 +207,7 @@ function verify_compatibility() {
 function verify_allowed() {
   local file=$1
   local name=$2
+  log "verify_allowed($file, $name)"
   local allowed_licenses=$(jq '.allowedLicense | length' /tmp/allowed_licenses.json)
   local i=0
   while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".allowedLicense[$i].name" /tmp/allowed_licenses.json)" ]]; do
@@ -205,12 +215,13 @@ function verify_allowed() {
   done
   if [[ $i -eq allowed_licenses ]]; then
     verifiedLicense=false
-    update_reason "$file license ($name) is not allowed"
+    update_reason "$file license($name) is not allowed"
   fi
 }
 
 function verify_root_license() {
   local root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
+  log "verify_root_license($root_license)"
   if [[ "$root_license" == "" ]]; then
     verifiedLicense=false
     update_reason "no license artifact found, or license is unrecognized"
@@ -218,14 +229,15 @@ function verify_root_license() {
     local root_license_type=$(jq -r '.root_license.type' $OUT/scanresult.json)
     if [[ "$root_license_type" == "" ]]; then
       verifiedLicense=false
-      update_reason "root license ($root_license) is not allowed"
+      update_reason "root license($root_license) is not allowed"
     else
-      echo "Verified presence of allowed root license ($root_license) of type ($root_license_type)"
+      log "Verified presence of allowed root license($root_license) of type($root_license_type)"
     fi
   fi
 }
 
 function verify_license() {
+  log "verify_license"
   extract_licenses $OUT/scancode.json
   verifiedLicense=true
   reason=""
@@ -254,18 +266,22 @@ function verify_license() {
 }
 
 WORK_DIR=$(pwd)
+cd /maven/scan
 
 if [[ ! -e scancode-toolkit-3.0.2 ]]; then
   wget https://github.com/nexB/scancode-toolkit/releases/download/v3.0.2/scancode-toolkit-3.0.2.zip
   unzip scancode-toolkit-3.0.2.zip
 fi
 
-solutionId=$1
-revisionId=$2
-folder=$3
-OUT=$(pwd)/$(date +%H%M%S%N)
+folder=$1
+solutionId=$(jq -r '.solutionId' $folder/cds/revision.json)
+revisionId=$(jq -r '.revisionId' $folder/cds/revision.json)
+requestId=$(date +%H%M%S%N)
+log "license_scan.sh solutionId($solutionId) revisionId($revisionId) folder($folder)"
+OUT=$(pwd)/$requestId
 mkdir $OUT
 cd $folder
+log "scancode revisionId($revisionId)"
 ../scancode-toolkit-3.0.2/scancode --license --copyright \
   --ignore "cds/*" --ignore "scancode.json" --ignore "scanresult.json" \
   --ignore "metadata.json" --ignore "*.h5" \
@@ -273,9 +289,6 @@ cd $folder
 cd ..
 initialize
 verify_license
-echo "verifiedLicense: $verifiedLicense"
-if [[ "$verifiedLicense" == "false" ]]; then echo "reason: $reason"; fi
-cat $OUT/scanresult.json
 mv $OUT/* $folder/.
 rmdir $OUT
-cd $WORK_DIR
+log "result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"
