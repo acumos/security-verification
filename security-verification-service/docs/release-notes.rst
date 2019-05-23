@@ -16,13 +16,132 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
+================================================
+Security Verification (SV) Library Release Notes
+================================================
+
+---------------------------
+Version 0.0.17, 23 May 2019
+---------------------------
+
+* `4366: Updated release note <https://gerrit.acumos.org/r/#/c/security-verification/+/4366/>`_
+
+  * `ACUMOS-2886: update security verification for cds 2.2.2 <https://jira.acumos.org/browse/ACUMOS-2886>`_
+
+* `4291: Update SV and LM version for LF release <https://gerrit.acumos.org/r/#/c/security-verification/+/4291/>`_
+
+* `ACUMOS-2830: Update license-manager-client-library, security-verification-client and security-verification-service For LF release <https://jira.acumos.org/browse/ACUMOS-2830>`_
+
+* `4262: Sonar 40% code coverage requirement on every repo <https://gerrit.acumos.org/r/#/c/security-verification/+/4262/>`_
+
+  * `ACUMOS-1095: Sonar 40% code coverage requirement on every repo <https://jira.acumos.org/browse/ACUMOS-1095>`_
+  * `ACUMOS-2815: Security Verification throwing Unexected Error Message <https://jira.acumos.org/browse/ACUMOS-2815>`_
+
+* 4206: S-V library implementation (`<https://gerrit.acumos.org/r/#/c/security-verification/+/4202/>`_)
+* 4202: S-V library implementation (`<https://gerrit.acumos.org/r/#/c/security-verification/+/4202/>`_)
+* 4202: S-V library implementation (`<https://gerrit.acumos.org/r/#/c/security-verification/+/4202/>`_)
+* 4201: S-V library implementation (`<https://gerrit.acumos.org/r/#/c/security-verification/+/4201/>`_)
+
+-------------------------------
+Version 0.0.17, 14 May 2019
+-------------------------------
+
+* Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
+
+-------------------------------
+Version 0.0.16, 10 May 2019
+-------------------------------
+* SecurityVerificationServiceImpl.createSiteConfig (`ACUMOS-2865 <https://jira.acumos.org/browse/ACUMOS-2865>`_)
+
+-------------------------------
+Version 0.0.15, 10 May 2019
+-------------------------------
+
+* SecurityVerificationServiceImpl.createSiteConfig (`ACUMOS-2865 <https://jira.acumos.org/browse/ACUMOS-2865>`_)
+* Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
+* Dependencies should be installed part of the docker image of the component rather than directly in yaml file (`ACUMOS-2845 <https://jira.acumos.org/browse/ACUMOS-2845>`_)
+
+-------------------------------
+Version 0.0.12, 01 May 2019
+-------------------------------
+
+* Update license-manager-client-library, security-verification-client and security-verification-service For LF release  (`ACUMOS-2830 <https://jira.acumos.org/browse/ACUMOS-2830>`_)
+
+-------------------------------
+Version 0.0.11, 30 April 2019
+-------------------------------
+
+* Security Verification throwing Unexected Error Message (`ACUMOS-2815 <https://jira.acumos.org/browse/ACUMOS-2815>`_)
+
+----------------------------
+Version 0.1.0, 12 April 2019
+----------------------------
+
+* `4137: Release 0.1.0 <https://gerrit.acumos.org/r/#/c/4137/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `4113: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4113/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `4101: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4101/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `4091: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4091/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+----------------------------
+Version 0.0.3, 05 April 2019
+----------------------------
+
+* `4085: Updated release note <https://gerrit.acumos.org/r/#/c/4085/>`_
+
+  * `ACUMOS-2555: S-V Library base module <https://jira.acumos.org/browse/ACUMOS-2555>`_
+
+* `4065: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4065/>`_
+
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+----------------------------
+Version 0.0.1, 04 April 2019
+----------------------------
+
+* `3990: S-V library implementation <https://gerrit.acumos.org/r/#/c/3990/>`_
+
+  * `ACUMOS-1956: S-V library implementation <https://jira.acumos.org/browse/ACUMOS-1956>`_
+  * `ACUMOS-2546: Reorganize security-verification git repo to support multiple maven projects <https://jira.acumos.org/browse/ACUMOS-2546>`_
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `3977: S-V library implementation <https://gerrit.acumos.org/r/#/c/3977/>`_
+
+  * `ACUMOS-1956: S-V library implementation <https://jira.acumos.org/browse/ACUMOS-1956>`_
+  * `ACUMOS-2546: Reorganize security-verification git repo to support multiple maven projects <https://jira.acumos.org/browse/ACUMOS-2546>`_
+  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+* `3948: S-V library implementation <https://gerrit.acumos.org/r/#/c/3948/>`_
+
+  * `ACUMOS-1956: S-V library implementation <https://jira.acumos.org/browse/ACUMOS-1956>`_
+  * `ACUMOS-2555: S-V Library base module <https://jira.acumos.org/browse/ACUMOS-2555>`_
+  * `ACUMOS-2557: S-V Library solution/revision processing <https://jira.acumos.org/browse/ACUMOS-2557>`_
+  * `ACUMOS-2558: S-V Library scan invocation logic <https://jira.acumos.org/browse/ACUMOS-2558>`_
+  * `ACUMOS-2546: Reorganize security-verification git repo to support multiple maven projects <https://jira.acumos.org/browse/ACUMOS-2546>`_
+
+* `3914: S-V library implementation <https://gerrit.acumos.org/r/#/c/3914/>`_
+
+  * `ACUMOS-2555: S-V Library base module <https://jira.acumos.org/browse/ACUMOS-2555>`_
+  * `ACUMOS-2557: S-V Library solution/revision processing <https://jira.acumos.org/browse/ACUMOS-2557>`_
+  * `ACUMOS-2558: S-V Library scan invocation logic <https://jira.acumos.org/browse/ACUMOS-2558>`_
+
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
 
---------------------------
-Version 0.2.0, 22 May 2019
---------------------------
+---------------------------
+Version 0.0.17, 23 May 2019
+---------------------------
 
 This release includes improvements and other updates as below, for the merged
 commits and related Jira items:
