@@ -49,6 +49,11 @@ Version 0.0.17, 14 May 2019
 * Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
 
 -------------------------------
+Version 0.0.16, 10 May 2019
+-------------------------------
+* SecurityVerificationServiceImpl.createSiteConfig (`ACUMOS-2865 <https://jira.acumos.org/browse/ACUMOS-2865>`_)
+
+-------------------------------
 Version 0.0.15, 10 May 2019
 -------------------------------
 
