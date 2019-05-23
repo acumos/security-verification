@@ -23,11 +23,35 @@ Security Verification (SV) Library Release Notes
 -------------------------------
 Version 0.0.17, 14 May 2019
 -------------------------------
+
+* `4366: Updated release note <https://gerrit.acumos.org/r/#/c/security-verification/+/4366/>`_
+
+  * `ACUMOS-2886: update security verification for cds 2.2.2 <https://jira.acumos.org/browse/ACUMOS-2886>`_
+
+* `4291: Update SV and LM version for LF release <https://gerrit.acumos.org/r/#/c/security-verification/+/4291/>`_
+
+* `ACUMOS-2830: Update license-manager-client-library, security-verification-client and security-verification-service For LF release <https://jira.acumos.org/browse/ACUMOS-2830>`_
+
+* `4262: Sonar 40% code coverage requirement on every repo <https://gerrit.acumos.org/r/#/c/security-verification/+/4262/>`_
+
+  * `ACUMOS-1095: Sonar 40% code coverage requirement on every repo <https://jira.acumos.org/browse/ACUMOS-1095>`_
+  * `ACUMOS-2815: Security Verification throwing Unexected Error Message <https://jira.acumos.org/browse/ACUMOS-2815>`_
+
+* 4206: S-V library implementation (`https://gerrit.acumos.org/r/#/c/security-verification/+/4202/>`_)
+* 4202: S-V library implementation (`https://gerrit.acumos.org/r/#/c/security-verification/+/4202/>`_)
+* 4202: S-V library implementation (`https://gerrit.acumos.org/r/#/c/security-verification/+/4202/>`_)
+* 4201: S-V library implementation (`https://gerrit.acumos.org/r/#/c/security-verification/+/4201/>`_)
+
+-------------------------------
+Version 0.0.17, 14 May 2019
+-------------------------------
+
 * Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
 
 -------------------------------
 Version 0.0.15, 10 May 2019
 -------------------------------
+
 * SecurityVerificationServiceImpl.createSiteConfig (`ACUMOS-2865 <https://jira.acumos.org/browse/ACUMOS-2865>`_)
 * Artifact type cdump not found -- when publishing in portal (`ACUMOS-2860 <https://jira.acumos.org/browse/ACUMOS-2860>`_)
 * Dependencies should be installed part of the docker image of the component rather than directly in yaml file (`ACUMOS-2845 <https://jira.acumos.org/browse/ACUMOS-2845>`_)
@@ -35,11 +59,13 @@ Version 0.0.15, 10 May 2019
 -------------------------------
 Version 0.0.12, 01 May 2019
 -------------------------------
+
 * Update license-manager-client-library, security-verification-client and security-verification-service For LF release  (`ACUMOS-2830 <https://jira.acumos.org/browse/ACUMOS-2830>`_)
 
 -------------------------------
 Version 0.0.11, 30 April 2019
 -------------------------------
+
 * Security Verification throwing Unexected Error Message (`ACUMOS-2815 <https://jira.acumos.org/browse/ACUMOS-2815>`_)
 
 ----------------------------
