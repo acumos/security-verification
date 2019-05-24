@@ -21,7 +21,7 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
-Version 0.0.17, 23 May 2019
+Version 0.0.18, 23 May 2019
 ---------------------------
 
 * `4366: Updated release note <https://gerrit.acumos.org/r/#/c/security-verification/+/4366/>`_
@@ -140,7 +140,7 @@ Security Verification (SV) Scanning Service Release Notes
 =========================================================
 
 ---------------------------
-Version 0.0.17, 23 May 2019
+Version 0.0.18, 23 May 2019
 ---------------------------
 
 This release includes improvements and other updates as below, for the merged
