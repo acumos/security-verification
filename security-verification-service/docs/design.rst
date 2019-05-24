@@ -255,6 +255,132 @@ For example:
   artifacts/metadata, since a record of earlier scans will be retained as a
   artifact related to the solution.
 
+------------------------------------------
+Recommended Tests for Feature Verification
+------------------------------------------
+
+The following test descriptions provide a guide to the expected user experience
+and SV service behavior, for common use cases. These can be used as a guide for
+testers to verify that user experience and system features.
+
+..........................
+Tests for Simple Solutions
+..........................
+
+++++++++++++++++++++++++++++++++++++++++++++++++++
+Scan invocation per verification.licenseScan flags
+++++++++++++++++++++++++++++++++++++++++++++++++++
+
+As applicable for the flags below from the "verification" siteConfig key
+(default values shown), verify that a scan is invoked (either from the
+sv-scanning-service logs, or by watching the revision.verifiedLicense attribute
+become "IP").
+
+.. code-block:: text
+
+   "licenseScan": {
+     "created": "true",
+     "updated": "true",
+     "deploy": "true",
+     "download": "true",
+     "share": "true",
+     "publishCompany": "true",
+     "publishPublic": "true"
+   },
+..
+
+These workflows should trigger the scan as applicable:
+
+* created: web-onboarding
+* updated: adding/modifying solution description or documents through the
+  "Manage My Model" / "Publish to Marketplace" screen
+* deploy: deploy request for any target environment
+* download: request to download any artifact or document
+* share: request to share a model
+* publish: request to publish a model
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+Workflow gating per verification.licenseVerify flags
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+As applicable for the flags below from the "verification" siteConfig key (default
+values shown), verify that workflows are either (1) allowed, if
+revision.verifiedLicense=SU; or (2) blocked (with reason displayed to the user
+and added to the notification tool for later review) if
+revision.verifiedLicense=FA or revision.verifiedLicense=IP.
+
+.. code-block:: text
+
+   "licenseVerify": {
+     "deploy": "true",
+     "download": "true",
+     "share": "false",
+     "publishCompany": "true",
+     "publishPublic": "true"
+   },
+..
+
+These workflows should be allowed or blocked as applicable:
+
+* deploy: deploy request for any target environment
+* download: request to download any artifact or document
+* share: request to share a model
+* publish: request to publish a model
+
++++++++++++++++++++++
+License Scan Failures
++++++++++++++++++++++
+
+Any of these scenarios should result in revision.verifiedLicense=FA, with the
+reason in parentheses:
+
+* no license.json artifact ("no license artifact found, or license is
+  unrecognized")
+* license.json does not have a recognized license ("no license artifact found,
+  or license is unrecognized")
+* license.json does not have an approved license ("root license($root_license)
+  is not allowed")
+* a license from any other scanned file is not allowed ($file license($name)
+  is not allowed)
+* a license from any scanned file is incompatible with the root license
+  ("$path license($name) is incompatible with root license $root_name")
+
+++++++++++++++++++++
+License Scan Success
+++++++++++++++++++++
+
+In the absence of any of the conditions in `License Scan Failures`_, the
+license scan completes with revision.verifiedLicense=SU.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Storage of scanresult.json and scancode.json artifacts
+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+At the end of each scan the resulting scanresult.json and scancode.json artifacts
+are created or updated as applicable, and avaiable in the Portal UI list of
+artifacts as "scanresult-<version>.json and scancode-<version>.json, where
+<version> is the version of the solution scanned.
+
+.............................
+Tests for Composite Solutions
+.............................
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Scan invocation for all composite solution components
++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+When a scan invocation is required per the verification.licenseScan flags, all
+sub-component solutions of the composite solution are scanned, and their
+revision.verifiedLicense attributes are updated.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Workflow determination considers verification.licenseVerify for all sub-component solutions
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+When workflow gating is required per the verification.licenseVerify flags, the
+revision.verifiedLicense attribute for every sub-component solution must be "SU"
+for the workflow to be allowed.
+
 ------------
 Architecture
 ------------
