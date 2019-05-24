@@ -21,6 +21,11 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
+Version 0.0.18, 24 May 2019
+---------------------------
+Update license-manager-client-library version-0.0.7 in security-verification-client-library (`ACUMOS-2954 <https://jira.acumos.org/browse/ACUMOS-2954>`_)
+
+---------------------------
 Version 0.0.17, 23 May 2019
 ---------------------------
 
