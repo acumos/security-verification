@@ -289,7 +289,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		logger.info("Before isValidWorkFlow:licenseVerify ");
 		if (isValidWorkFlow(licenseVerify, worflowId)) {
 			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
-					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("in-progress")) {
+					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
 				logger.info("license scan in-progress");
 				if (reason.length() > 1) {
 					reason.append(",");
@@ -299,7 +299,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 			}
 			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
-					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("failed")) {
+					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
 				logger.info("license scan failed");
 				if (reason.length() > 1) {
 					reason.append(",");
