@@ -41,37 +41,29 @@
 #   folder: destination folder
 #
 
-trap 'fail' ERR
-
 function fail() {
   log "$1"
   exit 1
 }
 
 function log() {
-  f=$(caller 0 | awk '{print $2}')
-  l=$(caller 0 | awk '{print $1}')
-  echo; echo "$f:$l ($(date)) $1"
+  fname=$(caller 0 | awk '{print $2}')
+  fline=$(caller 0 | awk '{print $1}')
+  echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
 }
 
 function get_solution() {
   curl -s -o cds/solution.json -u $cdsCreds $cdsUri/ccds/solution/$solutionId
-  log "Solution data:"
-  cat cds/solution.json
 }
 
 function get_revision() {
   curl -s -o cds/revision.json -u $cdsCreds \
     $cdsUri/ccds/solution/$solutionId/revision/$revisionId
-  log "Revision data:"
-  cat cds/revision.json
 }
 
 function get_artifacts() {
   log "Getting artifacts"
   curl -s -o cds/artifacts.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/artifact
-  log "Solution revision artifacts data:"
-  cat cds/artifacts.json
   arts=$(jq -r '. | length' cds/artifacts.json)
   i=0
   while [[ $i -lt $arts ]] ; do
@@ -79,23 +71,32 @@ function get_artifacts() {
     uri=$(jq -r ".[$i].uri" cds/artifacts.json)
     type=$(jq -r ".[$i].artifactTypeCode" cds/artifacts.json)
     if [[ "$name" == "license.json" ]]; then
-      log "Downloading license.json"
-      wget -O license.json $nexusUri/repository/$nexusRepo/$uri
+      log "Downloading license.json ($uri)"
+      curl -o license.json $nexusUri/repository/$nexusRepo/$uri
     elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
-      log "Downloading model.zip"
-      wget -O model.zip $nexusUri/repository/$nexusRepo/$uri
-      unzip  -d model-zip model.zip
-      if [[ -e model-zip/model.zip ]]; then
-        unzip  -d model-zip/model-zip model-zip/model.zip
-        rm model-zip/model.zip
+      log "Downloading model.zip ($uri)"
+      curl -o model.zip $nexusUri/repository/$nexusRepo/$uri
+      # Errors in zip files will cause the script to exit prematurely
+      if [[ $(unzip -d model-zip model.zip) ]]; then
+        log "potential issues with model.zip being unpacked"
       fi
-      rm model.zip
+      if [[ ! -d model-zip ]]; then
+        log "model.zip was not able to be unpacked"
+      else
+        rm model.zip
+        if [[ -e model-zip/model.zip ]]; then
+          if [[ $(unzip  -d model-zip/model-zip model-zip/model.zip) ]]; then
+            log "potential issues with model-zip/model.zip being unpacked"
+          fi
+          rm model-zip/model.zip
+        fi
+      fi
     elif [[ "$type" == "MI"  && "$name" == "model.proto" ]]; then
-      log "Downloading model.proto"
-      wget -O model.proto $nexusUri/repository/$nexusRepo/$uri
+      log "Downloading model.proto ($uri)"
+      curl -o model.proto $nexusUri/repository/$nexusRepo/$uri
     elif [[ "$type" == "MD" ]]; then
-      log "Downloading metadata.json"
-      wget -O metadata.json $nexusUri/repository/$nexusRepo/$uri
+      log "Downloading metadata.json ($uri)"
+      curl -o metadata.json $nexusUri/repository/$nexusRepo/$uri
     fi
     i=$((i+1))
   done
@@ -127,7 +128,7 @@ function get_metadata() {
         name=$(jq -r ".[$i].name" cds/document-$cname.json | sed 's/ /_/g')
         uri=$(jq -r ".[$i].uri" cds/document-$cname.json | sed 's/ /%20/g')
         log "Getting document $name"
-        wget -O $cname/$name $nexusUri/repository/$nexusRepo/$uri
+        curl -o $cname/$name $nexusUri/repository/$nexusRepo/$uri
         extension="${name##*.}"
         if [[ "$extension" == "zip" ]]; then
           filename="${name%.*}"
@@ -141,9 +142,11 @@ function get_metadata() {
   done
 }
 
+trap 'fail' ERR
 WORK_DIR=$(pwd)
 solutionId=$1
 revisionId=$2
+requestId=$(date +%H%M%S%N)
 # scan/<guid>
 folder=$3
 cdsCreds="$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
