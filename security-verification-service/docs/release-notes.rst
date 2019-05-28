@@ -21,6 +21,12 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
+Version 0.0.19, 28 May 2019
+---------------------------
+
+* `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+---------------------------
 Version 0.0.18, 23 May 2019
 ---------------------------
 
@@ -138,6 +144,12 @@ Version 0.0.1, 04 April 2019
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
+
+---------------------------
+Version 0.0.19, 28 May 2019
+---------------------------
+
+* `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
 
 ---------------------------
 Version 0.0.18, 23 May 2019
