@@ -30,6 +30,8 @@ Version 0.0.19, 28 May 2019
 Version 0.0.18, 23 May 2019
 ---------------------------
 
+* Update license-manager-client-library version-0.0.7 in security-verification-client-library (`ACUMOS-2954 <https://jira.acumos.org/browse/ACUMOS-2954>`_)
+
 * `4366: Updated release note <https://gerrit.acumos.org/r/#/c/security-verification/+/4366/>`_
 
   * `ACUMOS-2886: update security verification for cds 2.2.2 <https://jira.acumos.org/browse/ACUMOS-2886>`_

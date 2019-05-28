@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -71,7 +71,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	private Map<String, String> licenseVerify;
 	private Map<String, String> securityVerify;
 	private Map<String, String> allowedLicenseObjectMap;
-	private String externalScanObject;
 
 	public SecurityVerificationClientServiceImpl(final String securityVerificationApiUrl, final String cdmsClientUrl,
 			final String cdmsClientUsername, final String cdmsClientPwd, final String nexusClientUrl,
@@ -222,6 +221,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
 		StringBuilder reason = new StringBuilder();
+		ByteArrayOutputStream byteArrayOutputStream = null;
 
 		List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);
 		for (MLPArtifact mlpArtifact : mlpArtifactList) {
@@ -236,7 +236,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						.findFirst().get().getUri();
 				logger.info("mlpArtifact nexusURI: {}", nexusURI);
 
-				ByteArrayOutputStream byteArrayOutputStream = null;
 				try {
 					NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl, nexusClientUsername,
 							nexusClientPwd);
@@ -249,8 +248,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						byteArrayOutputStream.size());
 				logger.info("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
 
-				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-				String scanResultRootLicenseType = parseJSON
+				String scanResultRootLicenseType = SecurityVerificationJsonParser
 						.scanResultRootLicenseType(byteArrayOutputStream.toString());
 				logger.info("scanResultRootLicenseType: {} ", scanResultRootLicenseType);
 				if (scanResultRootLicenseType != null && scanResultRootLicenseType != "SPDX") {
@@ -300,12 +298,24 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 			}
 			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
 					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
-				logger.info("license scan failed");
+				// logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
+    		// 		mlpSolutionRevision.getVerifiedLicense());
 				if (reason.length() > 1) {
 					reason.append(",");
 				}
+
+				String scanResultReason = SecurityVerificationJsonParser
+						.scanResultReason(byteArrayOutputStream.toString());
+				logger.info("scanResultReason: {} ", scanResultReason);
+				if (scanResultReason != null) {
+					reason.append("license scan failed, reason: ");
+					reason.append(scanResultReason);
+				} else {
+					reason.append("license scan failed: unknown reason (null)");
+					reason.append(scanResultReason);
+				}
+
 				workFlowAllowed = false;
-				reason.append("license scan failed");
 			}
 		}
 
@@ -324,6 +334,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
 		StringBuilder reason = new StringBuilder();
+		ByteArrayOutputStream byteArrayOutputStream = null;
 
 		List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);
 		for (MLPArtifact mlpArtifact : mlpArtifactList) {
@@ -338,7 +349,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						.findFirst().get().getUri();
 				logger.info("mlpArtifact nexusURI: {}", nexusURI);
 
-				ByteArrayOutputStream byteArrayOutputStream = null;
 				try {
 					NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl, nexusClientUsername,
 							nexusClientPwd);
@@ -351,8 +361,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						byteArrayOutputStream.size());
 				logger.info("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
 
-				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-				String scanResultRootLicenseType = parseJSON
+				String scanResultRootLicenseType = SecurityVerificationJsonParser
 						.scanResultRootLicenseType(byteArrayOutputStream.toString());
 
 				logger.info("scanResultRootLicenseType: {} ", scanResultRootLicenseType);
@@ -408,9 +417,20 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				if (reason.length() > 1) {
 					reason.append(",");
 				}
+
+				String scanResultReason = SecurityVerificationJsonParser
+						.scanResultReason(byteArrayOutputStream.toString());
+				logger.info("scanResultReason: {} ", scanResultReason);
+				if (scanResultReason != null) {
+					reason.append("license scan failed, reason: ");
+					reason.append(scanResultReason);
+				} else {
+					reason.append("license scan failed: unknown reason (null)");
+				}
+
 				workFlowAllowed = false;
-				reason.append("license scan failed");
 			}
+
 		}
 
 		workflow.setWorkflowAllowed(workFlowAllowed);
@@ -439,7 +459,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		licenseVerify = parseJSON.siteConfigMap(siteConfigDataJsonObj, SVConstants.LICENSEVERIFY);
 		securityVerify = parseJSON.siteConfigMap(siteConfigDataJsonObj, SVConstants.SECURITYVERIFY);
 		allowedLicenseObjectMap = parseJSON.allowedLicenseMap(siteConfigDataJsonObj);
-		externalScanObject = parseJSON.externalScanValue(siteConfigDataJsonObj);
 		logger.info(
 				"licenseScan: {} securityScan: {} licenseVerify: {} securityVerify: {} allowedLicenseObjectMap: {} ",
 				licenseScan.size(), securityScan.size(), licenseVerify.size(), securityVerify.size(),
