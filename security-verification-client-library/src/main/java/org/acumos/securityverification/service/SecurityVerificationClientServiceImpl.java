@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -222,6 +222,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
 		StringBuilder reason = new StringBuilder();
+		ByteArrayOutputStream byteArrayOutputStream = null;
 
 		List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);
 		for (MLPArtifact mlpArtifact : mlpArtifactList) {
@@ -236,7 +237,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						.findFirst().get().getUri();
 				logger.info("mlpArtifact nexusURI: {}", nexusURI);
 
-				ByteArrayOutputStream byteArrayOutputStream = null;
 				try {
 					NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl, nexusClientUsername,
 							nexusClientPwd);
@@ -288,8 +288,15 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 		logger.info("Before isValidWorkFlow:licenseVerify ");
 		if (isValidWorkFlow(licenseVerify, worflowId)) {
-			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
-					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
+			if (mlpSolutionRevision.getVerifiedLicense() == null) {
+				logger.info("license scan not yet started");
+				if (reason.length() > 1) {
+					reason.append(",");
+				}
+				workFlowAllowed = false;
+				reason.append("license scan not yet started");
+			}
+			if (mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
 				logger.info("license scan in-progress");
 				if (reason.length() > 1) {
 					reason.append(",");
@@ -298,14 +305,26 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				reason.append("license scan in-progress");
 
 			}
-			if (mlpCdumpSolutionRevision.getVerifiedLicense() != null
-					&& mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
-				logger.info("license scan failed");
+			if (mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
+				// logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
+    		// 		mlpSolutionRevision.getVerifiedLicense());
 				if (reason.length() > 1) {
 					reason.append(",");
 				}
+
+				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+				String scanResultReason = parseJSON
+						.scanResultReason(byteArrayOutputStream.toString());
+				logger.info("scanResultReason: {} ", scanResultReason);
+				if (scanResultReason != null) {
+					reason.append("license scan failed, reason: ");
+					reason.append(scanResultReason);
+				} else {
+					reason.append("license scan failed: unknown reason (null)");
+					reason.append(scanResultReason);
+				}
+
 				workFlowAllowed = false;
-				reason.append("license scan failed");
 			}
 		}
 
@@ -324,6 +343,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
 		StringBuilder reason = new StringBuilder();
+		ByteArrayOutputStream byteArrayOutputStream = null;
 
 		List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);
 		for (MLPArtifact mlpArtifact : mlpArtifactList) {
@@ -338,7 +358,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						.findFirst().get().getUri();
 				logger.info("mlpArtifact nexusURI: {}", nexusURI);
 
-				ByteArrayOutputStream byteArrayOutputStream = null;
 				try {
 					NexusArtifactClient nexusArtifactClient = getNexusClient(nexusClientUrl, nexusClientUsername,
 							nexusClientPwd);
@@ -391,8 +410,15 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		MLPSolutionRevision mlpSolutionRevision = client.getSolutionRevision(solutionId, revisionId);
 		logger.info("Before isValidWorkFlow:licenseVerify ");
 		if (isValidWorkFlow(licenseVerify, worflowId)) {
-			if (mlpSolutionRevision.getVerifiedLicense() != null
-					&& mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
+			if (mlpSolutionRevision.getVerifiedLicense() == null) {
+				logger.info("license scan not yet started");
+				if (reason.length() > 1) {
+					reason.append(",");
+				}
+				workFlowAllowed = false;
+				reason.append("license scan not yet started");
+			}
+			if (mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
 				logger.info("license scan in-progress, mlpSolutionRevision.getVerifiedLicense: {}",
 						mlpSolutionRevision.getVerifiedLicense());
 				if (reason.length() > 1) {
@@ -401,16 +427,27 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				workFlowAllowed = false;
 				reason.append("license scan in-progress");
 			}
-			if (mlpSolutionRevision.getVerifiedLicense() != null
-					&& mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
+			if (mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
 				logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
 						mlpSolutionRevision.getVerifiedLicense());
 				if (reason.length() > 1) {
 					reason.append(",");
 				}
+
+				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+				String scanResultReason = parseJSON
+						.scanResultReason(byteArrayOutputStream.toString());
+				logger.info("scanResultReason: {} ", scanResultReason);
+				if (scanResultReason != null) {
+					reason.append("license scan failed, reason: ");
+					reason.append(scanResultReason);
+				} else {
+					reason.append("license scan failed: unknown reason (null)");
+				}
+
 				workFlowAllowed = false;
-				reason.append("license scan failed");
 			}
+
 		}
 
 		workflow.setWorkflowAllowed(workFlowAllowed);

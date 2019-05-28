@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -169,15 +169,31 @@ public class SecurityVerificationJsonParser {
 			rootLicense = (JSONObject) jo.get("root_license");
 			logger.debug("verifiedLicenseStatus: {}", rootLicense);
 			if(rootLicense != null && rootLicense.get("type")!= null) {
-				type = (String) rootLicense.get("type");	
+				type = (String) rootLicense.get("type");
 				logger.debug("type: {}", type);
 			}
-			
+
 		} catch (Exception e) {
 			logger.debug("Exception: {}", e);
 			throw e;
 		}
 		return type;
+	}
+
+	public static String scanResultReason(String scanResultJson) throws Exception {
+		logger.debug("Inside scanResultReason");
+		String reason = null;
+		try {
+			Object obj = new JSONParser().parse(new StringReader(scanResultJson));
+			JSONObject jo = (JSONObject) obj;
+			reason = (String) jo.get("reason");
+			logger.debug("reason: {}", reason);
+
+		} catch (Exception e) {
+			logger.debug("Exception: {}", e);
+			throw e;
+		}
+		return reason;
 	}
 
 }
