@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,32 +104,44 @@ public class UploadArtifactSVOutput {
 
 			if (uploadInfo != null) {
 				logger.debug(
-						"scanresult.json uploadToArtifact response Info: getArtifactId: {}, getGroupId: {}, getPackaging: {}, getVersion: {}, getArtifactMvnPath: {} ",
-						uploadInfo.getArtifactId(), uploadInfo.getGroupId(), uploadInfo.getPackaging(),
+						"{} uploadToArtifact response Info: getArtifactId: {}, getGroupId: {}, getPackaging: {}, getVersion: {}, getArtifactMvnPath: {} ",
+						file.getName(), uploadInfo.getArtifactId(), uploadInfo.getGroupId(), uploadInfo.getPackaging(),
 						uploadInfo.getVersion(), uploadInfo.getArtifactMvnPath());
-				MLPSolutionRevision  mlpSolutionRevision = dataServiceRestClient.getSolutionRevision(solutionId,revisionId);
-				MLPArtifact modelArtifact = new MLPArtifact();
-				modelArtifact.setName(file.getName());
-				modelArtifact.setDescription(file.getName());
-				modelArtifact.setVersion(uploadInfo.getVersion());
-				modelArtifact.setUserId(mlpSolutionRevision.getUserId());
-				modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
-				modelArtifact.setSize((int)size);
-				modelArtifact.setArtifactTypeCode("SR");                        
-				
-				modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
-				try {
-				logger.debug("addSolutionRevisionArtifact for " + file.getName() + " called");
-				dataServiceRestClient.addSolutionRevisionArtifact(solutionId, revisionId, modelArtifact.getArtifactId());
-				logger.debug( "addSolutionRevisionArtifact for " + file.getName() + " successful");
-				} catch (HttpStatusCodeException e) {
-					logger.error("Fail to call addSolutionRevisionArtifact: " + e);
-					throw new AcumosServiceException(AcumosServiceException.ErrorCode.INTERNAL_SERVER_ERROR,
-							"Fail to call addSolutionRevisionArtifact for " + file.getName() + " - "
-									+ e.getResponseBodyAsString(),
-							e);
+
+				List<MLPArtifact> mlpArtifactList = dataServiceRestClient.getSolutionRevisionArtifacts(null,revisionId);// solutionIdIgnored
+				MLPSolutionRevision mlpSolutionRevision = dataServiceRestClient.getSolutionRevision(solutionId,revisionId);
+				for (MLPArtifact mlpArtifact : mlpArtifactList) {
+					MLPArtifact modelArtifact = new MLPArtifact();
+					modelArtifact.setName(file.getName());
+					modelArtifact.setDescription(file.getName());
+					modelArtifact.setVersion(uploadInfo.getVersion());
+					modelArtifact.setUserId(mlpSolutionRevision.getUserId());
+					modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
+					modelArtifact.setSize((int) size);
+					modelArtifact.setArtifactTypeCode(SVServiceConstants.SCAN_RESULT_CODE);
+					if (mlpArtifact.getName().equalsIgnoreCase(SVServiceConstants.SCAN_RESULT_CODE)
+							&& mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(file.getName())) {
+						dataServiceRestClient.updateArtifact(modelArtifact);
+						logger.debug("updateArtifact done");
+					} else {
+						modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
+						logger.debug("createArtifact done");
+					}
+					try {
+						logger.debug("addSolutionRevisionArtifact for " + file.getName() + " called");
+						dataServiceRestClient.addSolutionRevisionArtifact(solutionId, revisionId,
+								modelArtifact.getArtifactId());
+						logger.debug("addSolutionRevisionArtifact for " + file.getName() + " successful");
+					} catch (HttpStatusCodeException e) {
+						logger.error("Fail to call addSolutionRevisionArtifact: " + e);
+						throw new AcumosServiceException(AcumosServiceException.ErrorCode.INTERNAL_SERVER_ERROR,
+								"Fail to call addSolutionRevisionArtifact for " + file.getName() + " - "
+										+ e.getResponseBodyAsString(),
+								e);
+					}
+
 				}
-				
+
 			} else {
 				logger.error("Cannot upload the Artifact to the specified path");
 				throw new AcumosServiceException(AcumosServiceException.ErrorCode.IO_EXCEPTION,
