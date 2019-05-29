@@ -33,6 +33,7 @@ public class SVServiceConstants {
 	public static final String SCAN_CODE_JSON = "/scancode.json";
 	public static final String SCAN_RESULT_JSON = "/scanresult.json";
 	public static final String SCAN_OUTPUT_LOCATION = "scanOutput";
+	public static final String SCAN_RESULT_CODE = "SR";
 	
 	public static final String CDMS_CLIENT_URL = "cdms.client.url";
 	public static final String CDMS_CLIENT_USER = "cdms.client.username";

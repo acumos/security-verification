@@ -116,7 +116,7 @@ function extract_licenses() {
               root_license=$name
               allowed_license_type=""
               get_allowed_license_type $name
-              echo "Root license $root_license found"
+              log "Root license $root_license found"
               if [[ "$allowed_license_type" != "" ]]; then
                 root_license_type=$allowed_license_type
                 log "root license is of allowed type $root_license_type"
@@ -128,10 +128,10 @@ function extract_licenses() {
         fi
         j=$((j+1))
       done
-      echo $result
       file_licenses=$(echo $file_licenses | sed 's/^,//')
       # add the file entry to the json structure
-      json="${json}{\"path\":\"$file_path\",\"licenses\":[$file_licenses]},"
+      path=$(echo $file_path | sed "s~$folder/~~")
+      json="${json}{\"path\":\"$path\",\"licenses\":[$file_licenses]},"
     fi
   i=$((i+1))
   done
@@ -156,10 +156,12 @@ function extract_licenses() {
 }
 
 function update_reason() {
+  # Remove any quotes in reason
+  update=$(echo $1 | sed 's/"//g')
   if [[ "$reason" == "" ]]; then
-    reason="$1"
+    reason="$update"
   else
-    reason="$reason, $1"
+    reason="$reason, $update"
   fi
   log "license_scan failure reason($reason)"
 }
@@ -191,7 +193,7 @@ function verify_compatibility() {
         done
         if [[ $l -eq $compatibles ]]; then
           verifiedLicense=false
-          update_reason "$path license($name) is incompatible with root license $root_name"
+          update_reason "$path license($name) is incompatible with root license $root_license"
         fi
         ((k++))
       done
@@ -200,22 +202,25 @@ function verify_compatibility() {
   else
     verifiedLicense=false
     reason="Internal error: $root_name not found in compatible license list"
-    echo $reason
+    log "$reason"
   fi
 }
 
 function verify_allowed() {
   local file=$1
-  local name=$2
-  log "verify_allowed($file, $name)"
-  local allowed_licenses=$(jq '.allowedLicense | length' /tmp/allowed_licenses.json)
-  local i=0
-  while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".allowedLicense[$i].name" /tmp/allowed_licenses.json)" ]]; do
-    i=$((i+1))
-  done
-  if [[ $i -eq allowed_licenses ]]; then
-    verifiedLicense=false
-    update_reason "$file license($name) is not allowed"
+  # license.json is reported upon as the "root license"
+  if [[ "$file" != *license.json* ]]; then
+    local name=$2
+    log "verify_allowed($file, $name)"
+    local allowed_licenses=$(jq '.allowedLicense | length' /tmp/allowed_licenses.json)
+    local i=0
+    while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".allowedLicense[$i].name" /tmp/allowed_licenses.json)" ]]; do
+      i=$((i+1))
+    done
+    if [[ $i -eq allowed_licenses ]]; then
+      verifiedLicense=false
+      update_reason "$file license($name) is not allowed"
+    fi
   fi
 }
 
@@ -225,12 +230,15 @@ function verify_root_license() {
   if [[ "$root_license" == "" ]]; then
     verifiedLicense=false
     update_reason "no license artifact found, or license is unrecognized"
+    root_license_valid="no"
   else
     local root_license_type=$(jq -r '.root_license.type' $OUT/scanresult.json)
     if [[ "$root_license_type" == "" ]]; then
+      root_license_valid="no"
       verifiedLicense=false
       update_reason "root license($root_license) is not allowed"
     else
+      root_license_valid="yes"
       log "Verified presence of allowed root license($root_license) of type($root_license_type)"
     fi
   fi
@@ -254,15 +262,15 @@ function verify_license() {
     done
     i=$((i+1))
   done
-  if [[ "$(jq -r '.root_license.name' $OUT/scanresult.json)" != "" ]]; then
+  if [[ "$root_license_valid" == "yes" ]]; then
     verify_compatibility
   fi
-  sed -i -- "s/^{/{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"revisionId\":\"$revisionId\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"solutionId\":\"$solutionId\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"reason\":\"$reason\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"verifiedLicense\":\"$verifiedLicense\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"schema\":\"1.0\",/" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"reason\":\"$reason\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"verifiedLicense\":\"$verifiedLicense\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"schema\":\"1.0\",~" $OUT/scanresult.json
 }
 
 WORK_DIR=$(pwd)
