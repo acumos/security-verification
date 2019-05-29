@@ -156,10 +156,12 @@ function extract_licenses() {
 }
 
 function update_reason() {
+  # Remove any quotes in reason
+  update=$(echo $1 | sed 's/"//g')
   if [[ "$reason" == "" ]]; then
-    reason="$1"
+    reason="$update"
   else
-    reason="$reason, $1"
+    reason="$reason, $update"
   fi
   log "license_scan failure reason($reason)"
 }
@@ -257,12 +259,12 @@ function verify_license() {
   if [[ "$(jq -r '.root_license.name' $OUT/scanresult.json)" != "" ]]; then
     verify_compatibility
   fi
-  sed -i -- "s/^{/{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"revisionId\":\"$revisionId\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"solutionId\":\"$solutionId\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"reason\":\"$reason\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"verifiedLicense\":\"$verifiedLicense\",/" $OUT/scanresult.json
-  sed -i -- "s/^{/{\"schema\":\"1.0\",/" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"reason\":\"$reason\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"verifiedLicense\":\"$verifiedLicense\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"schema\":\"1.0\",~" $OUT/scanresult.json
 }
 
 WORK_DIR=$(pwd)
