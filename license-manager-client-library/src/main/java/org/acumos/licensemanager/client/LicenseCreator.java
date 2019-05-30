@@ -29,6 +29,7 @@ import org.acumos.licensemanager.client.model.CreatedRtu;
 import org.acumos.licensemanager.client.model.ICreateRtu;
 import org.acumos.licensemanager.client.model.ICreatedRtuResponse;
 import org.acumos.licensemanager.client.model.ILicenseCreator;
+import org.acumos.licensemanager.client.model.RtuSearchRequest;
 import org.acumos.licensemanager.exceptions.RightToUseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,8 +76,9 @@ public class LicenseCreator implements ILicenseCreator {
     CreatedRtu response = new CreatedRtu();
     response.setRequest(request);
     // check if rtu reference already exists for solution id + userid
-
-    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUses(dataClient, request);
+    RtuSearchRequest searchRequest = new RtuSearchRequest();
+    searchRequest.setSolutionId(request.getSolutionId());
+    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUses(dataClient, searchRequest);
     // in Boreas only expect 1 rtu
     if (rtus != null && !rtus.isEmpty()) {
       // in Boreas we will not update RTU if added for solution and user

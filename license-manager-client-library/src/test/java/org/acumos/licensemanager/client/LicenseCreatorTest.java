@@ -25,12 +25,15 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.acumos.cds.client.CommonDataServiceRestClientMockImpl;
 import org.acumos.cds.domain.MLPRightToUse;
+import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPUser;
+import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.licensemanager.client.model.CreateRtuRequest;
 import org.acumos.licensemanager.client.model.ICreatedRtuResponse;
 import org.acumos.licensemanager.client.model.ILicenseCreator;
@@ -104,33 +107,52 @@ public class LicenseCreatorTest {
     assertEquals(solutionId, verifyUserRTU.getRequest().getSolutionId());
     List<MLPRightToUse> rtus = verifyUserRTU.getRtus();
     assertEquals(true, rtus != null && rtus.size() == 1);
+    MLPRtuReference firstRtuRefId = rtus.get(0).getRtuReferences().iterator().next();
+
     client.setRightToUseList(rtus);
+    client.setRightToUses(new RestPageResponse<MLPRightToUse>(rtus));
 
     // update
     CreateRtuRequest licenseDownloadRequest2 = new CreateRtuRequest();
     // solutionId, userId
+    String secondRtuRefId = UUID.randomUUID().toString();
     licenseDownloadRequest2.setSiteWide(true);
     licenseDownloadRequest2.setSolutionId(solutionId);
     licenseDownloadRequest2.addUserId(userId);
-    licenseDownloadRequest2.setRtuRefs(new String[] {UUID.randomUUID().toString()});
+    licenseDownloadRequest2.setRtuRefs(new String[] {secondRtuRefId});
     ICreatedRtuResponse verifyUserRtu2 = licenseSrvc.createRtu(licenseDownloadRequest2);
     assertEquals(true, verifyUserRtu2 != null);
     assertEquals("expect rtu is updated not created", false, verifyUserRtu2.isCreated());
     assertEquals(true, verifyUserRtu2.isUpdated());
     assertEquals(solutionId, verifyUserRtu2.getRequest().getSolutionId());
+    MLPRtuReference secondRtuRef =
+        verifyUserRtu2.getRtus().get(0).getRtuReferences().iterator().next();
     assertEquals(true, client.getRightToUses(solutionId, userId).size() > 0);
     // assertEquals(0, verifyUserRTU2.getRtuException().size());
-    client.setRightToUseList(null);
+    // client.setRightToUseList(null);
 
     CreateRtuRequest licenseDownloadRequest3 = new CreateRtuRequest();
     // solutionId, userId
+    String thirdRtuRefId = UUID.randomUUID().toString();
+
     licenseDownloadRequest3.setSiteWide(false);
     licenseDownloadRequest3.setSolutionId(solutionId);
     licenseDownloadRequest3.addUserId(userId2);
-    licenseDownloadRequest3.setRtuRefs(new String[] {UUID.randomUUID().toString()});
+    licenseDownloadRequest3.setRtuRefs(new String[] {thirdRtuRefId});
     ICreatedRtuResponse verifyUserRtu3 = licenseSrvc.createRtu(licenseDownloadRequest3);
+    MLPRtuReference thirdRtuRef =
+        verifyUserRtu3.getRtus().get(0).getRtuReferences().iterator().next();
+
     assertEquals(true, verifyUserRtu3 != null);
-    assertEquals("expect rtu is created not updated", true, verifyUserRtu3.isCreated());
+    assertEquals("expect rtu is updated", false, verifyUserRtu3.isCreated());
+    assertEquals("expect 1 rtu", 1, verifyUserRtu3.getRtus().size());
+    assertEquals(
+        "expect 2 rtu refs ", 3, verifyUserRtu3.getRtus().get(0).getRtuReferences().size());
+    Set<MLPRtuReference> refs = verifyUserRtu3.getRtus().get(0).getRtuReferences();
+    assertEquals("expect firstRtuRef" + firstRtuRefId, true, refs.contains(firstRtuRefId));
+    assertEquals("expect secondRtuRef" + secondRtuRef, true, refs.contains(secondRtuRef));
+    assertEquals("expect thirdRtuRef" + thirdRtuRef, true, refs.contains(thirdRtuRef));
+
     assertEquals(solutionId, verifyUserRtu3.getRequest().getSolutionId());
     assertEquals(true, client.getRightToUses(solutionId, userId2).size() > 0);
     // assertEquals(0, verifyUserRTU2.getRtuException().size());
