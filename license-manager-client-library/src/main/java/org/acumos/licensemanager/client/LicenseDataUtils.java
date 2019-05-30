@@ -29,7 +29,6 @@ import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.cds.transport.RestPageResponse;
-import org.acumos.licensemanager.client.model.ICommonLicenseRequest;
 import org.acumos.licensemanager.client.model.ICreateRtu;
 import org.acumos.licensemanager.client.model.RtuSearchRequest;
 import org.acumos.licensemanager.exceptions.RightToUseException;
@@ -58,6 +57,9 @@ class LicenseDataUtils {
    */
   protected static void addRtuRefs(final ICreateRtu request, final MLPRightToUse rtu) {
     Set<MLPRtuReference> rtuReferences = new HashSet<MLPRtuReference>();
+    if (!rtu.getRtuReferences().isEmpty()) {
+      rtuReferences = rtu.getRtuReferences();
+    }
     List<String> rtuRefStr = request.getRtuRefs();
     for (String rtuRef : rtuRefStr) {
       rtuReferences.add(new MLPRtuReference(rtuRef));
@@ -98,55 +100,29 @@ class LicenseDataUtils {
    * @throws org.acumos.licensemanager.exceptions.RightToUseException if any.
    */
   protected static List<MLPRightToUse> getRightToUses(
-      final ICommonDataServiceRestClient dataClient, final ICommonLicenseRequest request)
+      final ICommonDataServiceRestClient dataClient, final RtuSearchRequest searchRequest)
       throws RightToUseException {
     List<MLPRightToUse> rtus = new ArrayList<MLPRightToUse>(0);
     try {
-      // only supporting one userid at a time
-      // site wide rtu only
-      if (request.getUserIds().isEmpty() && request.isSiteWide()) {
-        RtuSearchRequest searchRequest = new RtuSearchRequest();
-        searchRequest.setSolutionId(request.getSolutionId());
-        searchRequest.setSite(request.isSiteWide());
-        RestPageResponse<MLPRightToUse> searchRightToUses =
-            dataClient.searchRightToUses(
-                searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
-        rtus = searchRightToUses.getContent();
-      } else {
-        rtus = dataClient.getRightToUses(request.getSolutionId(), request.getUserIds().get(0));
+      RestPageResponse<MLPRightToUse> searchRightToUses =
+          dataClient.searchRightToUses(
+              searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
+      if (searchRightToUses != null) {
+        rtus.addAll(searchRightToUses.getContent());
+      } else if (searchRequest.getUserIds() != null && !searchRequest.getUserIds().isEmpty()) {
+        // get user ids
+        for (String userId : searchRequest.getUserIds()) {
+          List<MLPRightToUse> userRights =
+              dataClient.getRightToUses(searchRequest.getSolutionId(), userId);
+          rtus.addAll(userRights);
+        }
       }
 
     } catch (RestClientResponseException ex) {
       LOGGER.error("getRightToUses failed, server reports: {}", ex.getResponseBodyAsString());
       throw new RightToUseException("getRightToUses Failed", ex);
     }
-    return rtus;
-  }
-
-  /**
-   * Query the CDS client for any site wide solution RTU.
-   *
-   * @param dataClient a {@link org.acumos.cds.client.ICommonDataServiceRestClient} object.
-   * @param request a {@link org.acumos.licensemanager.client.model.ICommonLicenseRequest} object.
-   * @return a {@link java.util.List} object.
-   * @throws org.acumos.licensemanager.exceptions.RightToUseException if any.
-   */
-  protected static List<MLPRightToUse> getSitewideSolutionRtu(
-      final ICommonDataServiceRestClient dataClient, final ICommonLicenseRequest request)
-      throws RightToUseException {
-    List<MLPRightToUse> rtus = new ArrayList<MLPRightToUse>();
-    try {
-      RtuSearchRequest searchRequest = new RtuSearchRequest();
-      searchRequest.setSolutionId(request.getSolutionId());
-      searchRequest.setSite(true);
-      RestPageResponse<MLPRightToUse> rtuPageResponse =
-          dataClient.searchRightToUses(
-              searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
-      rtus = rtuPageResponse.getContent();
-    } catch (RestClientResponseException ex) {
-      LOGGER.error("getRightToUses failed, server reports: {}", ex.getResponseBodyAsString());
-      throw new RightToUseException("getRightToUsesFailed", ex);
-    }
+    // return unmodifiable collection
     return rtus;
   }
 }

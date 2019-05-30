@@ -29,6 +29,7 @@ import org.acumos.licensemanager.client.model.ILicenseVerifier;
 import org.acumos.licensemanager.client.model.IVerifyLicenseRequest;
 import org.acumos.licensemanager.client.model.LicenseAction;
 import org.acumos.licensemanager.client.model.LicenseVerification;
+import org.acumos.licensemanager.client.model.RtuSearchRequest;
 import org.acumos.licensemanager.exceptions.RightToUseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,16 +78,19 @@ public class LicenseVerifier implements ILicenseVerifier {
 
     boolean rightToUseFlag = false;
     // Check for user RTU if there is no sitewide RTU
-    List<MLPRightToUse> rightToUse = LicenseDataUtils.getRightToUses(dataClient, request);
-    List<MLPRightToUse> siteWideRtuForSolution =
-        LicenseDataUtils.getSitewideSolutionRtu(dataClient, request);
+    RtuSearchRequest searchRequest = new RtuSearchRequest();
+    searchRequest.setSolutionId(request.getSolutionId());
+    searchRequest.setSite(request.isSiteWide());
+    searchRequest.setUserIds(request.getUserIds());
+    List<MLPRightToUse> rightsToUse = LicenseDataUtils.getRightToUses(dataClient, searchRequest);
+
+    if (rightsToUse != null && !rightsToUse.isEmpty()) {
+      rightToUseFlag = true;
+    }
+
     // If there is a right to use (any for solution/user
     // for download or deploy actions
     // are allowed in Boreas)
-    if ((siteWideRtuForSolution != null && !siteWideRtuForSolution.isEmpty())
-        || (rightToUse != null && !rightToUse.isEmpty())) {
-      rightToUseFlag = true;
-    }
     for (LicenseAction action : request.getActions()) {
       switch (action) {
         case DOWNLOAD:

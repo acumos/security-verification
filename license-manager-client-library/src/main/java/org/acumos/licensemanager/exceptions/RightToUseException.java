@@ -21,6 +21,8 @@
 package org.acumos.licensemanager.exceptions;
 
 import java.io.Serializable;
+import java.util.List;
+import org.acumos.cds.domain.MLPRightToUse;
 import org.springframework.web.client.RestClientResponseException;
 
 /** When getting, updating, or creating a right to use this exception captures the issue. */
@@ -28,6 +30,9 @@ public class RightToUseException extends Exception implements Serializable {
 
   /** Internal exception being wrapped by RTU exception. */
   private final RestClientResponseException cdsRestClientException;
+
+  private String solutionId;
+  private List<MLPRightToUse> rtus;
 
   /**
    * Creates exception for any RTU operation error.
@@ -41,6 +46,30 @@ public class RightToUseException extends Exception implements Serializable {
     cdsRestClientException = restException;
   }
 
+  public String getSolutionId() {
+    return solutionId;
+  }
+
+  public RightToUseException setSolutionId(String solutionId) {
+    this.solutionId = solutionId;
+    return this;
+  }
+
+  /**
+   * Creates exception for RTU creation errors
+   *
+   * @param message provide text for message
+   * @param solutionId solution id that has an issue
+   * @param rtus list of rtus found based on solution
+   */
+  public RightToUseException(
+      final String message, final String solutionId, final List<MLPRightToUse> rtus) {
+    super(message);
+    cdsRestClientException = null;
+    this.setSolutionId(solutionId);
+    this.setRtus(rtus);
+  }
+
   /**
    * Getter for the field <code>cdsRestClientException</code>.
    *
@@ -48,6 +77,15 @@ public class RightToUseException extends Exception implements Serializable {
    */
   public final RestClientResponseException getCdsRestClientException() {
     return cdsRestClientException;
+  }
+
+  public List<MLPRightToUse> getRtus() {
+    return rtus;
+  }
+
+  public RightToUseException setRtus(List<MLPRightToUse> rtus) {
+    this.rtus = rtus;
+    return this;
   }
 
   private static final long serialVersionUID = 3714073159231864295L;

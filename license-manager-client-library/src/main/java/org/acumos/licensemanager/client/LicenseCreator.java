@@ -23,12 +23,15 @@ package org.acumos.licensemanager.client;
 import java.lang.invoke.MethodHandles;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPRightToUse;
+import org.acumos.cds.domain.MLPRtuReference;
 import org.acumos.licensemanager.client.model.CreatedRtu;
 import org.acumos.licensemanager.client.model.ICreateRtu;
 import org.acumos.licensemanager.client.model.ICreatedRtuResponse;
 import org.acumos.licensemanager.client.model.ILicenseCreator;
+import org.acumos.licensemanager.client.model.RtuSearchRequest;
 import org.acumos.licensemanager.exceptions.RightToUseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,13 +78,28 @@ public class LicenseCreator implements ILicenseCreator {
     CreatedRtu response = new CreatedRtu();
     response.setRequest(request);
     // check if rtu reference already exists for solution id + userid
-
-    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUses(dataClient, request);
+    RtuSearchRequest searchRequest = new RtuSearchRequest();
+    searchRequest.setSolutionId(request.getSolutionId());
+    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUses(dataClient, searchRequest);
     // in Boreas only expect 1 rtu
     if (rtus != null && !rtus.isEmpty()) {
+
       // in Boreas we will not update RTU if added for solution and user
-      updateRtu(request, response, rtus);
-      grantRtuToUsers(request, response);
+      // update if rtu ref id matches
+      Set<MLPRtuReference> rtuReferences = rtus.get(0).getRtuReferences();
+      String ref = rtuReferences.iterator().next().getRef();
+      if (rtus.size() == 1
+          && rtuReferences.size() == 1
+          && !ref.equals(request.getRtuRefs().get(0))) {
+        throw new RightToUseException(
+            "Rtu already exists for solution id" + request.getSolutionId() + "with rtuId " + ref,
+            request.getSolutionId(),
+            rtus);
+      } else {
+        updateRtu(request, response, rtus);
+        grantRtuToUsers(request, response);
+      }
+
     } else {
       createRightToUse(request, response);
       grantRtuToUsers(request, response);
@@ -118,7 +136,8 @@ public class LicenseCreator implements ILicenseCreator {
       response.setCreated(true);
     } catch (RestClientResponseException ex) {
       LOGGER.error("createRightToUse failed, server reports: {}", ex.getResponseBodyAsString());
-      throw new RightToUseException("createRightToUse failed", ex);
+      throw new RightToUseException("createRightToUse failed", ex)
+          .setSolutionId(request.getSolutionId());
     }
   }
 
