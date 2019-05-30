@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-service</artifactId>
-	<version>0.0.19-SNAPSHOT</version>
+	<version>0.0.20-SNAPSHOT</version>
 	<name>Security Verification Service</name>
 	<description>Acumos Security Verification Service for artifacts uploaded with a model</description>
 

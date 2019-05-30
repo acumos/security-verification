@@ -22,6 +22,10 @@
 License Manager Client Library Release Notes
 ============================================
 
+Version 0.0.9, 30 May 2019
+--------------------------
+* Update license-manager-client-library version as security-verification version changes
+  
 Version 0.0.8, 14 May 2019
 --------------------------
 * Update license-manager-client-library version as security-verification
