@@ -18,15 +18,14 @@
 .. ===============LICENSE_END==================================================
 ..
 
-==============================
-License Manager Client Library
-==============================
+=============================
+License Management User Guide
+=============================
 
 .. toctree::
        :maxdepth: 2
-       release-notes.rst
-       api-docs.rst
-       developer-guide.rst
-       user-guide.rst
 
-
+       license-json.rst
+       rtu-deploy-download.rst
+       rtu-creation.rst
+       model-usage-tracking.rst

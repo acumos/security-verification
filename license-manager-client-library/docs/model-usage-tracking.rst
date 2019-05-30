@@ -17,16 +17,3 @@
 .. limitations under the License.
 .. ===============LICENSE_END==================================================
 ..
-
-==============================
-License Manager Client Library
-==============================
-
-.. toctree::
-       :maxdepth: 2
-       release-notes.rst
-       api-docs.rst
-       developer-guide.rst
-       user-guide.rst
-
-
