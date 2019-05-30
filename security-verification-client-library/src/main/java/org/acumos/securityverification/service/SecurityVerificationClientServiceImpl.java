@@ -258,7 +258,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						.scanResultRootLicenseType(byteArrayOutputStream.toString());
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 				// Proprietary models have a recognized licenseType, not null, "", or SPDX
-				if (!StringUtils.isEmpty(scanResultRootLicenseType) && scanResultRootLicenseType != "SPDX") {
+				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
 					if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
 								securityVerificationCdumpNode.getNodeSolutionId(), userId);
@@ -388,7 +388,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 				// Proprietary models have a recognized licenseType, not null, "", or SPDX
-				if (!StringUtils.isEmpty(scanResultRootLicenseType) && scanResultRootLicenseType != "SPDX") {
+				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
 					if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
 								solutionId, userId);
