@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -60,29 +60,29 @@ public class UploadArtifactSVOutput {
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private Environment env;
-	
+
 	Map<String, String> artifactsDetails = new HashMap<>();
-	
+
 	public UploadArtifactSVOutput(Environment env2){
 		this.env = env2;
 	}
-	
+
 	public void addCreateArtifact(String solutionId, String revisionId, String version, String userId,
 			File file) throws AcumosServiceException, FileNotFoundException {
-		
+
 		logger.debug("Inside the addCreateArtifact, solutionId: {} revisionId: {} version: {} userId: {}",solutionId,revisionId,version,userId);
 
 		long size = file.length();
 		String name = FilenameUtils.getBaseName(file.getName());
 		String extension = FilenameUtils.getExtension(file.getName());
 		logger.debug("addCreateArtifact filename: {} size: {}, extension: {}, name: {} ", name, size, extension, name);
-		
+
 		ICommonDataServiceRestClient dataServiceRestClient = getCcdsClient();
 		if (SecurityVerificationServiceUtils.isEmptyOrNullString(extension))
 			throw new IllegalArgumentException("Incorrect file extension.");
 
 		try {
-			// first try to upload the file to nexus. 
+			// first try to upload the file to nexus.
 			NexusArtifactClient nexusClient = getNexusClient();
 			UploadArtifactInfo uploadInfo = null;
 			InputStream stream = null;
@@ -110,36 +110,39 @@ public class UploadArtifactSVOutput {
 
 				List<MLPArtifact> mlpArtifactList = dataServiceRestClient.getSolutionRevisionArtifacts(null,revisionId);// solutionIdIgnored
 				MLPSolutionRevision mlpSolutionRevision = dataServiceRestClient.getSolutionRevision(solutionId,revisionId);
+				boolean found = false;
+				MLPArtifact modelArtifact = new MLPArtifact();
+				modelArtifact.setName(file.getName());
+				modelArtifact.setDescription(file.getName());
+				modelArtifact.setVersion(uploadInfo.getVersion());
+				modelArtifact.setUserId(mlpSolutionRevision.getUserId());
+				modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
+				modelArtifact.setSize((int) size);
+				modelArtifact.setArtifactTypeCode(SVServiceConstants.SCAN_RESULT_CODE);
 				for (MLPArtifact mlpArtifact : mlpArtifactList) {
-					MLPArtifact modelArtifact = new MLPArtifact();
-					modelArtifact.setName(file.getName());
-					modelArtifact.setDescription(file.getName());
-					modelArtifact.setVersion(uploadInfo.getVersion());
-					modelArtifact.setUserId(mlpSolutionRevision.getUserId());
-					modelArtifact.setUri(uploadInfo.getArtifactMvnPath());
-					modelArtifact.setSize((int) size);
-					modelArtifact.setArtifactTypeCode(SVServiceConstants.SCAN_RESULT_CODE);
-					if (mlpArtifact.getName().equalsIgnoreCase(SVServiceConstants.SCAN_RESULT_CODE)
-							&& mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(file.getName())) {
+					if (mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(SVServiceConstants.SCAN_RESULT_CODE)
+							&& mlpArtifact.getName().equalsIgnoreCase(file.getName())) {
+						modelArtifact.setArtifactId(mlpArtifact.getArtifactId());
 						dataServiceRestClient.updateArtifact(modelArtifact);
+						found = true;
 						logger.debug("updateArtifact done");
-					} else {
-						modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
-						logger.debug("createArtifact done");
 					}
+				}
+				if (!found) {
+					modelArtifact = dataServiceRestClient.createArtifact(modelArtifact);
+					logger.debug("createArtifact done");
 					try {
-						logger.debug("addSolutionRevisionArtifact for " + file.getName() + " called");
-						dataServiceRestClient.addSolutionRevisionArtifact(solutionId, revisionId,
-								modelArtifact.getArtifactId());
-						logger.debug("addSolutionRevisionArtifact for " + file.getName() + " successful");
-					} catch (HttpStatusCodeException e) {
-						logger.error("Fail to call addSolutionRevisionArtifact: " + e);
-						throw new AcumosServiceException(AcumosServiceException.ErrorCode.INTERNAL_SERVER_ERROR,
-								"Fail to call addSolutionRevisionArtifact for " + file.getName() + " - "
-										+ e.getResponseBodyAsString(),
-								e);
-					}
-
+							logger.debug("addSolutionRevisionArtifact for " + file.getName() + " called");
+							dataServiceRestClient.addSolutionRevisionArtifact(solutionId, revisionId,
+									modelArtifact.getArtifactId());
+							logger.debug("addSolutionRevisionArtifact for " + file.getName() + " successful");
+						} catch (HttpStatusCodeException e) {
+							logger.error("Fail to call addSolutionRevisionArtifact: " + e);
+							throw new AcumosServiceException(AcumosServiceException.ErrorCode.INTERNAL_SERVER_ERROR,
+									"Fail to call addSolutionRevisionArtifact for " + file.getName() + " - "
+											+ e.getResponseBodyAsString(),
+									e);
+						}
 				}
 
 			} else {
@@ -168,7 +171,7 @@ public class UploadArtifactSVOutput {
 		}
 		return artifactsDetails;
 	}
-	
+
 	private String getNexusGroupId(String solutionId, String revisionId) {
 		logger.debug("Inside getNexusGroupId");
 		String group = env.getProperty(SVServiceConstants.NEXUS_GROUPID);
@@ -195,7 +198,7 @@ public class UploadArtifactSVOutput {
 		repositoryLocation.setUrl(env.getProperty(SVServiceConstants.NEXUS_CLIENT_URL));
 		repositoryLocation.setUsername(env.getProperty(SVServiceConstants.NEXUS_CLIENT_USER));
 		repositoryLocation.setPassword(env.getProperty(SVServiceConstants.NEXUS_CLIENT_PWD));
-		
+
 		if (!StringUtils.isEmpty(env.getProperty(SVServiceConstants.NEXUS_CLIENT_PROXY))) {
 			repositoryLocation.setProxy(env.getProperty(SVServiceConstants.NEXUS_CLIENT_PROXY));
 		}
