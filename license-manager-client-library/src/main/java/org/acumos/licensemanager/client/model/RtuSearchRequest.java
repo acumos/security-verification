@@ -21,6 +21,7 @@
 package org.acumos.licensemanager.client.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.acumos.cds.domain.MLPRightToUse_;
 import org.acumos.cds.transport.RestPageRequest;
@@ -32,6 +33,7 @@ public class RtuSearchRequest {
 
   private boolean isOr;
   private RestPageRequest pageRequest;
+  private List<String> userIds;
 
   /* Default constructor */
   public RtuSearchRequest() {}
@@ -95,5 +97,13 @@ public class RtuSearchRequest {
     if (!isEmptyOrNullString(solutionId)) map.put(MLPRightToUse_.SOLUTION_ID, solutionId);
 
     return map;
+  }
+
+  public void setUserIds(List<String> userIds) {
+    this.userIds = userIds;
+  }
+
+  public List<String> getUserIds() {
+    return userIds;
   }
 }

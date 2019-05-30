@@ -98,7 +98,7 @@ public class LicenseVerifierTest {
             LicenseAction.DEPLOY, solution.getSolutionId(), allowedUser.getUserId());
     licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
 
-    client.setRightToUses(new RestPageResponse<MLPRightToUse>(new ArrayList<MLPRightToUse>()));
+    client.setRightToUses(new RestPageResponse<MLPRightToUse>(rightToUseList));
 
     ILicenseVerification verifyUserRtu = licenseSrvc.verifyRtu(licenseDownloadRequest);
     // CompletableFuture.allOf(verifyUserRTU).join();
@@ -109,6 +109,7 @@ public class LicenseVerifierTest {
     assertEquals(true, verifyUserRtu.isAllowed(LicenseAction.DEPLOY));
 
     client.setRightToUseList(new ArrayList<MLPRightToUse>());
+    client.setRightToUses(new RestPageResponse<MLPRightToUse>(new ArrayList<MLPRightToUse>()));
 
     MLPUser disAllowedUser = new MLPUser();
     client.setLoginUser(disAllowedUser);
