@@ -228,9 +228,9 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		for (MLPArtifact mlpArtifact : mlpArtifactList) {
 			logger.info("getArtifactTypeCode: {} mlpArtifactGetName: {} ", mlpArtifact.getArtifactTypeCode(),
 					mlpArtifact.getName());
-				  // Don't use ARTIFACT_TYPE_SCANRESULT as a filter for now, until scancode.json is stored with a different code
-				  //			if (mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_SCANRESULT)
-				  //					|| mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
+					// Don't use ARTIFACT_TYPE_SCANRESULT as a filter for now, until scancode.json is stored with a different code
+					//			if (mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_SCANRESULT)
+					//					|| mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
 			if (mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
 
 				String nexusURI = "";
@@ -258,7 +258,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						.scanResultRootLicenseType(byteArrayOutputStream.toString());
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 				// Proprietary models have a recognized licenseType, not null, "", or SPDX
-				if (!StringUtils.isEmpty(scanResultRootLicenseType) && scanResultRootLicenseType != "SPDX") {
+				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
 					if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
 								securityVerificationCdumpNode.getNodeSolutionId(), userId);
@@ -266,7 +266,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 						// returns true or false if rtu exists
 						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
-				    logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+						logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
 					}
 					if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
@@ -275,7 +275,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 						// returns true or false if rtu exists
 						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
-				    logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+						logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
 					}
 				}
 			}
@@ -304,36 +304,36 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				reason.append("license scan not yet started");
 			} else {
 				if (mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
-  				logger.info("license scan in-progress");
-  				if (reason.length() > 1) {
-  					reason.append(",");
-  				}
-  				workFlowAllowed = false;
-  				reason.append("license scan in-progress");
+					logger.info("license scan in-progress");
+					if (reason.length() > 1) {
+						reason.append(",");
+					}
+					workFlowAllowed = false;
+					reason.append("license scan in-progress");
 
-  			}
-  			if (mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
-  				// logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
-      		// 		mlpSolutionRevision.getVerifiedLicense());
-  				if (reason.length() > 1) {
-  					reason.append(",");
-  				}
+				}
+				if (mlpCdumpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
+					// logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
+		 		// 		mlpSolutionRevision.getVerifiedLicense());
+					if (reason.length() > 1) {
+						reason.append(",");
+					}
 
-  				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-  				String scanResultReason = parseJSON
-  						.scanResultReason(byteArrayOutputStream.toString());
-  				logger.info("scanResultReason: {} ", scanResultReason);
-  				if (scanResultReason != null) {
-  					reason.append("license scan failed, reason: ");
-  					reason.append(scanResultReason);
-  				} else {
-  					reason.append("license scan failed: unknown reason (null)");
-  					reason.append(scanResultReason);
-  				}
+					SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+					String scanResultReason = parseJSON
+							.scanResultReason(byteArrayOutputStream.toString());
+					logger.info("scanResultReason: {} ", scanResultReason);
+					if (scanResultReason != null) {
+						reason.append("license scan failed, reason: ");
+						reason.append(scanResultReason);
+					} else {
+						reason.append("license scan failed: unknown reason (null)");
+						reason.append(scanResultReason);
+					}
 
-  				workFlowAllowed = false;
-  			}
-      }
+					workFlowAllowed = false;
+				}
+		 }
 		}
 
 		workflow.setWorkflowAllowed(workFlowAllowed);
@@ -357,9 +357,9 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		for (MLPArtifact mlpArtifact : mlpArtifactList) {
 			logger.info("getArtifactTypeCode: {} mlpArtifactGetName: {} ", mlpArtifact.getArtifactTypeCode(),
 					mlpArtifact.getName());
-				  // Don't use ARTIFACT_TYPE_SCANRESULT as a filter for now, until scancode.json is stored with a different code
-				  //			if (mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_SCANRESULT)
-				  //					|| mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
+					// Don't use ARTIFACT_TYPE_SCANRESULT as a filter for now, until scancode.json is stored with a different code
+					//			if (mlpArtifact.getArtifactTypeCode().equalsIgnoreCase(SVConstants.ARTIFACT_TYPE_SCANRESULT)
+					//					|| mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
 			if (mlpArtifact.getName().equalsIgnoreCase("scanresult.json")) {
 
 				String nexusURI = "";
@@ -388,7 +388,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 				// Proprietary models have a recognized licenseType, not null, "", or SPDX
-				if (!StringUtils.isEmpty(scanResultRootLicenseType) && scanResultRootLicenseType != "SPDX") {
+				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
 					if (worflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
 								solutionId, userId);
@@ -396,7 +396,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 						// returns true or false if rtu exists
 						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
-				    logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+						logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
 					}
 					if (worflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
@@ -405,7 +405,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 						// returns true or false if rtu exists
 						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
-				    logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+						logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
 					}
 				}
 			}
@@ -434,35 +434,35 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				reason.append("license scan not yet started");
 			} else {
 				if (mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("IP")) {
-  				logger.info("license scan in-progress, mlpSolutionRevision.getVerifiedLicense: {}",
-  						mlpSolutionRevision.getVerifiedLicense());
-  				if (reason.length() > 1) {
-  					reason.append(",");
-  				}
-  				workFlowAllowed = false;
-  				reason.append("license scan in-progress");
-  			}
-  			if (mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
-  				logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
-  						mlpSolutionRevision.getVerifiedLicense());
-  				if (reason.length() > 1) {
-  					reason.append(",");
-  				}
+					logger.info("license scan in-progress, mlpSolutionRevision.getVerifiedLicense: {}",
+							mlpSolutionRevision.getVerifiedLicense());
+					if (reason.length() > 1) {
+						reason.append(",");
+					}
+					workFlowAllowed = false;
+					reason.append("license scan in-progress");
+				}
+				if (mlpSolutionRevision.getVerifiedLicense().equalsIgnoreCase("FA")) {
+					logger.info("license scan failed, mlpSolutionRevision.getVerifiedLicense:{}",
+							mlpSolutionRevision.getVerifiedLicense());
+					if (reason.length() > 1) {
+						reason.append(",");
+					}
 
-  				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-  				String scanResultReason = parseJSON
-  						.scanResultReason(byteArrayOutputStream.toString());
-  				logger.info("scanResultReason: {} ", scanResultReason);
-  				if (scanResultReason != null) {
-  					reason.append("license scan failed, reason: ");
-  					reason.append(scanResultReason);
-  				} else {
-  					reason.append("license scan failed: unknown reason (null)");
-  				}
+					SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
+					String scanResultReason = parseJSON
+							.scanResultReason(byteArrayOutputStream.toString());
+					logger.info("scanResultReason: {} ", scanResultReason);
+					if (scanResultReason != null) {
+						reason.append("license scan failed, reason: ");
+						reason.append(scanResultReason);
+					} else {
+						reason.append("license scan failed: unknown reason (null)");
+					}
 
-  				workFlowAllowed = false;
-  			}
-      }
+					workFlowAllowed = false;
+				}
+		 }
 		}
 
 		workflow.setWorkflowAllowed(workFlowAllowed);
