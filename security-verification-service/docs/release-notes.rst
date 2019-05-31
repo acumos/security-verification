@@ -25,19 +25,32 @@ Version 0.0.20, 30 May 2019
 ---------------------------
 
 * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
   * Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4534/>`_
-  
+
+  * `4554: Upload single copy of scancode.json etc <https://gerrit.acumos.org/r/#/c/security-verification/+/4554/>`_
+  * `4545: Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4545/>`_
+  * `4534: Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4534/>`_
+
 ---------------------------
 Version 0.0.19, 28 May 2019
 ---------------------------
 
 * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
 
+  * `4524: Correct return of failure reason to user <https://gerrit.acumos.org/r/#/c/security-verification/+/4524/>`_
+  * `4522: Correct check for getVerifiedLicense result <https://gerrit.acumos.org/r/#/c/security-verification/+/4522/>`_
+  * `4518: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/security-verification/+/4518/>`_
+
 ---------------------------
 Version 0.0.18, 23 May 2019
 ---------------------------
 
 * Update license-manager-client-library version-0.0.7 in security-verification-client-library (`ACUMOS-2954 <https://jira.acumos.org/browse/ACUMOS-2954>`_)
+
+* `4489: Update design doc with recommended tests <https://gerrit.acumos.org/r/#/c/security-verification/+/4489/>`_
+
+  * `ACUMOS-2358: S-V design documentation <https://jira.acumos.org/browse/ACUMOS-2358>`_
 
 * `4366: Updated release note <https://gerrit.acumos.org/r/#/c/security-verification/+/4366/>`_
 
@@ -92,21 +105,12 @@ Version 0.0.11, 30 April 2019
 Version 0.1.0, 12 April 2019
 ----------------------------
 
-* `4137: Release 0.1.0 <https://gerrit.acumos.org/r/#/c/4137/>`_
+* `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
 
-  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
-
-* `4113: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4113/>`_
-
-  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
-
-* `4101: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4101/>`_
-
-  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
-
-* `4091: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4091/>`_
-
-  * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+  * `4137: Release 0.1.0 <https://gerrit.acumos.org/r/#/c/4137/>`_
+  * `4113: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4113/>`_
+  * `4101: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4101/>`_
+  * `4091: S-V Library workflow permission determination <https://gerrit.acumos.org/r/#/c/4091/>`_
 
 ----------------------------
 Version 0.0.3, 05 April 2019
@@ -159,13 +163,18 @@ Version 0.0.20, 30 May 2019
 ---------------------------
 
 * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
   * Update artifact creation logic
-  
+
 ---------------------------
 Version 0.0.19, 28 May 2019
 ---------------------------
 
 * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
+
+  * `4524: Correct return of failure reason to user <https://gerrit.acumos.org/r/#/c/security-verification/+/4524/>`_
+
+    * switch to curl (wget hangs), add logging
 
 ---------------------------
 Version 0.0.18, 23 May 2019
@@ -173,6 +182,10 @@ Version 0.0.18, 23 May 2019
 
 This release includes improvements and other updates as below, for the merged
 commits and related Jira items:
+
+* `4489: Update design doc with recommended tests <https://gerrit.acumos.org/r/#/c/security-verification/+/4489/>`_
+
+  * `ACUMOS-2358: S-V design documentation <https://jira.acumos.org/browse/ACUMOS-2358>`_
 
 * `4362: SecurityVerificationServiceImpl createSiteConfig <https://gerrit.acumos.org/r/#/c/security-verification/+/4362/>`_
 

@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-service</artifactId>
-	<version>0.0.20-SNAPSHOT</version>
+	<version>0.0.20</version>
 	<name>Security Verification Service</name>
 	<description>Acumos Security Verification Service for artifacts uploaded with a model</description>
 
@@ -196,7 +196,7 @@
 				<!-- <version>1.4.0</version> -->
 			</plugin>
 			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
+					<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<!-- <version>3.0</version> -->
 				<configuration>
@@ -265,7 +265,7 @@
 								<assembly>
 									<inline>
 										<files>
-										   <file>
+											 <file>
 												<source>scripts/dump_model.sh</source>
 												<outputDirectory />
 												<destName>scan/dump_model.sh</destName>
@@ -274,7 +274,7 @@
 												<source>scripts/license_scan.sh</source>
 												<outputDirectory />
 												<destName>scan/license_scan.sh</destName>
-											</file> 
+											</file>
 											<file>
 												<source>scripts/setup_verification_site_config.sh</source>
 												<outputDirectory />
