@@ -26,8 +26,7 @@ Version 0.0.20, 30 May 2019
 
 * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
 
-  * Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4534/>`_
-
+  * '4555: Update versions for release <https://gerrit.acumos.org/r/#/c/security-verification/+/4555/>'_
   * `4554: Upload single copy of scancode.json etc <https://gerrit.acumos.org/r/#/c/security-verification/+/4554/>`_
   * `4545: Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4545/>`_
   * `4534: Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4534/>`_
