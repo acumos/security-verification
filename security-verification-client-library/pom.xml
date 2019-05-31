@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-client</artifactId>
-	<version>0.0.20-SNAPSHOT</version>
+	<version>0.0.20</version>
 	<name>security-verification-client-library</name>
 	<description>Acumos Security Verification Client Library</description>
-		
+
 	<!-- <packaging>jar</packaging> -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -37,7 +37,7 @@
 		<dependency>
 			<groupId>org.acumos.security-verification.license-manager</groupId>
 			<artifactId>license-manager-client-library</artifactId>
-			<version>0.0.9-SNAPSHOT</version>
+			<version>0.0.9</version>
 		</dependency>
 		<dependency>
 			<groupId>org.acumos.acumos-nexus-client</groupId>
@@ -84,9 +84,6 @@
 			<artifactId>wagon-http-lightweight</artifactId>
 			<version>${wagonVersion}</version>
 		</dependency>
-
-
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -226,7 +223,7 @@
 					</compilerArguments>
 				</configuration>
 			</plugin>
-			<!-- add build information to manifest. Java provides access to the implementation 
+			<!-- add build information to manifest. Java provides access to the implementation
 				version for a package, so cram the build number into there. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
