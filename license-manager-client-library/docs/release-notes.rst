@@ -27,11 +27,11 @@ Version 0.0.9, 29 May 2019
   version changes
 * Update RTU refs  `ACUMOS-2896 <https://jira.acumos.org/browse/ACUMOS-2896>`_
 
-
 Version 0.0.9, 30 May 2019
 --------------------------
-* Update license-manager-client-library version as security-verification version changes
-  
+* Update license-manager-client-library version as security-verification
+  version changes
+
 Version 0.0.8, 14 May 2019
 --------------------------
 * Update license-manager-client-library version as security-verification
