@@ -37,10 +37,10 @@ public interface ISecurityVerificationClientService {
 	 * verification for a solution/revision.
 	 * @param solutionId, required field
 	 * @param revisionId, required field
-	 * @param worflowId, required field
+	 * @param workflowId, required field
 	 * @return workflow information
 	 * @throws Exception
 	 */
-	public Workflow securityVerificationScan(String solutionId, String revisionId, String worflowId) throws Exception;
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId) throws Exception;
 
 }

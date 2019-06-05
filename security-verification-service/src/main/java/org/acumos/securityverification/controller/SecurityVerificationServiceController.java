@@ -28,7 +28,7 @@ import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.securityverification.logging.LogConfig;
 import org.acumos.securityverification.service.ISecurityVerificationService;
 import org.acumos.securityverification.transport.ErrorTransport;
-import org.acumos.securityverification.transport.SVResonse;
+import org.acumos.securityverification.transport.SVResponse;
 import org.acumos.securityverification.transport.SuccessTransport;
 import org.acumos.securityverification.utils.SVServiceConstants;
 import org.slf4j.Logger;
@@ -62,7 +62,7 @@ public class SecurityVerificationServiceController extends AbstractController {
 	@RequestMapping(value = "/" + SVServiceConstants.SOLUTIONID + "/{solutionId}/" + SVServiceConstants.REVISIONID
 			+ "/{revisionId}/" + SVServiceConstants.WORKFLOWID
 			+ "/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SVResonse securityVerification(@PathVariable("solutionId") String solutionId,
+	public SVResponse securityVerification(@PathVariable("solutionId") String solutionId,
 			@PathVariable("revisionId") String revisionId, @PathVariable("workflowId") String workflowId) {
 		logger.debug("Inside securityVerification service scan solutionId  {}  revisionId  {}", solutionId, revisionId);
 		try {
@@ -80,7 +80,7 @@ public class SecurityVerificationServiceController extends AbstractController {
 
 	@ApiOperation(value = "Add default SiteConfig Verification.")
 	@RequestMapping(value = SVServiceConstants.UPDATE_SITE_CONFIG, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public SVResonse siteConfigVerification() throws Exception {
+	public SVResponse siteConfigVerification() throws Exception {
 		logger.debug("Inside siteConfigVerification adding default SiteConfig Verification Json");
 		try {
 			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScan");

@@ -29,7 +29,7 @@ import java.lang.invoke.MethodHandles;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.securityverification.service.ISecurityVerificationService;
-import org.acumos.securityverification.transport.SVResonse;
+import org.acumos.securityverification.transport.SVResponse;
 import org.acumos.securityverification.utils.SVServiceConstants;
 import org.junit.Before;
 import org.junit.Test;
@@ -81,15 +81,15 @@ public class SecurityVerificationServiceControllerTest {
 						env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD), null)
 				.thenReturn((CommonDataServiceRestClientImpl) client);
 		securityVerificationService.securityVerification(solutionId, revisionId, client);
-		SVResonse svResonse = securityVerificationServiceController.securityVerification(solutionId, revisionId,
+		SVResponse svResponse = securityVerificationServiceController.securityVerification(solutionId, revisionId,
 				workflowId);
-		assertNotNull(svResonse);
+		assertNotNull(svResponse);
 	}
 
 	@Test
 	public void testSiteConfigVerification() throws Exception {
-		SVResonse svResonse = securityVerificationServiceController.siteConfigVerification();
-		assertNotNull(svResonse);
+		SVResponse svResponse = securityVerificationServiceController.siteConfigVerification();
+		assertNotNull(svResponse);
 	}
 
 }
