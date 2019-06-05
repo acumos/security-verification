@@ -49,7 +49,11 @@ function fail() {
 function log() {
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
+    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  else
+    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1"
+  fi
 }
 
 function get_solution() {
@@ -156,6 +160,7 @@ nexusRepo=$ACUMOS_NEXUS_MAVEN_REPO
 
 cd $folder
 if [[ ! -d cds ]]; then mkdir cds; fi
+curl -u $cdsCreds $cdsUri/ccds/site/config/verification | jq -r ".configValue" >cds/siteconfig.json
 get_solution
 get_revision
 get_artifacts

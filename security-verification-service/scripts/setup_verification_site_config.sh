@@ -30,6 +30,9 @@
 #   cds_creds: CDS credentials, e.g. username:password
 #   admin: username of Acumos Admin (user with role "Admin")
 #   json: (optional) verification JSON file to use (default is included here)
+#
+# To check the current value directly, run the command
+# curl -u <cds_creds> <cds_base>/ccds/site/config/verification | jq -r ".configValue" | sed 's/\\//g' | jq
 
 function fail() {
   log "$1"
@@ -73,11 +76,10 @@ function setup_verification_site_config() {
   else
     cds_api="-X PUT $cds_base/site/config/verification"
   fi
-  sed -i -- 's/"/\\"/g' $json
   cat <<EOF >$jsoninp
 {
   "configKey": "verification",
-  "configValue": "$(cat $json)",
+  "configValue": "$(cat $json | sed 's/"/\\"/g')",
   "userId": "$userId"
 }
 EOF
@@ -111,66 +113,21 @@ fi
 
 set -x
 export WORK_DIR=$(pwd)
+cd $(dirname "$0")
 cds_base=$1/ccds
 cds_creds=$2
 admin=$3
 json=$4
-log "Create or update site-config key 'verificaton'"
+log "Create or update site-config key 'verification'"
 if [[ "$json" != "" ]]; then
   log "Using provided JSON file $json"
-  cat $json
 else
-  json="/tmp/$(date +%H%M%S%N)"
-  log "Using script-default JSON"
-  cat <<EOF >$json
-{
- "verification" : {
- "externalScan":"false",
- "allowedLicense": [
- { "type":"SPDX", "value":"Apache-2.0" },
- { "type":"SPDX", "value":"CC-BY-4.0" },
- { "type":"SPDX", "value":"BSD-3-Clause" },
- { "type":"VendorA", "value":"VendorA-OSS" },
- { "type":"CompanyB", "value":"CompanyB-Proprietary" }
- ],
- "licenseScan": {
- "created":"true",
- "updated":"true",
- "deploy":"false",
- "download":"false",
- "share":"false",
- "publishCompany":"false",
- "publishPublic":"false"
- },
- "securityScan": {
- "created":"true",
- "updated":"true",
- "deploy":"false",
- "download":"false",
- "share":"false",
- "publishCompany":"false",
- "publishPublic":"false"
- },
- "licenseVerify": {
- "deploy":"true",
- "download":"true",
- "share":"false",
- "publishCompany":"true",
- "publishPublic":"true"
- },
- "securityVerify": {
- "deploy":"true",
- "download":"true",
- "share":"false",
- "publishCompany":"true",
- "publishPublic":"true"
- }
- }
-}
-EOF
+  json="siteconfig-verification.json"
+  log "Using default values in siteconfig-verification.json"
 fi
 if [[ ! $(jq . $json) ]]; then
   fail "JSON did not parse successfully"
 fi
 find_admin
 setup_verification_site_config $json
+cd $WORK_DIR
