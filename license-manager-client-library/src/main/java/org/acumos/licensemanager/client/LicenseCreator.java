@@ -22,11 +22,13 @@ package org.acumos.licensemanager.client;
 
 import java.lang.invoke.MethodHandles;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRtuReference;
+import org.acumos.cds.domain.MLPUser;
 import org.acumos.licensemanager.client.model.CreatedRtu;
 import org.acumos.licensemanager.client.model.ICreateRtu;
 import org.acumos.licensemanager.client.model.ICreatedRtuResponse;
@@ -66,14 +68,14 @@ public class LicenseCreator implements ILicenseCreator {
     if (request.getSolutionId() == null) {
       throw new IllegalArgumentException("request solution id is not defined");
     }
-    if (request.getUserIds().isEmpty() && !request.isSiteWide()) {
+    if (request.getUserIds() == null && !request.isSiteWide()) {
       throw new IllegalArgumentException("request userId or " + "siteWide is not defined");
     }
 
-    if (request.getUserIds().size() > 1) {
-      throw new IllegalArgumentException(
-          "only allow one user id was passed" + request.getUserIds().size());
-    }
+    // if (request.getUserIds().size() > 1) {
+    //   throw new IllegalArgumentException(
+    //       "only allow one user id was passed" + request.getUserIds().size());
+    // }
 
     CreatedRtu response = new CreatedRtu();
     response.setRequest(request);
@@ -97,6 +99,7 @@ public class LicenseCreator implements ILicenseCreator {
             rtus);
       } else {
         updateRtu(request, response, rtus);
+        removeRtuFromUsers(request, response);
         grantRtuToUsers(request, response);
       }
 
@@ -107,11 +110,47 @@ public class LicenseCreator implements ILicenseCreator {
     return response;
   }
 
+  private void removeRtuFromUsers(ICreateRtu request, CreatedRtu response)
+      throws RightToUseException {
+    // remove rtu from user that are not in request list
+    // get the list of users for the rtu being updated
+    // if user is not in creation list remove user
+    List<String> userIds = request.getUserIds();
+    List<MLPUser> rtuUsers = new ArrayList<MLPUser>();
+    Long rtuId = response.getRtus().get(0).getRtuId();
+    List<MLPUser> rtuUsers2 = getRtuUsers(rtuId);
+    if (rtuUsers2 == null) {
+      return;
+    }
+    rtuUsers.addAll(rtuUsers2);
+
+    for (MLPUser rtuUser : rtuUsers) {
+      String userId = rtuUser.getUserId();
+      boolean match = userIds.stream().anyMatch(str -> str.trim().equals(userId));
+      if (!match) {
+        removeUserFromRtu(rtuId, userId);
+      }
+    }
+  }
+
+  private void removeUserFromRtu(Long rtuId, String userId) throws RightToUseException {
+    try {
+      // allow user to have access
+      dataClient.dropUserFromRtu(userId, rtuId);
+    } catch (RestClientResponseException ex) {
+      LOGGER.error(
+          "allowSolutionUserAccess failed, server reports: {}", ex.getResponseBodyAsString());
+      throw new RightToUseException("allowSolutionUserAccess failed", ex);
+    }
+  }
+
   private void grantRtuToUsers(final ICreateRtu request, CreatedRtu response)
       throws RightToUseException {
     if (!request.getUserIds().isEmpty() && !response.getRtus().isEmpty()) {
       for (MLPRightToUse rtu : response.getRtus()) {
-        grantRtuToUser(request.getUserIds().get(0), rtu.getRtuId());
+        for (String userId : request.getUserIds()) {
+          grantRtuToUser(userId, rtu.getRtuId());
+        }
       }
     }
   }
@@ -153,6 +192,18 @@ public class LicenseCreator implements ILicenseCreator {
     try {
       // allow user to have access
       dataClient.addUserToRtu(userId, rtuId);
+    } catch (RestClientResponseException ex) {
+      LOGGER.error(
+          "allowSolutionUserAccess failed, server reports: {}", ex.getResponseBodyAsString());
+      throw new RightToUseException("allowSolutionUserAccess failed", ex);
+    }
+  }
+
+  private List<MLPUser> getRtuUsers(final Long rtuId) throws RightToUseException {
+
+    try {
+      // allow user to have access
+      return dataClient.getRtuUsers(rtuId);
     } catch (RestClientResponseException ex) {
       LOGGER.error(
           "allowSolutionUserAccess failed, server reports: {}", ex.getResponseBodyAsString());

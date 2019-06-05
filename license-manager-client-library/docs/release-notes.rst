@@ -21,6 +21,11 @@
 ============================================
 License Manager Client Library Release Notes
 ============================================
+
+Version 0.0.10 04 Jun 2019
+--------------------------
+* Support RTU removing users from RTU `ACUMOS-3003 <https://jira.acumos.org/browse/ACUMOS-3003>`_
+
 Version 0.0.9, 29 May 2019
 --------------------------
 * Update license-manager-client-library version as security-verification
@@ -30,8 +35,9 @@ Version 0.0.9, 29 May 2019
 
 Version 0.0.9, 30 May 2019
 --------------------------
-* Update license-manager-client-library version as security-verification version changes
-  
+* Update license-manager-client-library version as security-verification
+  version changes
+
 Version 0.0.8, 14 May 2019
 --------------------------
 * Update license-manager-client-library version as security-verification

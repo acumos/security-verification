@@ -24,9 +24,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.acumos.cds.client.CommonDataServiceRestClientMockImpl;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRtuReference;
@@ -49,6 +52,8 @@ public class LicenseCreatorTest {
 
   private class MockDatabaseClient extends CommonDataServiceRestClientMockImpl {
 
+    Long counter = new Long(0);
+    Map<Long, List<MLPUser>> userRtu = new HashMap<Long, List<MLPUser>>();
     List<MLPRightToUse> nextRtuResponse = new ArrayList<MLPRightToUse>();
 
     public MockDatabaseClient(String webapiString, String user, String pass) {
@@ -58,10 +63,51 @@ public class LicenseCreatorTest {
     @Override
     public MLPRightToUse createRightToUse(MLPRightToUse rightToUse) {
       // set as right to use response
+      rightToUse.setRtuId(counter++);
       nextRtuResponse.add(rightToUse);
       setRightToUseList(nextRtuResponse);
       super.createRightToUse(rightToUse);
+
       return rightToUse;
+    }
+
+    @Override
+    public void updateRightToUse(MLPRightToUse rightToUse) {
+      // rightToUse.setRtuId(counter++);
+      super.updateRightToUse(rightToUse);
+    }
+
+    @Override
+    public void addUserToRtu(String userId, Long rtuId) {
+      List<MLPUser> userIdsForRtu = userRtu.get(rtuId);
+      if (userIdsForRtu != null) {
+        userIdsForRtu.add(createUser(userId));
+      } else {
+        userIdsForRtu = new ArrayList<MLPUser>();
+        userIdsForRtu.add(createUser(userId));
+        userRtu.put(rtuId, userIdsForRtu);
+      }
+    }
+
+    private MLPUser createUser(String userId) {
+      MLPUser mlpUser = new MLPUser();
+      mlpUser.setUserId(userId);
+      return mlpUser;
+    }
+
+    @Override
+    public void dropUserFromRtu(String userId, Long rtuId) {
+      List<MLPUser> userIdsForRtu = userRtu.get(rtuId);
+      List<MLPUser> resultUserIdsForRtu =
+          userIdsForRtu.stream()
+              .filter(item -> !userId.equals(item.getUserId()))
+              .collect(Collectors.toList());
+      userRtu.put(rtuId, resultUserIdsForRtu);
+    }
+
+    @Override
+    public List<MLPUser> getRtuUsers(long rtuId) {
+      return userRtu.get(rtuId);
     }
   }
   // TODO add invalid test which checks for log message
@@ -146,7 +192,17 @@ public class LicenseCreatorTest {
     assertEquals("expect firstRtuRef" + firstRtuRefId, true, refs.contains(firstRtuRefId));
 
     assertEquals(solutionId, verifyUserRtu3.getRequest().getSolutionId());
-    assertEquals(true, client.getRightToUses(solutionId, userId2).size() > 0);
+    List<MLPUser> rtuUsers = client.getRtuUsers(verifyUserRtu3.getRtus().get(0).getRtuId());
+    assertEquals(1, rtuUsers.size());
+    assertEquals(
+        "Expect new user id",
+        true,
+        rtuUsers.stream().anyMatch(rtuUser -> rtuUser.getUserId().equals(userId2)));
+    assertEquals(
+        "Expect all user no longer has right to use",
+        false,
+        rtuUsers.stream().anyMatch(rtuUser -> rtuUser.getUserId().equals(userId)));
+
     // assertEquals(0, verifyUserRTU2.getRtuException().size());
 
   }
@@ -180,6 +236,7 @@ public class LicenseCreatorTest {
   public void invalidNoUserIdArgumentTest() throws RightToUseException {
     ILicenseCreator licenseSrvc = new LicenseCreator(client);
     CreateRtuRequest creationrequest = new CreateRtuRequest();
+    creationrequest.setUserIds(null);
     creationrequest.setSolutionId("dummysolutionid");
     try {
       licenseSrvc.createRtu(creationrequest);

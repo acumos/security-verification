@@ -21,6 +21,12 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
+Version 0.0.21, 04 Jun 2019
+---------------------------
+
+* Uprev to allow release of License Manager client library
+
+---------------------------
 Version 0.0.20, 30 May 2019
 ---------------------------
 
