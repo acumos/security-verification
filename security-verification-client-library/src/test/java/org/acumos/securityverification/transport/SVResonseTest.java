@@ -23,13 +23,13 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-public class SVResonseTest {
+public class SVResponseTest {
 
 	@Test
 	public void testGetScanSucess() {
-		SVResonse svResonse = new SVResonse();
-		svResonse.setScanSucess("scanSucess");
-		assertNotNull(svResonse);
-		assertNotNull(svResonse.getScanSucess());
+		SVResponse svResponse = new SVResponse();
+		svResponse.setScanSucess("scanSucess");
+		assertNotNull(svResponse);
+		assertNotNull(svResponse.getScanSucess());
 	}
 }

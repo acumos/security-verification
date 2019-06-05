@@ -19,7 +19,7 @@
  */
 package org.acumos.securityverification.transport;
 
-public class SVResonse {
+public class SVResponse {
 
 	private String scanSucess;
 
