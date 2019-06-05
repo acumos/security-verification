@@ -23,6 +23,6 @@ package org.acumos.securityverification.transport;
  * Trivial marker interface for any type returned by server, which make coding
  * of controllers a bit more type safe.
  */
-public interface SVResonse {
+public interface SVResponse {
 
 }

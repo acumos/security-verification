@@ -25,60 +25,30 @@
 function log() {
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
+    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  else
+    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1"
+  fi
 }
 
 function initialize() {
   log "initializing allowed_licenses.json and compatible_licenses.json"
-  cat <<EOF >/tmp/allowed_licenses.json
-{ "allowedLicense": [
-  { "type":"SPDX", "name":"Apache-2.0" },
-  { "type":"SPDX", "name":"CC-BY-4.0" },
-  { "type":"SPDX", "name":"BSD-3-Clause" },
-  { "type":"SPDX", "name":"MIT-License" },
-  { "type":"VendorA", "name":"VendorA-OSS" },
-  { "type":"CompanyB", "name":"CompanyB-Proprietary" }
-]}
-EOF
-
-  cat <<EOF >/tmp/compatible_licenses.json
-{ "compatibleLicenses": [
-  { "name":"Apache-2.0", "compatible": [
-      { "name": "CC-BY-4.0" },
-      { "name": "Apache-2.0" },
-      { "name": "BSD-3-Clause" },
-      { "name": "MIT-License" }
-    ]
-  },
-  { "name":"BSD-3-Clause", "compatible": [
-      { "name": "CC-BY-4.0" },
-      { "name": "Apache-2.0" },
-      { "name": "BSD-3-Clause" },
-      { "name": "MIT-License" }
-    ]
-  },
-  { "name":"MIT", "compatible": [
-      { "name": "CC-BY-4.0" },
-      { "name": "Apache-2.0" },
-      { "name": "BSD-3-Clause" },
-      { "name": "MIT-License" }
-    ]
-  }
-]}
-EOF
+  jq '.allowedLicense' $folder/cds/siteconfig.json >$folder/cds/allowed_licenses.json
+  jq '.compatibleLicenses' $folder/cds/siteconfig.json >$folder/cds/compatible_licenses.json
 }
 
 function get_allowed_license_type() {
   log "get_allowed_license_type $1"
   local license_name=$1
-  local n=$(jq -r '.allowedLicense | length' /tmp/allowed_licenses.json)
+  local n=$(jq -r '. | length' $folder/cds/allowed_licenses.json)
   local i=0
   local allowed_name
   allowed_license_type=""
   while [[ $i -lt $n ]]; do
-    allowed_name=$(jq -r ".allowedLicense[$i].name" /tmp/allowed_licenses.json)
+    allowed_name=$(jq -r ".[$i].name" $folder/cds/allowed_licenses.json)
     if [[ "$allowed_name" == "$license_name" ]]; then
-      allowed_license_type=$(jq -r ".allowedLicense[$i].type" /tmp/allowed_licenses.json)
+      allowed_license_type=$(jq -r ".[$i].type" $folder/cds/allowed_licenses.json)
     fi
     i=$((i+1))
   done
@@ -88,7 +58,7 @@ function extract_licenses() {
   log "extract_licenses"
   local root_license=""
   local root_license_type=""
-  echo "" >all_licenses
+  echo "" >$folder/all_licenses
   local files=$(jq '.files | length' $1)
   json='{"files":['
   local i=0
@@ -98,7 +68,7 @@ function extract_licenses() {
     local lics=$(jq ".files[$i].licenses | length" $1)
     if [[ $lics -gt 0 ]]; then
       local result="$file_path: "
-      echo "" >file_licenses
+      echo "" >$folder/file_licenses
       local file_licenses=""
       local j=0
       while [[ $j -lt $lics ]]; do
@@ -107,10 +77,10 @@ function extract_licenses() {
         # https://github.com/nexB/scancode-toolkit/issues/1408
         # https://github.com/nexB/scancode-toolkit/issues/1409
         if [[ "$name" != "NPL-1.1" && "$name" != "NOKOS-License-1.0a" ]]; then
-          if [[ $(grep -c $name file_licenses) -eq 0 ]]; then
+          if [[ $(grep -c $name $folder/file_licenses) -eq 0 ]]; then
             file_licenses="$file_licenses,{\"name\":\"$name\"}"
-            echo "$name" >file_licenses
-            echo "$name " >>all_licenses
+            echo "$name " >>$folder/file_licenses
+            echo "$name " >>$folder/all_licenses
             result="$result $name"
             if [[ "$root_license" == "" && $(echo $file_path | cut -d '/' -f 2 | grep -c -i -E '^license.json') -gt 0 ]]; then
               root_license=$name
@@ -143,10 +113,10 @@ function extract_licenses() {
     sed -i -- "s~^{~{\"root_license\":{\"type\":\"\",\"name\":\"\"},~" $OUT/scanresult.json
   fi
   # Count number of references to each license
-  licenses=$(sort all_licenses | uniq)
+  licenses=$(sort $folder/all_licenses | uniq)
   local i=0
   for license in $licenses; do
-    count=$(grep -c $license all_licenses)
+    count=$(grep -c $license $folder/all_licenses)
     log "$license: $count"
     i=$((i+1))
   done
@@ -169,15 +139,15 @@ function update_reason() {
 function verify_compatibility() {
   log "verify_compatibility($root_name)"
   root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
-  compatible_licenses=$(jq '.compatibleLicenses | length' /tmp/compatible_licenses.json)
+  compatible_licenses=$(jq '. | length' $folder/cds/compatible_licenses.json)
   local i=0
-  local root_name=$(jq -r ".compatibleLicenses[$i].name" /tmp/compatible_licenses.json)
+  local root_name=$(jq -r ".[$i].name" $folder/cds/compatible_licenses.json)
   while [[ "$root_license" != "$root_name" && $i -lt $compatible_licenses ]]; do
     i=$((i+1))
-    root_name=$(jq -r ".compatibleLicenses[$i].name" /tmp/compatible_licenses.json)
+    root_name=$(jq -r ".[$i].name" $folder/cds/compatible_licenses.json)
   done
   if [[ $i -le $compatible_licenses ]]; then
-    compatibles=$(jq ".compatibleLicenses[$i].compatible | length" /tmp/compatible_licenses.json)
+    compatibles=$(jq ".[$i].compatible | length" $folder/cds/compatible_licenses.json)
     local license
     files=$(jq '.files | length' $OUT/scanresult.json)
     local j=0
@@ -188,7 +158,7 @@ function verify_compatibility() {
       while [[ $k -lt $licenses ]]; do
         name=$(jq -r ".files[$j].licenses[$k].name" $OUT/scanresult.json)
         local l=0
-        while [[ "$name" != "$(jq -r ".compatibleLicenses[$i].compatible[$l].name" /tmp/compatible_licenses.json)" && $l -lt $compatibles ]]; do
+        while [[ "$name" != "$(jq -r ".[$i].compatible[$l].name" $folder/cds/compatible_licenses.json)" && $l -lt $compatibles ]]; do
           ((l++))
         done
         if [[ $l -eq $compatibles ]]; then
@@ -212,9 +182,9 @@ function verify_allowed() {
   if [[ "$file" != *license.json* ]]; then
     local name=$2
     log "verify_allowed($file, $name)"
-    local allowed_licenses=$(jq '.allowedLicense | length' /tmp/allowed_licenses.json)
+    local allowed_licenses=$(jq '. | length' $folder/cds/allowed_licenses.json)
     local i=0
-    while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".allowedLicense[$i].name" /tmp/allowed_licenses.json)" ]]; do
+    while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".[$i].name" $folder/cds/allowed_licenses.json)" ]]; do
       i=$((i+1))
     done
     if [[ $i -eq allowed_licenses ]]; then
@@ -265,6 +235,7 @@ function verify_license() {
   if [[ "$root_license_valid" == "yes" ]]; then
     verify_compatibility
   fi
+  echo '{"files":[]}' $OUT/scanresult.json
   sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $OUT/scanresult.json
   sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $OUT/scanresult.json
   sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $OUT/scanresult.json
@@ -273,6 +244,7 @@ function verify_license() {
   sed -i -- "s~^{~{\"schema\":\"1.0\",~" $OUT/scanresult.json
 }
 
+set -x
 WORK_DIR=$(pwd)
 cd /maven/scan
 
@@ -291,12 +263,23 @@ mkdir $OUT
 cd $folder
 log "scancode revisionId($revisionId)"
 ../scancode-toolkit-3.0.2/scancode --license --copyright \
-  --ignore "cds/*" --ignore "scancode.json" --ignore "scanresult.json" \
-  --ignore "metadata.json" --ignore "*.h5" \
+  --ignore "cds" --ignore "scancode.json" \
+  --ignore "scanresult.json" --ignore "metadata.json" --ignore "*.h5" \
   --json=$OUT/scancode.json .
 cd ..
-initialize
-verify_license
+if [[ ! -e $OUT/scancode.json ]]; then
+  log "scancode failure"
+  echo '{"files":[]}' >$OUT/scanresult.json
+  sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"reason\":\"ubnknown failure in scancode utility\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"verifiedLicense\":\"false\",~" $OUT/scanresult.json
+  sed -i -- "s~^{~{\"schema\":\"1.0\",~" $OUT/scanresult.json
+else
+  initialize
+  verify_license
+  log "result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"
+fi
 mv $OUT/* $folder/.
 rmdir $OUT
-log "result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"

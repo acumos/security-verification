@@ -24,6 +24,6 @@ package org.acumos.securityverification.transport;
 /**
  * Marker interface used by all transport (non-Domain) models.
  */
-public interface SVServiceResponse extends SVResonse {
+public interface SVServiceResponse extends SVResponse {
 
 }
