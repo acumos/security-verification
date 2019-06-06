@@ -82,7 +82,7 @@ public class LicenseCreator implements ILicenseCreator {
     // check if rtu reference already exists for solution id + userid
     RtuSearchRequest searchRequest = new RtuSearchRequest();
     searchRequest.setSolutionId(request.getSolutionId());
-    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUses(dataClient, searchRequest);
+    List<MLPRightToUse> rtus = LicenseDataUtils.getRightToUsesNoFilter(dataClient, searchRequest);
     // in Boreas only expect 1 rtu
     if (rtus != null && !rtus.isEmpty()) {
 

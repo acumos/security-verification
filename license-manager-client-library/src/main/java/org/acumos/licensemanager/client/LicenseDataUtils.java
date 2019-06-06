@@ -28,6 +28,7 @@ import java.util.Set;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRtuReference;
+import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.transport.RestPageResponse;
 import org.acumos.licensemanager.client.model.ICreateRtu;
 import org.acumos.licensemanager.client.model.RtuSearchRequest;
@@ -99,6 +100,36 @@ class LicenseDataUtils {
    * @return a {@link java.util.List} object.
    * @throws org.acumos.licensemanager.exceptions.RightToUseException if any.
    */
+  protected static List<MLPRightToUse> getRightToUsesNoFilter(
+      final ICommonDataServiceRestClient dataClient, final RtuSearchRequest searchRequest)
+      throws RightToUseException {
+    List<MLPRightToUse> rtus = new ArrayList<MLPRightToUse>(0);
+    try {
+      RestPageResponse<MLPRightToUse> searchRightToUses =
+          dataClient.searchRightToUses(
+              searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
+
+      if (searchRightToUses != null) {
+        rtus.addAll(searchRightToUses.getContent());
+      }
+
+    } catch (RestClientResponseException ex) {
+      LOGGER.error("getRightToUses failed, server reports: {}", ex.getResponseBodyAsString());
+      throw new RightToUseException("getRightToUses Failed", ex);
+    }
+    // return unmodifiable collection
+    return rtus;
+  }
+  /**
+   * Wrapper method for getting the right to use for an existing solution. Used primarily to log and
+   * capture any {@link org.springframework.web.client.RestClientResponseException} that is returned
+   * from the CDS client.
+   *
+   * @param dataClient a {@link org.acumos.cds.client.ICommonDataServiceRestClient} object.
+   * @param request a {@link org.acumos.licensemanager.client.model.ICommonLicenseRequest} object.
+   * @return a {@link java.util.List} object.
+   * @throws org.acumos.licensemanager.exceptions.RightToUseException if any.
+   */
   protected static List<MLPRightToUse> getRightToUses(
       final ICommonDataServiceRestClient dataClient, final RtuSearchRequest searchRequest)
       throws RightToUseException {
@@ -107,14 +138,23 @@ class LicenseDataUtils {
       RestPageResponse<MLPRightToUse> searchRightToUses =
           dataClient.searchRightToUses(
               searchRequest.paramsMap(), searchRequest.isOr(), searchRequest.getPageRequest());
-      if (searchRightToUses != null) {
-        rtus.addAll(searchRightToUses.getContent());
-      } else if (searchRequest.getUserIds() != null && !searchRequest.getUserIds().isEmpty()) {
-        // get user ids
-        for (String userId : searchRequest.getUserIds()) {
-          List<MLPRightToUse> userRights =
-              dataClient.getRightToUses(searchRequest.getSolutionId(), userId);
-          rtus.addAll(userRights);
+
+      if (searchRightToUses != null && !searchRightToUses.getContent().isEmpty()) {
+        // only one rtu
+        MLPRightToUse rtu = searchRightToUses.getContent().get(0);
+        // if site wide then return rtu
+        if (rtu.isSite()) {
+          rtus.add(rtu);
+        } else if (searchRequest.getUserIds() != null && !searchRequest.getUserIds().isEmpty()) {
+          // user specific only verifies one at a time
+          String userId = searchRequest.getUserIds().get(0);
+          List<MLPUser> rtuUsers = dataClient.getRtuUsers(rtu.getRtuId());
+          if (rtuUsers != null && !rtuUsers.isEmpty()) {
+            boolean foundIt = rtuUsers.stream().anyMatch(user -> user.getUserId().equals(userId));
+            if (foundIt) {
+              rtus.add(rtu);
+            }
+          }
         }
       }
 

@@ -24,11 +24,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 import org.acumos.cds.client.CommonDataServiceRestClientMockImpl;
 import org.acumos.cds.domain.MLPRightToUse;
 import org.acumos.cds.domain.MLPRtuReference;
@@ -36,6 +39,8 @@ import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPUser;
 import org.acumos.cds.transport.RestPageResponse;
+import org.acumos.licensemanager.client.model.CreateRtuRequest;
+import org.acumos.licensemanager.client.model.ICreatedRtuResponse;
 import org.acumos.licensemanager.client.model.ILicenseVerification;
 import org.acumos.licensemanager.client.model.ILicenseVerifier;
 import org.acumos.licensemanager.client.model.LicenseAction;
@@ -49,14 +54,74 @@ import org.junit.Test;
  */
 public class LicenseVerifierTest {
 
+  private class MockDatabaseClient extends CommonDataServiceRestClientMockImpl {
+
+    Long counter = new Long(0);
+    Map<Long, List<MLPUser>> userRtu = new HashMap<Long, List<MLPUser>>();
+    List<MLPRightToUse> nextRtuResponse = new ArrayList<MLPRightToUse>();
+
+    public MockDatabaseClient(String webapiString, String user, String pass) {
+      super(webapiString, user, pass);
+    }
+
+    @Override
+    public MLPRightToUse createRightToUse(MLPRightToUse rightToUse) {
+      // set as right to use response
+      rightToUse.setRtuId(counter++);
+      nextRtuResponse.add(rightToUse);
+      setRightToUseList(nextRtuResponse);
+      super.createRightToUse(rightToUse);
+
+      return rightToUse;
+    }
+
+    @Override
+    public void updateRightToUse(MLPRightToUse rightToUse) {
+      // rightToUse.setRtuId(counter++);
+      super.updateRightToUse(rightToUse);
+    }
+
+    @Override
+    public void addUserToRtu(String userId, Long rtuId) {
+      List<MLPUser> userIdsForRtu = userRtu.get(rtuId);
+      if (userIdsForRtu != null) {
+        userIdsForRtu.add(createUser(userId));
+      } else {
+        userIdsForRtu = new ArrayList<MLPUser>();
+        userIdsForRtu.add(createUser(userId));
+        userRtu.put(rtuId, userIdsForRtu);
+      }
+    }
+
+    private MLPUser createUser(String userId) {
+      MLPUser mlpUser = new MLPUser();
+      mlpUser.setUserId(userId);
+      return mlpUser;
+    }
+
+    @Override
+    public void dropUserFromRtu(String userId, Long rtuId) {
+      List<MLPUser> userIdsForRtu = userRtu.get(rtuId);
+      List<MLPUser> resultUserIdsForRtu =
+          userIdsForRtu.stream()
+              .filter(item -> !userId.equals(item.getUserId()))
+              .collect(Collectors.toList());
+      userRtu.put(rtuId, resultUserIdsForRtu);
+    }
+
+    @Override
+    public List<MLPUser> getRtuUsers(long rtuId) {
+      return userRtu.get(rtuId);
+    }
+  }
+
   // TODO add invalid test which checks for log message
 
   @Test
   public void licenseVerifierUserOnly()
       throws InterruptedException, ExecutionException, RightToUseException {
 
-    CommonDataServiceRestClientMockImpl client =
-        new CommonDataServiceRestClientMockImpl("url", "user", "pass");
+    CommonDataServiceRestClientMockImpl client = new MockDatabaseClient("url", "user", "pass");
 
     // mock user for rtu test
 
@@ -79,18 +144,10 @@ public class LicenseVerifierTest {
     client.setSolutionRevision(solRev);
 
     // generic right to use
-    MLPRightToUse rightToUse = new MLPRightToUse(solutionId, false);
-
-    Set<MLPRtuReference> rtuReferences = new HashSet<MLPRtuReference>();
-    String ref = UUID.randomUUID().toString();
-    rtuReferences.add(new MLPRtuReference(ref));
-    rightToUse.setRtuReferences(rtuReferences);
-    client.createRightToUse(rightToUse);
-
-    List<MLPRightToUse> rightToUseList = new ArrayList<MLPRightToUse>();
-    rightToUseList.add(rightToUse);
-    client.setRightToUseList(rightToUseList);
     // client.setRtusByReference(rightToUseList);
+    CreateRtuRequest createRtuRequest = new CreateRtuRequest(solutionId, allowedUser.getUserId());
+    LicenseCreator licenseCreator = new LicenseCreator(client);
+    ICreatedRtuResponse createdRtu = licenseCreator.createRtu(createRtuRequest);
 
     ILicenseVerifier licenseSrvc = new LicenseVerifier(client);
     VerifyLicenseRequest licenseDownloadRequest =
@@ -98,7 +155,7 @@ public class LicenseVerifierTest {
             LicenseAction.DEPLOY, solution.getSolutionId(), allowedUser.getUserId());
     licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
 
-    client.setRightToUses(new RestPageResponse<MLPRightToUse>(rightToUseList));
+    client.setRightToUses(new RestPageResponse<MLPRightToUse>(createdRtu.getRtus()));
 
     ILicenseVerification verifyUserRtu = licenseSrvc.verifyRtu(licenseDownloadRequest);
     // CompletableFuture.allOf(verifyUserRTU).join();
@@ -111,16 +168,15 @@ public class LicenseVerifierTest {
     client.setRightToUseList(new ArrayList<MLPRightToUse>());
     client.setRightToUses(new RestPageResponse<MLPRightToUse>(new ArrayList<MLPRightToUse>()));
 
-    MLPUser disAllowedUser = new MLPUser();
-    client.setLoginUser(disAllowedUser);
-    client.setUserById(disAllowedUser);
-    client.setUser(disAllowedUser);
-    disAllowedUser.setUserId("disAllowedUser");
+    CreateRtuRequest createRtuRequest2 = new CreateRtuRequest();
+    createRtuRequest2.setUserIds(new ArrayList<String>());
+    createRtuRequest2.setSolutionId(solutionId);
+    ICreatedRtuResponse createdRtu2CreatedRtuResponse = licenseCreator.createRtu(createRtuRequest2);
     licenseDownloadRequest =
         new VerifyLicenseRequest(
             new LicenseAction[] {LicenseAction.DEPLOY, LicenseAction.DOWNLOAD},
             solution.getSolutionId(),
-            disAllowedUser.getUserId());
+            allowedUser.getUserId());
     verifyUserRtu = licenseSrvc.verifyRtu(licenseDownloadRequest);
     assertEquals(true, verifyUserRtu != null);
     assertEquals(false, verifyUserRtu.getAllowedToUse().get(LicenseAction.DOWNLOAD));
@@ -131,8 +187,7 @@ public class LicenseVerifierTest {
   public void licenseVerifierSiteWide()
       throws InterruptedException, ExecutionException, RightToUseException {
 
-    CommonDataServiceRestClientMockImpl client =
-        new CommonDataServiceRestClientMockImpl("url", "user", "pass");
+    CommonDataServiceRestClientMockImpl client = new MockDatabaseClient("url", "user", "pass");
 
     // mock user for rtu test
 
@@ -193,8 +248,7 @@ public class LicenseVerifierTest {
   @Test
   public void licenseVerifierInvalidTests() throws RightToUseException {
 
-    CommonDataServiceRestClientMockImpl dataClient =
-        new CommonDataServiceRestClientMockImpl("url", "user", "pass");
+    CommonDataServiceRestClientMockImpl dataClient = new MockDatabaseClient("url", "user", "pass");
     LicenseVerifier licenseVerifier = new LicenseVerifier(dataClient);
     VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest();
     List<LicenseAction> actions = new ArrayList<LicenseAction>();
@@ -214,8 +268,7 @@ public class LicenseVerifierTest {
   @Test
   public void licenseVerifierNoRequest() throws RightToUseException {
 
-    CommonDataServiceRestClientMockImpl dataClient =
-        new CommonDataServiceRestClientMockImpl("url", "user", "pass");
+    CommonDataServiceRestClientMockImpl dataClient = new MockDatabaseClient("url", "user", "pass");
     LicenseVerifier licenseVerifier = new LicenseVerifier(dataClient);
 
     try {
@@ -229,8 +282,7 @@ public class LicenseVerifierTest {
   @Test
   public void licenseVerifierNoSolution() throws RightToUseException {
 
-    CommonDataServiceRestClientMockImpl dataClient =
-        new CommonDataServiceRestClientMockImpl("url", "user", "pass");
+    CommonDataServiceRestClientMockImpl dataClient = new MockDatabaseClient("url", "user", "pass");
     LicenseVerifier licenseVerifier = new LicenseVerifier(dataClient);
     VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest();
     licenseDownloadRequest.setSolutionId("dummysolution");
