@@ -507,20 +507,30 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		String siteConfigWorkFlowId = siteConfigMap.get(workFlowId);
 		logger.info("Inside isValidInvokeScan. workFlowId: {}  siteConfigWorkFlowId: {}", workFlowId,
 				siteConfigWorkFlowId);
-		if (siteConfigWorkFlowId.equals(SVConstants.TRUE)) {
-			return true;
-		}
+		if (siteConfigMap.containsKey(workFlowId)) {
+			if (siteConfigWorkFlowId.equals(SVConstants.TRUE)) {
+				return true;
+			} else {
+			return false;
+			}
+		} else {
 		return false;
+		}
 	}
 
 	private boolean isValidWorkFlow(Map<String, String> siteConfigMap, String workFlowId) {
 		String siteConfigWorkFlowId = siteConfigMap.get(workFlowId);
 		logger.info("Inside isValidWorkFlow. workFlowId: {}  siteConfigWorkFlowId: {}", workFlowId,
 				siteConfigWorkFlowId);
-		if (siteConfigWorkFlowId.equals(SVConstants.TRUE)) {
-			return true;
-		}
+		if (siteConfigMap.containsKey(workFlowId)) {
+			if (siteConfigWorkFlowId.equals(SVConstants.TRUE)) {
+				return true;
+			} else {
+			return false;
+			}
+		} else {
 		return false;
+		}
 	}
 
 	private ICommonDataServiceRestClient getCcdsClient(final String cdmsClientUrl, final String cdmsClientUsername,
