@@ -49,20 +49,26 @@ function fail() {
 function log() {
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
+    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  else
+    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1"
+  fi
 }
 
 function get_solution() {
+  log "Getting solution data from $cdsUri/ccds/solution/$solutionId"
   curl -s -o cds/solution.json -u $cdsCreds $cdsUri/ccds/solution/$solutionId
 }
 
 function get_revision() {
+  log "Getting revision data from $cdsUri/ccds/solution/$solutionId/revision/$revisionId"
   curl -s -o cds/revision.json -u $cdsCreds \
     $cdsUri/ccds/solution/$solutionId/revision/$revisionId
 }
 
 function get_artifacts() {
-  log "Getting artifacts"
+  log "Getting artifacts from $cdsUri/ccds/revision/$revisionId/artifact"
   curl -s -o cds/artifacts.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/artifact
   arts=$(jq -r '. | length' cds/artifacts.json)
   i=0
@@ -103,7 +109,7 @@ function get_artifacts() {
 }
 
 function get_metadata() {
-  log "Getting documents"
+  log "Getting catalogs from $cdsUri/ccds/catalog"
   curl -s -o cds/catalog.json -u $cdsCreds $cdsUri/ccds/catalog
   cats=$(jq -r '.content | length' cds/catalog.json)
   log "$cats catalogs found: "
@@ -112,16 +118,16 @@ function get_metadata() {
   while [[ $j -lt $cats ]] ; do
     cid=$(jq -r ".content[$j].catalogId" cds/catalog.json)
     cname=$(jq -r ".content[$j].name" cds/catalog.json | sed 's/ /-/g')
-    log "Getting any revision description in catalog=$cname"
     curl -s -o description-$cname.txt -u $cdsCreds $cdsUri/ccds/revision/$revisionId/catalog/$cid/descr
     if [[ "$(cat description-$cname.txt)" == "" ]];
       then rm description-$cname.txt;
+    else
+      log "Saved revision description for catalog=$cname"
     fi
     curl -s -o cds/document-$cname.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/catalog/$cid/document
-    log "Documents in catalog $cname:"
-    cat cds/document-$cname.json
     docs=$(jq -r '. | length' cds/document-$cname.json)
     if [[ $docs -gt 0 ]]; then
+      log "Getting documents in catalog=$cname from $cdsUri/ccds/revision/$revisionId/catalog/$cid/document"
       mkdir $cname
       i=0
       while [[ $i -lt $docs ]] ; do
@@ -146,16 +152,19 @@ trap 'fail' ERR
 WORK_DIR=$(pwd)
 solutionId=$1
 revisionId=$2
-requestId=$(date +%H%M%S%N)
-# scan/<guid>
 folder=$3
+requestId=$(date +%H%M%S%N)
+log "Starting model download for scanning solutionId=$solutionId revisionId=$revisionId folder=$folder"
 cdsCreds="$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
 cdsUri="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT"
 nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT"
 nexusRepo=$ACUMOS_NEXUS_MAVEN_REPO
 
+if [[ ! -d $folder ]]; then mkdir $folder; fi
 cd $folder
 if [[ ! -d cds ]]; then mkdir cds; fi
+log "Getting siteConfig.verification from $cdsUri/ccds/site/config/verification"
+curl -u $cdsCreds $cdsUri/ccds/site/config/verification | jq -r ".configValue" >cds/siteconfig.json
 get_solution
 get_revision
 get_artifacts

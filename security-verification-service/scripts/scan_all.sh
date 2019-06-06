@@ -19,7 +19,7 @@
 #
 
 creds="-u $ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
-cds_base="http://cds-service:8000/ccds"
+cds_base="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT/ccds"
 curl -s -o sols.json $creds $cds_base/solution
 sols=$(jq '.content | length' sols.json)
 i=0
@@ -30,7 +30,6 @@ while [[ $i -lt $sols ]] ; do
   j=0
   while [[ $j -lt $revs ]] ; do
     rid=$(jq -r ".[$j].revisionId" revs.json)
-    echo $sid $rid
     bash dump_model.sh $sid $rid $rid
     bash license_scan.sh $sid $rid $rid
     j=$((j+1))

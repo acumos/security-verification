@@ -19,17 +19,17 @@
  */
 package org.acumos.securityverification.transport;
 
-public class SVResonse {
+import static org.junit.Assert.assertNotNull;
 
-	private String scanSucess;
+import org.junit.Test;
 
-	public String getScanSucess() {
-		return scanSucess;
+public class SVResponseTest {
+
+	@Test
+	public void testGetScanSucess() {
+		SVResponse svResponse = new SVResponse();
+		svResponse.setScanSucess("scanSucess");
+		assertNotNull(svResponse);
+		assertNotNull(svResponse.getScanSucess());
 	}
-
-	public void setScanSucess(String scanSucess) {
-		this.scanSucess = scanSucess;
-	}
-
-	
 }
