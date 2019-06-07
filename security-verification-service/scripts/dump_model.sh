@@ -42,33 +42,46 @@
 #
 
 function fail() {
-  log "$1"
+  fname=$(caller 0 | awk '{print $2}')
+  fline=$(caller 0 | awk '{print $1}')
+  if [[ "$1" == "" ]]; then
+    logit $fname $fline ERROR "Unknown failure"
+  else
+    logit $fname $fline ERROR "$1"
+  fi
   exit 1
+}
+
+function logit() {
+  if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
+    echo "$(date +%Y-%m-%d:%H:%M:%SZ), $3, dump_model.sh($1:$2), requestId($requestId), $4" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  else
+    echo "$(date +%Y-%m-%d:%H:%M:%SZ), $3, dump_model.sh($1:$2), requestId($requestId), $4"
+  fi
 }
 
 function log() {
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
-    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
-  else
-    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), dump_model.sh($fname:$fline), requestId($requestId), $1"
+  if [[ "$1" == "ERROR" ]]; then logit $fname $fline $1 "$2"
+  elif [[ "$1" == "INFO" ]]; then logit $fname $fline $1 "$2"
+  elif [[ "$1" == "DEBUG" && "$LOG_LEVEL" == "DEBUG" ]]; then logit $fname $fline $1 "$2"
   fi
 }
 
 function get_solution() {
-  log "Getting solution data from $cdsUri/ccds/solution/$solutionId"
+  log DEBUG "Getting solution data from $cdsUri/ccds/solution/$solutionId"
   curl -s -o cds/solution.json -u $cdsCreds $cdsUri/ccds/solution/$solutionId
 }
 
 function get_revision() {
-  log "Getting revision data from $cdsUri/ccds/solution/$solutionId/revision/$revisionId"
+  log DEBUG "Getting revision data from $cdsUri/ccds/solution/$solutionId/revision/$revisionId"
   curl -s -o cds/revision.json -u $cdsCreds \
     $cdsUri/ccds/solution/$solutionId/revision/$revisionId
 }
 
 function get_artifacts() {
-  log "Getting artifacts from $cdsUri/ccds/revision/$revisionId/artifact"
+  log DEBUG "Getting artifacts from $cdsUri/ccds/revision/$revisionId/artifact"
   curl -s -o cds/artifacts.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/artifact
   arts=$(jq -r '. | length' cds/artifacts.json)
   i=0
@@ -77,31 +90,31 @@ function get_artifacts() {
     uri=$(jq -r ".[$i].uri" cds/artifacts.json)
     type=$(jq -r ".[$i].artifactTypeCode" cds/artifacts.json)
     if [[ "$name" == "license.json" ]]; then
-      log "Downloading license.json ($uri)"
+      log DEBUG "Downloading license.json ($uri)"
       curl -o license.json $nexusUri/repository/$nexusRepo/$uri
     elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
-      log "Downloading model.zip ($uri)"
+      log DEBUG "Downloading model.zip ($uri)"
       curl -o model.zip $nexusUri/repository/$nexusRepo/$uri
       # Errors in zip files will cause the script to exit prematurely
       if [[ $(unzip -d model-zip model.zip) ]]; then
-        log "potential issues with model.zip being unpacked"
+        log DEBUG "potential issues with model.zip being unpacked"
       fi
       if [[ ! -d model-zip ]]; then
-        log "model.zip was not able to be unpacked"
+        log DEBUG "model.zip was not able to be unpacked"
       else
         rm model.zip
         if [[ -e model-zip/model.zip ]]; then
           if [[ $(unzip  -d model-zip/model-zip model-zip/model.zip) ]]; then
-            log "potential issues with model-zip/model.zip being unpacked"
+            log DEBUG "potential issues with model-zip/model.zip being unpacked"
           fi
           rm model-zip/model.zip
         fi
       fi
     elif [[ "$type" == "MI"  && "$name" == "model.proto" ]]; then
-      log "Downloading model.proto ($uri)"
+      log DEBUG "Downloading model.proto ($uri)"
       curl -o model.proto $nexusUri/repository/$nexusRepo/$uri
     elif [[ "$type" == "MD" ]]; then
-      log "Downloading metadata.json ($uri)"
+      log DEBUG "Downloading metadata.json ($uri)"
       curl -o metadata.json $nexusUri/repository/$nexusRepo/$uri
     fi
     i=$((i+1))
@@ -109,10 +122,10 @@ function get_artifacts() {
 }
 
 function get_metadata() {
-  log "Getting catalogs from $cdsUri/ccds/catalog"
+  log DEBUG "Getting catalogs from $cdsUri/ccds/catalog"
   curl -s -o cds/catalog.json -u $cdsCreds $cdsUri/ccds/catalog
   cats=$(jq -r '.content | length' cds/catalog.json)
-  log "$cats catalogs found: "
+  log DEBUG "$cats catalogs found: "
   cat cds/catalog.json
   j=0
   while [[ $j -lt $cats ]] ; do
@@ -122,18 +135,18 @@ function get_metadata() {
     if [[ "$(cat description-$cname.txt)" == "" ]];
       then rm description-$cname.txt;
     else
-      log "Saved revision description for catalog=$cname"
+      log DEBUG "Saved revision description for catalog=$cname"
     fi
     curl -s -o cds/document-$cname.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/catalog/$cid/document
     docs=$(jq -r '. | length' cds/document-$cname.json)
     if [[ $docs -gt 0 ]]; then
-      log "Getting documents in catalog=$cname from $cdsUri/ccds/revision/$revisionId/catalog/$cid/document"
+      log DEBUG "Getting documents in catalog=$cname from $cdsUri/ccds/revision/$revisionId/catalog/$cid/document"
       mkdir $cname
       i=0
       while [[ $i -lt $docs ]] ; do
         name=$(jq -r ".[$i].name" cds/document-$cname.json | sed 's/ /_/g')
         uri=$(jq -r ".[$i].uri" cds/document-$cname.json | sed 's/ /%20/g')
-        log "Getting document $name"
+        log DEBUG "Getting document $name"
         curl -o $cname/$name $nexusUri/repository/$nexusRepo/$uri
         extension="${name##*.}"
         if [[ "$extension" == "zip" ]]; then
@@ -154,7 +167,7 @@ solutionId=$1
 revisionId=$2
 folder=$3
 requestId=$(date +%H%M%S%N)
-log "Starting model download for scanning solutionId=$solutionId revisionId=$revisionId folder=$folder"
+log DEBUG "Starting model download for scanning solutionId=$solutionId revisionId=$revisionId folder=$folder"
 cdsCreds="$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
 cdsUri="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT"
 nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT"
@@ -163,11 +176,11 @@ nexusRepo=$ACUMOS_NEXUS_MAVEN_REPO
 if [[ ! -d $folder ]]; then mkdir $folder; fi
 cd $folder
 if [[ ! -d cds ]]; then mkdir cds; fi
-log "Getting siteConfig.verification from $cdsUri/ccds/site/config/verification"
+log DEBUG "Getting siteConfig.verification from $cdsUri/ccds/site/config/verification"
 curl -u $cdsCreds $cdsUri/ccds/site/config/verification | jq -r ".configValue" >cds/siteconfig.json
 get_solution
 get_revision
 get_artifacts
 get_metadata
-bash /maven/scan/license_scan.sh $folder
+bash /maven/scan/license_scan.sh $folder $requestId
 cd $WORK_DIR
