@@ -87,7 +87,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 	}
 
-	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId) {
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId, String userId) {
 
 		Workflow workflow = new Workflow();
 		try {
@@ -117,7 +117,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 					if (mlpSolutionRevision != null && mlpSolutionRevision.getRevisionId() != null && revisionId != null
 							&& mlpSolutionRevision.getRevisionId().equals(revisionId)) {
 						verificationSiteConfig();
-						String userId = mlpSolutionRevision.getUserId();
 						mlpRevisionId = mlpSolutionRevision.getRevisionId();
 						logger.info("mlpSolutionRevision.getVersion(): {}", mlpSolutionRevision.getVersion());
 						// modelTypeCode is PR (predictor) and toolkitTypeCode is CP
