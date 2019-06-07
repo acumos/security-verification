@@ -41,6 +41,6 @@ public interface ISecurityVerificationClientService {
 	 * @return workflow information
 	 * @throws Exception
 	 */
-	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId) throws Exception;
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId, String userId) throws Exception;
 
 }

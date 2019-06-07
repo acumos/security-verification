@@ -87,7 +87,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 	}
 
-	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId) {
+	public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId, String loggedInUserId) {
 
 		Workflow workflow = new Workflow();
 		try {
@@ -117,7 +117,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 					if (mlpSolutionRevision != null && mlpSolutionRevision.getRevisionId() != null && revisionId != null
 							&& mlpSolutionRevision.getRevisionId().equals(revisionId)) {
 						verificationSiteConfig();
-						String userId = mlpSolutionRevision.getUserId();
+						String ownerUserId = mlpSolutionRevision.getUserId();
 						mlpRevisionId = mlpSolutionRevision.getRevisionId();
 						logger.info("mlpSolutionRevision.getVersion(): {}", mlpSolutionRevision.getVersion());
 						// modelTypeCode is PR (predictor) and toolkitTypeCode is CP
@@ -129,8 +129,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 							logger.info("It is a Composite Solution and solutionId: {}  revisionId: {} ", solutionId,
 									revisionId);
 
-							workflowPermissionDeterminationSimpleSolution(workflowId, workflow, client, userId,
-									solutionId, revisionId);
+							workflowPermissionDeterminationSimpleSolution(workflowId, workflow, client, loggedInUserId,
+									ownerUserId, solutionId, revisionId);
 
 							if (workflow.isWorkflowAllowed()) {
 								List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null,
@@ -183,7 +183,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 														mlpCdumpSolutionRevision.getRevisionId(),
 														mlpCdumpSolutionRevision.getVersion());
 												workflowPermissionDeterminationCompositeSolution(workflowId, workflow,
-														client, userId, securityVerificationCdumpNode,
+														client, loggedInUserId, ownerUserId, securityVerificationCdumpNode,
 														mlpCdumpSolutionRevision, revisionId);
 											}
 										}
@@ -195,8 +195,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 									revisionId);
 							if (mlpSolutionRevision.getRevisionId() != null
 									&& mlpSolutionRevision.getRevisionId().equals(revisionId)) {
-								workflowPermissionDeterminationSimpleSolution(workflowId, workflow, client, userId,
-										solutionId, revisionId);
+								workflowPermissionDeterminationSimpleSolution(workflowId, workflow, client, loggedInUserId,
+										ownerUserId, solutionId, revisionId);
 							}
 						}
 					} else {
@@ -216,12 +216,12 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	}
 
 	private void workflowPermissionDeterminationCompositeSolution(String workflowId, Workflow workflow,
-			ICommonDataServiceRestClient client, String userId,
+			ICommonDataServiceRestClient client, String loggedInUserId, String ownerUserId,
 			SecurityVerificationCdumpNode securityVerificationCdumpNode, MLPSolutionRevision mlpCdumpSolutionRevision,
 			String revisionId) throws Exception {
 		logger.info(
 				"Inside workflowPermissionDeterminationCompositeSolution method call. workflowId: {} userId: {} revisionId: {}",
-				workflowId, userId, revisionId);
+				workflowId, loggedInUserId, revisionId);
 		ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
 		ResponseEntity<SVResponse> svResponse = null;
 		boolean rtuFlag = true;
@@ -258,15 +258,18 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						byteArrayOutputStream.size());
 				logger.info("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
 
-				SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-				String scanResultRootLicenseType = parseJSON
+				String scanResultRootLicenseType = SecurityVerificationJsonParser
 						.scanResultRootLicenseType(byteArrayOutputStream.toString());
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 				// Proprietary models have a recognized licenseType, not null, "", or SPDX
 				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
+					//  if owner skip 
+					if(ownerUserId == loggedInUserId){
+						return;
+					}
 					if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
-								securityVerificationCdumpNode.getNodeSolutionId(), userId);
+								securityVerificationCdumpNode.getNodeSolutionId(), loggedInUserId);
 						licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
 						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 						// returns true or false if rtu exists
@@ -275,7 +278,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 					}
 					if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
 						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
-								securityVerificationCdumpNode.getNodeSolutionId(), userId);
+								securityVerificationCdumpNode.getNodeSolutionId(), loggedInUserId);
 						licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
 						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 						// returns true or false if rtu exists
@@ -299,7 +302,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		}
 
 		logger.info("Before isValidWorkFlow:licenseVerify ");
-		if (isValidWorkFlow(licenseVerify, workflowId)) {
+		// if user != owner && isValid workflow
+		if (ownerUserId != loggedInUserId && isValidWorkFlow(licenseVerify, workflowId)) {
 			if (mlpCdumpSolutionRevision.getVerifiedLicense() == null) {
 				logger.info("license scan not yet started");
 				if (reason.length() > 1) {
@@ -347,10 +351,10 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	}
 
 	private void workflowPermissionDeterminationSimpleSolution(String workflowId, Workflow workflow,
-			ICommonDataServiceRestClient client, String userId, String solutionId, String revisionId) throws Exception {
+			ICommonDataServiceRestClient client, String loggedInUserId, String ownerUserId, String solutionId, String revisionId) throws Exception {
 		logger.info(
 				"Inside workflowPermissionDeterminationSimpleSolution method call. workflowId: {} userId: {} solutionId: {} revisionId: {}",
-				workflowId, userId, solutionId, revisionId);
+				workflowId, loggedInUserId, solutionId, revisionId);
 		ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
 		ResponseEntity<SVResponse> svResponse = null;
 		boolean rtuFlag = true;
@@ -393,24 +397,28 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 				// Proprietary models have a recognized licenseType, not null, "", or SPDX
+		
 				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
-					if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
-						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
-								solutionId, userId);
-						licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
-						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
-						// returns true or false if rtu exists
-						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
-						logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
-					}
-					if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
-						VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
-								solutionId, userId);
-						licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
-						ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
-						// returns true or false if rtu exists
-						rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
-						logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+					// if owner skip rtu check
+					if(ownerUserId != loggedInUserId){
+						if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
+							VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
+									solutionId, loggedInUserId);
+							licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
+							ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+							// returns true or false if rtu exists
+							rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
+							logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+						}
+						if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
+							VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
+									solutionId, loggedInUserId);
+							licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
+							ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+							// returns true or false if rtu exists
+							rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
+							logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+						}
 					}
 				}
 			}
@@ -429,7 +437,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 		MLPSolutionRevision mlpSolutionRevision = client.getSolutionRevision(solutionId, revisionId);
 		logger.info("Before isValidWorkFlow:licenseVerify ");
-		if (isValidWorkFlow(licenseVerify, workflowId)) {
+		// if owner of model skip workflow check
+		if (ownerUserId != loggedInUserId && isValidWorkFlow(licenseVerify, workflowId)) {
 			if (mlpSolutionRevision.getVerifiedLicense() == null) {
 				logger.info("license scan not yet started");
 				if (reason.length() > 1) {
@@ -454,8 +463,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						reason.append(",");
 					}
 
-					SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
-					String scanResultReason = parseJSON
+					String scanResultReason = SecurityVerificationJsonParser
 							.scanResultReason(byteArrayOutputStream.toString());
 					logger.info("scanResultReason: {} ", scanResultReason);
 					if (scanResultReason != null) {
