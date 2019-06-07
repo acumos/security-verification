@@ -21,14 +21,26 @@
 #
 # per https://github.com/nexB/scancode-toolkit
 
-
-function log() {
+function fail() {
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
-    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  if [[ "$1" == "" ]]; then
+    log "Unknown failure at $fname:$fline"
   else
-    echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1"
+    log "$1"
+  fi
+  exit 1
+}
+
+function log() {
+  if [[ "$LOG_LEVEL" == "DEBUG" ]]; then
+    fname=$(caller 0 | awk '{print $2}')
+    fline=$(caller 0 | awk '{print $1}')
+    if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
+      echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+    else
+      echo "$(date +%Y-%m-%d:%H:%M:%SZ), license_scan.sh($fname:$fline), requestId($requestId), $1"
+    fi
   fi
 }
 
@@ -41,7 +53,7 @@ function initialize() {
 function get_allowed_license_type() {
   log "get_allowed_license_type $1"
   local license_name=$1
-  local n=$(jq -r '. | length' $folder/cds/allowed_licenses.json)
+  local n=$(jq '. | length' $folder/cds/allowed_licenses.json)
   local i=0
   local allowed_name
   allowed_license_type=""
@@ -112,17 +124,6 @@ function extract_licenses() {
   else
     sed -i -- "s~^{~{\"root_license\":{\"type\":\"\",\"name\":\"\"},~" $OUT/scanresult.json
   fi
-  # Count number of references to each license
-  licenses=$(sort $folder/all_licenses | uniq)
-  local i=0
-  for license in $licenses; do
-    count=$(grep -c $license $folder/all_licenses)
-    log "$license: $count"
-    i=$((i+1))
-  done
-  local license_count=$i
-  log "license_count($license_count)"
-  log "root license($root_license)"
 }
 
 function update_reason() {
@@ -137,59 +138,58 @@ function update_reason() {
 }
 
 function verify_compatibility() {
-  log "verify_compatibility($root_name)"
+  license=$1
   root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
+  log "checking $root_license compatibility with $license"
   compatible_licenses=$(jq '. | length' $folder/cds/compatible_licenses.json)
   local i=0
-  local root_name=$(jq -r ".[$i].name" $folder/cds/compatible_licenses.json)
-  while [[ "$root_license" != "$root_name" && $i -lt $compatible_licenses ]]; do
+  local name=$(jq -r ".[$i].name" $folder/cds/compatible_licenses.json)
+  while [[ "$root_license" != "$name" && $i -lt $compatible_licenses ]]; do
     i=$((i+1))
-    root_name=$(jq -r ".[$i].name" $folder/cds/compatible_licenses.json)
+    name=$(jq -r ".[$i].name" $folder/cds/compatible_licenses.json)
   done
   if [[ $i -le $compatible_licenses ]]; then
     compatibles=$(jq ".[$i].compatible | length" $folder/cds/compatible_licenses.json)
-    local license
-    files=$(jq '.files | length' $OUT/scanresult.json)
-    local j=0
-    while [[ $j -lt $files ]]; do
-      path=$(jq -r ".files[$j].path" $OUT/scanresult.json)
-      licenses=$(jq ".files[$j].licenses | length" $OUT/scanresult.json)
-      local k=0
-      while [[ $k -lt $licenses ]]; do
-        name=$(jq -r ".files[$j].licenses[$k].name" $OUT/scanresult.json)
-        local l=0
-        while [[ "$name" != "$(jq -r ".[$i].compatible[$l].name" $folder/cds/compatible_licenses.json)" && $l -lt $compatibles ]]; do
-          ((l++))
-        done
-        if [[ $l -eq $compatibles ]]; then
-          verifiedLicense=false
-          update_reason "$path license($name) is incompatible with root license $root_license"
-        fi
-        ((k++))
-      done
-      j=$((j+1))
+    local c=0
+    compatible=""
+    while [[ $c -lt $compatibles ]]; do
+      next_compatible=$(jq -r ".[$i].compatible[$l].name" $folder/cds/compatible_licenses.json)
+      compatible="$compatible $next_compatible"
+      c=$((c+1))
     done
+    if [[ "$compatible" != *"$license"* ]]; then
+      log "$path license($license) is incompatible with root license $root_license"
+      verifiedLicense=false
+      update_reason "$path license($license) is incompatible with root license $root_license"
+    else
+      log "$license is compatible with $root_license"
+    fi
   else
     verifiedLicense=false
-    reason="Internal error: $root_name not found in compatible license list"
-    log "$reason"
+    reason="Internal error: $root_license not found in compatible license list"
+    fail "$reason"
   fi
 }
 
 function verify_allowed() {
   local file=$1
+  local root_license=$(jq -r '.root_license.name' $OUT/scanresult.json)
   # license.json is reported upon as the "root license"
   if [[ "$file" != *license.json* ]]; then
     local name=$2
     log "verify_allowed($file, $name)"
     local allowed_licenses=$(jq '. | length' $folder/cds/allowed_licenses.json)
     local i=0
-    while [[ $i -lt $allowed_licenses && "$name" != "$(jq ".[$i].name" $folder/cds/allowed_licenses.json)" ]]; do
+    while [[ $i -lt $allowed_licenses && "$name" != "$(jq -r ".[$i].name" $folder/cds/allowed_licenses.json)" ]]; do
       i=$((i+1))
     done
     if [[ $i -eq allowed_licenses ]]; then
       verifiedLicense=false
       update_reason "$file license($name) is not allowed"
+    else
+      if [[ "$root_license_valid" == "yes" && "$name" != "$root_license" ]]; then
+        verify_compatibility $name
+      fi
     fi
   fi
 }
@@ -223,18 +223,15 @@ function verify_license() {
   files=$(jq '.files | length' $OUT/scanresult.json)
   local i=0
   while [[ $i -lt $files ]]; do
-    local file=$(jq ".files[$i].path" $OUT/scanresult.json)
-    licenses=$(jq ".files[$i].licenses | length" $OUT/scanresult.json)
+    local file=$(jq -r ".files[$i].path" $OUT/scanresult.json)
+    licenses=$(jq -r ".files[$i].licenses | length" $OUT/scanresult.json)
     local j=0
     while [[ $j -lt $licenses ]]; do
-      verify_allowed $file $(jq ".files[$i].licenses[$j].name" $OUT/scanresult.json)
+      verify_allowed $file $(jq -r ".files[$i].licenses[$j].name" $OUT/scanresult.json)
       j=$((j+1))
     done
     i=$((i+1))
   done
-  if [[ "$root_license_valid" == "yes" ]]; then
-    verify_compatibility
-  fi
   echo '{"files":[]}' $OUT/scanresult.json
   sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $OUT/scanresult.json
   sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $OUT/scanresult.json
@@ -245,6 +242,7 @@ function verify_license() {
 }
 
 set -x
+trap 'fail' ERR
 WORK_DIR=$(pwd)
 cd /maven/scan
 
@@ -261,7 +259,7 @@ log "license_scan.sh solutionId($solutionId) revisionId($revisionId) folder($fol
 OUT=$(pwd)/$requestId
 mkdir $OUT
 cd $folder
-log "scancode revisionId($revisionId)"
+log "invoking scancode"
 ../scancode-toolkit-3.0.2/scancode --license --copyright \
   --ignore "cds" --ignore "scancode.json" \
   --ignore "scanresult.json" --ignore "metadata.json" --ignore "*.h5" \
