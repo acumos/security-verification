@@ -1,0 +1,82 @@
+{
+  "modelLicenses": [
+    {
+      "keyword": "CompanyB-Commercial",
+      "intro": "This Acumos software file is distributed by Nordix Foundation under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at",
+      "URL": "http://www.apache.org/licenses/LICENSE-2.0",
+      "warranty": "This file is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.",
+      "copyright": {
+        "year": 2019,
+        "company": "Company B",
+        "suffix": "A Intellectual Property. All rights reserved."
+      },
+      "swidTag": "Acumos Ai/ML Model",
+      "modelId": "AB123456",
+      "rights": [
+        {
+          "id": "download",
+          "name": "Download",
+          "desc": "The user has the right to download the model from the Acumos platform (https://marketplace.acumos.org)",
+          "limit": {
+            "type": "url",
+            "value": "https://marketplace.acumos.org"
+          }
+        },
+        {
+          "id": "deploy",
+          "name": "Deploy",
+          "desc": "The user has the right to deploy the model from the Acumos platform (url)",
+          "limit": {
+            "type": "url",
+            "value": "https://marketplace.acumos.org"
+          }
+        },
+        {
+          "id": "location",
+          "name": "Locations Allowed",
+          "desc": "The right to use this software is granted for the specified allowed locations",
+          "limit": {
+            "type": "location",
+            "value": [
+              "Luxembourg, Belgium"
+            ]
+          }
+        },
+        {
+          "id": "duration",
+          "name": "Time allowed to use",
+          "desc": "The model can be used until the following date",
+          "limit": {
+            "type": "date",
+            "value": "2020-01-01"
+          }
+        },
+        {
+          "id": "apiusage",
+          "name": "Number of times api is called",
+          "desc": "Limits the number of times the api is called",
+          "limit": {
+            "type": "number",
+            "value": 500
+          }
+        },
+        {
+          "id": "deployments",
+          "name": "Number of deployments",
+          "desc": "Limits the number of deployments allowed",
+          "limit": {
+            "type": "number",
+            "value": 1
+          }
+        }
+      ]
+    }
+  ],
+  "contentLicenses": [
+    {
+      "keyword": "CC0 license",
+      "path": "image-classification/data/cropped_panda.jpg",
+      "source": "https://pixabay.com/en/animal-branch-cute-leaves-outdoors-1852789/"
+    }
+  ]
+}
