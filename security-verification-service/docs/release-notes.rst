@@ -21,8 +21,16 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
-Version 0.0.21, 04 Jun 2019
+Version 0.0.21, 07 Jun 2019
 ---------------------------
+
+* `4632: Changing API - SV needs to accept logged in userId <https://gerrit.acumos.org/r/#/c/security-verification/+/4632/>`_
+* `4616: Rtu Verifier fixes <https://gerrit.acumos.org/r/#/c/security-verification/+/4616/>`_
+* `ACUMOS-1373: S-V Scanning Service component with spring-based API <https://jira.acumos.org/browse/ACUMOS-1373>`_
+
+  * `4634: Update release notes, scan scripts <https://gerrit.acumos.org/r/#/c/security-verification/+/4634/>`_
+  * `4621: Fix workflow check <https://gerrit.acumos.org/r/#/c/security-verification/+/4621/>`_
+  * `4603: Support proprietary licences <https://gerrit.acumos.org/r/#/c/security-verification/+/4603/>`_
 
 * Uprev to allow release of License Manager client library
 
@@ -32,7 +40,7 @@ Version 0.0.20, 30 May 2019
 
 * `ACUMOS-2559: S-V Library workflow permission determination <https://jira.acumos.org/browse/ACUMOS-2559>`_
 
-  * '4555: Update versions for release <https://gerrit.acumos.org/r/#/c/security-verification/+/4555/>'_
+  * `4555: Update versions for release <https://gerrit.acumos.org/r/#/c/security-verification/+/4555/>`_
   * `4554: Upload single copy of scancode.json etc <https://gerrit.acumos.org/r/#/c/security-verification/+/4554/>`_
   * `4545: Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4545/>`_
   * `4534: Update artifact creation logic <https://gerrit.acumos.org/r/#/c/security-verification/+/4534/>`_
@@ -162,6 +170,14 @@ Version 0.0.1, 04 April 2019
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
+
+----------------------------
+Version 0.0.21, 07 June 2019
+----------------------------
+
+* `ACUMOS-1373: S-V Scanning Service component with spring-based API <https://jira.acumos.org/browse/ACUMOS-1373>`_
+
+  * `4603: Support proprietary licences <https://gerrit.acumos.org/r/#/c/security-verification/+/4603/>`_
 
 ---------------------------
 Version 0.0.20, 30 May 2019
