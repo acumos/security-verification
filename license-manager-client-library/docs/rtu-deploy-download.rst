@@ -16,9 +16,7 @@
 .. See the License for the specific language governing permissions and
 .. limitations under the License.
 .. ===============LICENSE_END==================================================
-..
 
-===================================
 RTU Download/Deploy Model Artifacts
 ===================================
 
@@ -35,3 +33,5 @@ You must reach out to the admin of Acumos portal to be assigned a right to use.
 
 If you are the admin or need to provide documentation to your admin
 please see `Rtu Creation <rtu-creation.html>`_.
+=======
+..
