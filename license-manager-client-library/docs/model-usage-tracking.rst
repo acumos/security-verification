@@ -16,10 +16,7 @@
 .. See the License for the specific language governing permissions and
 .. limitations under the License.
 .. ===============LICENSE_END==================================================
-..
 
-
-====================
 Model Usage Tracking
 ====================
 
@@ -58,3 +55,4 @@ usage count.
     model-usage-tracking-simple.rst
     model-usage-tracking-comp.rst
 
+..
