@@ -16,29 +16,30 @@
 .. See the License for the specific language governing permissions and
 .. limitations under the License.
 .. ===============LICENSE_END==================================================
-..
 
-================================
 Right-To-Use (RTU) Configuration
 ================================
 
-As an admin role in the platform you will have access to the RTU configuration view.
-This feature applies to models with commercial / not open source SPDX licenses.
-To enable this feature you must be using portal with Security verification enabled:
+Note - This feature applies to models with commercial / not open source SPDX licenses.
+
+As an admin role in the platform you will have access to the RTU 
+configuration view.To enable this feature you must be using portal
+back end (portal-be) with Security verification enabled below
+is an example of the configuration you must have to use to enable this feature:
 
 .. code-block:: json
 
   SPRING_APPLICATION_JSON: '{
           "portal": {
             "feature": {
-...
+            ...
               "sv": {
                 "enabled": "true",
                 "api": "http://sv-scanning-service:9082/scan"
               },
-....
+              ...
             },
-...
+            ...
   }'
 
 In this view you can add a new Rtu Id for a solution. You cannot have more than one 
@@ -78,7 +79,7 @@ Please make sure you inform the user outside of Acumos platform.
 Site-wide RTU
 -------------
 
-For a site wide RTU you will give access to any user. Just selec the site wide checkbox.
+For a site wide RTU you will give access to any user. Just select the site wide checkbox.
 
 .. image:: images/rtu_configuration_5.png
 
