@@ -71,7 +71,19 @@ function find_admin() {
 function setup_verification_site_config() {
   local jsonout="/tmp/$(date +%H%M%S%N)"
   local jsoninp="/tmp/$(date +%H%M%S%N)"
-  if [[ $(curl -I -u $cds_creds $cds_base/site/config/verification | grep -ci 'content-length: 0') -eq 1 ]]; then
+  tries=10
+  try=1
+  while ! curl -k -u $cds_creds $cds_base/site/config/verification ; do
+    if [[ $try -le $tries ]]; then
+      try=$((try+1))
+      log "CDS is not yet ready. Waiting 1 minute."
+      sleep 60
+    else
+      fail "CDS is not ready after 10 minutes"
+    fi
+  done
+
+  if [[ $(curl -k -u $cds_creds $cds_base/site/config/verification | jq -r '.created') == "" ]]; then
     cds_api="-X POST $cds_base/site/config"
   else
     cds_api="-X PUT $cds_base/site/config/verification"
@@ -86,13 +98,17 @@ EOF
 
   log "Sending request to CDS API $cds_api"
   cat $jsoninp
-
   curl -s -o $jsonout -u $cds_creds \
     -H 'Accept: application/json' \
     -H "Content-Type: application/json" \
     $cds_api -d @$jsoninp
-
   cat $jsonout
+  if [[ "$(jq '.created' $jsonout)" != "" ]]; then
+    log "SV site-config key verification was successfully created"
+    sleep 60
+  else
+    fail "SV site-config key verification creation failed"
+  fi
   rm $jsonout
   rm $jsoninp
 }
