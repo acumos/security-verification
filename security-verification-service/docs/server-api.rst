@@ -1,7 +1,7 @@
 .. ===============LICENSE_START=======================================================
 .. Acumos CC-BY-4.0
 .. ===================================================================================
-.. Copyright (C) 2017-2018 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+.. Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
 .. ===================================================================================
 .. This Acumos documentation file is distributed by AT&T and Tech Mahindra
 .. under the Creative Commons Attribution 4.0 International License (the "License");
@@ -16,21 +16,21 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-.. Acumos Security Verification documentation master
+=================================
+Security Verification Service API
+=================================
 
-=====================
-Security Verification
-=====================
+This page provides a static view of the methods in the CDS server.  Please note that a
+running CDS server provides a more useful version of this information.  View the details
+at a URL like the following, but check the server configuration for the exact port number
+(e.g., "9183") and context root (e.g., "scan") to use::
 
+    http://localhost:9183/scan/swagger-ui.html
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+SV APIs in Boreas Release
+--------------------------
 
-   design.rst
-   client.rst
-   server.rst
-   server-api.rst
-   release-notes.rst
+This section lists the methods in version 0.0.21, which is the third and last version in the Boreas release.
 
-* :ref:`search`
+.. swaggerv2doc:: api/SVService-api-docs-0.0.21.json
+

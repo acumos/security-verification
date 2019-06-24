@@ -43,8 +43,10 @@ log "Copying from /maven/conf/scripts to /maven/scan/: $files"
 cp /maven/conf/scripts/* .
 log "Setting up SV siteConfig verification key"
 bash setup_verification_site_config.sh http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT $ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD $ACUMOS_ADMIN_USER
+if [[ $? -ne 0 ]]; then exit 1; fi
+log "Initializing scancode toolkit"
+scancode-toolkit-3.0.2/scancode --license start.sh --json=/tmp/scancode.json
 log "Starting the SV Scanning service"
 cd /maven
 java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /maven/security-verification-service-*.jar
 log "SV Scanning service has exited"
-sleep 3600
