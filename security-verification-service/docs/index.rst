@@ -27,6 +27,7 @@ Security Verification
    :maxdepth: 2
    :caption: Contents:
 
+   user-guide.rst
    design.rst
    client.rst
    server.rst
