@@ -105,7 +105,6 @@ EOF
   cat $jsonout
   if [[ "$(jq '.created' $jsonout)" != "" ]]; then
     log "SV site-config key verification was successfully created"
-    sleep 60
   else
     fail "SV site-config key verification creation failed"
   fi
