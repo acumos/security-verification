@@ -21,13 +21,19 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
+Version 0.0.23, 29 Jun 2019
+---------------------------
+
+Version update only; changes were to the SV Scanning Service
+
+---------------------------
 Version 0.0.22, 25 Jun 2019
 ---------------------------
 
 * `ACUMOS-1373: S-V Scanning Service component with spring-based API <https://jira.acumos.org/browse/ACUMOS-1373>`_
 
-  * `4603: Wait for CDS, init scancode on startup<https://gerrit.acumos.org/r/#/c/security-verification/+/4754/>`_
-  
+  * `4603: Wait for CDS, init scancode on startup <https://gerrit.acumos.org/r/#/c/security-verification/+/4754/>`_
+
 ---------------------------
 Version 0.0.21, 07 Jun 2019
 ---------------------------
@@ -178,6 +184,23 @@ Version 0.0.1, 04 April 2019
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
+
+---------------------------
+Version 0.0.23, 29 Jun 2019
+---------------------------
+
+This release restores the ability to deploy the SV Scanning Service with
+full functionality embedded in the docker container image. Updates with external
+configuration files (e.g. to update licenses/rules, or the scanning tool/scripts)
+is optional, as described by the updated user-guide.
+
+* `ACUMOS-1373: S-V Scanning Service component with spring-based API <https://jira.acumos.org/browse/ACUMOS-1373>`_
+
+  * `4795: Deployment with config updates optional <https://gerrit.acumos.org/r/#/c/security-verification/+/4795/>`_
+
+* `ACUMOS-2358: S-V design documentation <https://jira.acumos.org/browse/ACUMOS-2358>`_
+
+  * `4789: Update design, add user guide <https://gerrit.acumos.org/r/#/c/security-verification/+/4789/>`_
 
 ---------------------------
 Version 0.0.22, 25 Jun 2019
