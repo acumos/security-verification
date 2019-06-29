@@ -21,31 +21,21 @@
 #
 
 function log() {
+  set +x
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
   if [[ ! -d /maven/logs/security-verification/security-verification-server ]]; then
     mkdir -p /maven/logs/security-verification/security-verification-server
   fi
   echo; echo "$(date +%Y-%m-%d:%H:%M:%SZ), start.sh($fname:$fline), $1" >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
+  set -x
 }
-
 
 set -x
 cd /maven/scan
-files=$(ls /maven/conf/licenses/*)
-log "Copying from /maven/conf/licenses to scancode license folder: $files"
-cp /maven/conf/licenses/* scancode-toolkit-3.0.2/src/licensedcode/data/licenses/.
-files=$(ls /maven/conf/rules/*)
-log "Copying from /maven/conf/rules to scancode rules folder: $files"
-cp /maven/conf/rules/* scancode-toolkit-3.0.2/src/licensedcode/data/rules/.
-files=$(ls /maven/conf/scripts/*)
-log "Copying from /maven/conf/scripts to /maven/scan/: $files"
-cp /maven/conf/scripts/* .
 log "Setting up SV siteConfig verification key"
 bash setup_verification_site_config.sh http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT $ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD $ACUMOS_ADMIN_USER
 if [[ $? -ne 0 ]]; then exit 1; fi
-log "Initializing scancode toolkit"
-scancode-toolkit-3.0.2/scancode --license start.sh --json=/tmp/scancode.json
 log "Starting the SV Scanning service"
 cd /maven
 java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /maven/security-verification-service-*.jar

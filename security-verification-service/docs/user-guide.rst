@@ -34,21 +34,23 @@ Verification (SV) feature of the Acumos platform. It is intended for use by:
 * Acumos platform users in other supervisory roles, e.g. as a marketplace catalog
   admin ("publishers")
 
-The `Security Verification Design Specification <https://docs.acumos.org/en/boreas/submodules/security-verification/security-verification-service/docs/index.html>`_
-outlines the principle rationales for and features provided by the SV feature.
-In summary, these include:
+The `Security Verification Design Specification <./design.rst>`_ outlines the
+principle rationales for and features provided by the SV feature. In summary,
+these include:
 
-* for modelers and end-users: ensuring that solutions they contribute to or
-  obtain from an Acumos platform are covered by clear and compatible licenses
+* for modelers and end-users:
 
-  * "clear" means that the license is a clearly recognized license, either a
-    well-known open source license or a proprietary license
-  * "compatible" means both that:
+  * ensuring that solutions they contribute to or obtain from an Acumos platform
+    are covered by clear and compatible licenses
 
-    * the licenses are in compliance with the policies established by the
-      Acumos platform operator
-    * all files associated with the solution are compatible with the license
-      under which the solution is published (the "root license")
+    * "clear" means that the license is a clearly recognized license, either a
+      well-known open source license or a proprietary license
+    * "compatible" means both that:
+
+      * the licenses are in compliance with the policies established by the
+        Acumos platform operator
+      * all files associated with the solution are compatible with the license
+        under which the solution is published (the "root license")
 
   * ensuring that details of license scans are included with solutions, so that
     any potential issues can be easily identified
@@ -259,11 +261,11 @@ why the workflow cannot be completed at the current time, including:
     * "no license artifact found, or license is unrecognized": a license.json file
       has not been uploaded, or no recognized license was found in license.json
     * "root license($root_license) is not allowed": license.json does not have an
-      approved license
+       approved license
     * "$file license($name) is not allowed": a license from any other scanned file
       is not allowed
     * "$path license($name) is incompatible with root license $root_name": a
-      license from any scanned file is incompatible with the root license
+       license from any scanned file is incompatible with the root license
 
 ............
 For Modelers
@@ -297,12 +299,11 @@ If you are a model user, any workflow you attempt may be gated per the site
 policy established by an admin; see `Workflows, Gates, and Scan Triggering`_
 for examples of messages you may receive when attempting a gated workflow
 
-It is expected to be typical that platform admins will require successful scans
-prior to publication to a public catalog, so you should not expect workflows you
-request to be blocked due to license scan status, since in most cases a
-successful scan will have been completed, before the solution was made
-available to you. However, note that workflows may be blocked for a brief period
-(typically less than 30 seconds), when a new scan has been invoked in these cases:
+It is expected that platform admins will require successful scans prior to
+publication to a public catalog, so you should not expect workflows to be blocked
+due to license scan status. However, note that workflows may be blocked for
+a brief period (typically less than 30 seconds), when a new scan has been
+invoked in these cases:
 
 * the solution owner has just updated the solution
 * the platform admin has configured "download" or "deploy" as scan triggers,
@@ -343,9 +344,8 @@ The main controls that platform admins have over the SV feature are:
   ..
 
 * which scan triggers to activate (if any): although there is little cost
-  in system resource terms to scanning, you might want to focus the triggers
-  for scan invocation based upon the typical solution use patterns for your
-  modeler/user base
+  in system resource terms to scanning, your might want to limit the triggers
+  for scan invocation
 
   * update (addition/update of artifacts or documents)
 
@@ -414,7 +414,7 @@ Configuring the Site Config Verification Key
 
 "Verification" is the name of the key (configured parameter) of the site config
 table in the Acumos Common Data Service ("CDS"). It contains a JSON structure
-that is used by the SV feature to control the scan triggers and workflow
+that is used by the SV Scanning Service to control the scan triggers and workflow
 gates, as above. Use these steps to customize the verification site config for your
 platform:
 
@@ -422,9 +422,9 @@ Before your Acumos platform is deployed, or after, update the default
 verification site config key:
 
 * the default (demo) verification site config is shown below, and available in the
-  `system-integration repository <https://github.com/acumos/system-integration>`_
-  folder AIO/kubernetes/deployment/configmap/sv-scanning/scripts/ as
-  `siteconfig-verification.json <https://github.com/acumos/system-integration/AIO/kubernetes/deployment/configmap/sv-scanning/scripts/siteconfig-verification.json>`_)
+  `security-verification repository <https://github.com/acumos/security-verification>`_
+  folder security-verification-service/scripts as
+  `siteconfig-verification.json <https://github.com/acumos/security-verification/security-verification-service/scripts/siteconfig-verification.json>`_)
 
 .. code-block:: text
 
@@ -529,8 +529,9 @@ verification site config key:
 * NOTE: the "securityScan" and "securityVerify" sections are reserved for future
   use
 * If you are using the
-  `AIO toolset <https://github.com/acumos/system-integration/tree/master/AIO>`_,
-  update siteconfig-verification.json in the folder referenced above
+  `AIO toolset <https://github.com/acumos/security-verification/tree/master/AIO>`_,
+  put your updated siteconfig-verification.json in the folder
+  AIO/kubernetes/configmap/sv-scanning/scripts
 * Deploy or redeploy the SV Scanning service using the tools for your platform,
   e.g. using the "redeploy_component.sh" script in the system-integration repo
 
@@ -547,8 +548,8 @@ Configuring the Scancode Toolkit
 ++++++++++++++++++++++++++++++++
 
 Two folders in the
-`system-integration repository <https://github.com/acumos/system-integration>`_
-folder AIO/kubernetes/deployment/configmap/sv-scanning contain examples of how
+`security-verification repository <https://github.com/acumos/security-verification>`_
+folder security-verification-service contain examples of how
 you can configure the Scancode Toolkit to recognize and categorize additional
 license types, e.g. proprietary licenses.
 
@@ -556,9 +557,8 @@ To make changes in these folders, follow the guide below, and then
 deploy/redeploy the SV Scanning Service as described in
 `Configuring the Site Config Verification Key`_.
 
-The "licenses" and "rules" folders under
-AIO/kubernetes/deployment/configmap/sv-scanning can contain extra license and
-license-detection rule files that the admin can configure for use with the
+The "licenses" and "rules" folders under security-verification-service contain
+extra license and license-detection rule files that the admin can configure for use with the
 SV Scanning Service.
 
 NOTE:
@@ -568,7 +568,7 @@ NOTE:
   allows. For more information, see
   `How to add a new license detection rule? <https://github.com/nexB/scancode-toolkit/wiki/FAQ>`_
   on the `Scancode-toolkit github repo <https://github.com/nexB/scancode-toolkit>`_.
-* the files contained in the system-integration repo folders under "licenses"
+* the files contained in the security-verification repo folders under "licenses"
   and "rules" are examples, for demonstration and test purposes only
 
 ---------------
