@@ -179,7 +179,7 @@ revisionId=$2
 folder=$(basename $3)
 requestId=$(date +%H%M%S%N)
 mkdir $requestId
-log DEBUG "Starting model download for scanning solutionId=$solutionId revisionId=$revisionId folder=$folder"
+log INFO "Starting model download for scanning solutionId=$solutionId revisionId=$revisionId folder=$folder"
 cdsCreds="$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
 cdsUri="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT"
 nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT"
@@ -197,7 +197,7 @@ get_metadata
 cd ..
 bash /maven/scan/license_scan.sh $folder $requestId
 if [[ $? -ne 0 ]]; then
-    log "license_scan.sh failed"
+    log ERROR "license_scan.sh failed"
 fi
 if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
   cat $requestId/dump_model.log >>/maven/logs/security-verification/security-verification-server/security-verification-server.log

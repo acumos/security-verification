@@ -290,7 +290,7 @@ log DEBUG "invoking scancode"
   --json=$WORK_DIR/$requestId/scancode.json .
 cd ..
 if [[ ! -e $requestId/scancode.json ]]; then
-  log DEBUG "scancode failure"
+  log ERROR "scancode failure"
 cat <<EOF >$requestId/scanresult.json
 {"files":[]}
 EOF
@@ -304,5 +304,5 @@ else
   sed -i -- "s~$folder/~~g" $requestId/scancode.json
   initialize
   verify_license
-  log DEBUG "result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"
+  log INFO "License scan result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"
 fi
