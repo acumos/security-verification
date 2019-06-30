@@ -264,12 +264,12 @@
 								</tags>
 								<assembly>
 									<inline>
-                    <fileSets>
-                      <fileSet>
-                        <directory>scan</directory>
+										<fileSets>
+											<fileSet>
+												<directory>scan</directory>
 												<outputDirectory>scan</outputDirectory>
-                      </fileSet>
-                    </fileSets>
+											</fileSet>
+										</fileSets>
 										<files>
 											<file>
 												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
