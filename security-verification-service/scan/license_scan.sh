@@ -131,7 +131,9 @@ EOF
         fi
         j=$((j+1))
       done
+      # Remove newlines
       sed -i -- ':a;N;$!ba;s/\n//g' $requestId/file_licenses.json
+      # Remove list continuation (,) for first file in list
       sed -i -- 's/\[,/[/' $requestId/file_licenses.json
       cat <<EOF >>$requestId/scanresult.json
 $(cat $requestId/file_licenses.json)]},
@@ -140,13 +142,12 @@ EOF
     fi
   i=$((i+1))
   done
+  # Remove newlines
   sed -i -- ':a;N;$!ba;s/\n//g' $requestId/scanresult.json
+  # Close file list when no file licenses were found
+  sed -i -- 's/\[$/[]}/' $requestId/scanresult.json
+  # Close file list when files were found
   sed -i -- 's/\},$/}]}/' $requestId/scanresult.json
-  if [[ "$root_license" != "" ]]; then
-    sed -i -- "s~^{~{\"root_license\":{\"type\":\"$root_license_type\",\"name\":\"$root_license\"},~" $requestId/scanresult.json
-  else
-    sed -i -- "s~^{~{\"root_license\":{\"type\":\"\",\"name\":\"\"},~" $requestId/scanresult.json
-  fi
 }
 
 function update_reason() {
@@ -260,6 +261,18 @@ function verify_license() {
     fi
     f=$((f+1))
   done
+  if [[ ! $(jq . $requestId/scanresult.json) ]]; then
+    cp $requestId/scanresult.json $requestId/scanresult-errored.json
+    log ERROR "internal error: scanresult.json parse error"
+    cat <<EOF >$requestId/scanresult.json
+{"files":[]}
+EOF
+  fi
+  if [[ "$root_license" != "" ]]; then
+    sed -i -- "s~^{~{\"root_license\":{\"type\":\"$root_license_type\",\"name\":\"$root_license\"},~" $requestId/scanresult.json
+  else
+    sed -i -- "s~^{~{\"root_license\":{\"type\":\"\",\"name\":\"\"},~" $requestId/scanresult.json
+  fi
   sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $requestId/scanresult.json
   sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $requestId/scanresult.json
   sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $requestId/scanresult.json
@@ -284,7 +297,7 @@ revisionId=$(jq -r '.revisionId' $folder/cds/revision.json)
 log DEBUG "license_scan.sh solutionId($solutionId) revisionId($revisionId) folder($folder)"
 cd $folder
 log DEBUG "invoking scancode"
-../scancode-toolkit-3.0.2/scancode --license --copyright \
+../scancode-toolkit-3.0.2/scancode --quiet --license --copyright \
   --ignore "cds" --ignore "scancode.json" \
   --ignore "scanresult.json" --ignore "metadata.json" --ignore "*.h5" \
   --json=$WORK_DIR/$requestId/scancode.json .
@@ -304,5 +317,9 @@ else
   sed -i -- "s~$folder/~~g" $requestId/scancode.json
   initialize
   verify_license
-  log INFO "License scan result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"
+  if [[ "$verifiedLicense" == "true" ]]; then
+    log INFO "License scan result revisionId($revisionId) verifiedLicense($verifiedLicense) rootLicense($root_license)"
+  else
+    log INFO "License scan result revisionId($revisionId) verifiedLicense($verifiedLicense) reason($reason)"
+  fi
 fi

@@ -21,7 +21,7 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
-Version 0.0.23, 30 Jun 2019
+Version 0.0.23, 08 Jun 2019
 ---------------------------
 
 Version update only; changes were to the SV Scanning Service
@@ -190,7 +190,7 @@ Security Verification (SV) Scanning Service Release Notes
 =========================================================
 
 ---------------------------
-Version 0.0.23, 30 Jun 2019
+Version 0.0.23, 08 Jun 2019
 ---------------------------
 
 This release restores the ability to deploy the SV Scanning Service with
@@ -200,6 +200,7 @@ is optional, as described by the updated user-guide.
 
 * `ACUMOS-1373: S-V Scanning Service component with spring-based API <https://jira.acumos.org/browse/ACUMOS-1373>`_
 
+  * `4800: Handle exception cases and large scan sets <https://gerrit.acumos.org/r/#/c/security-verification/+/4800/>`_
   * `4795: Deployment with config updates optional <https://gerrit.acumos.org/r/#/c/security-verification/+/4795/>`_
 
 * `ACUMOS-2358: S-V design documentation <https://jira.acumos.org/browse/ACUMOS-2358>`_
