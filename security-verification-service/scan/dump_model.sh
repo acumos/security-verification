@@ -97,7 +97,7 @@ function get_artifacts() {
       log DEBUG "Downloading model.zip ($uri)"
       curl -s -o model.zip $nexusUri/repository/$nexusRepo/$uri
       # Errors in zip files will cause the script to exit prematurely
-      if [[ ! $(unzip -d model-zip model.zip) ]]; then
+      if [[ ! $(unzip -q -d model-zip model.zip) ]]; then
         log DEBUG "potential issues with model.zip being unpacked"
       fi
       if [[ ! -d model-zip ]]; then
@@ -105,7 +105,7 @@ function get_artifacts() {
       else
         rm model.zip
         if [[ -e model-zip/model.zip ]]; then
-          if [[ ! $(unzip  -d model-zip/model-zip model-zip/model.zip) ]]; then
+          if [[ ! $(unzip -q -qq  -d model-zip/model-zip model-zip/model.zip) ]]; then
             log DEBUG "potential issues with model-zip/model.zip being unpacked"
           fi
           rm model-zip/model.zip
@@ -152,7 +152,7 @@ function get_metadata() {
         extension="${name##*.}"
         if [[ "$extension" == "zip" ]]; then
           filename="${name%.*}"
-          unzip -d $cname/${filename}-$extension $cname/$name
+          unzip -q -d $cname/${filename}-$extension $cname/$name
           rm $cname/$name
         fi
         i=$((i+1))
