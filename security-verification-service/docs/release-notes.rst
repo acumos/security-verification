@@ -21,7 +21,7 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ---------------------------
-Version 0.0.23, 08 Jun 2019
+Version 0.0.24, 09 Jun 2019
 ---------------------------
 
 Version update only; changes were to the SV Scanning Service
@@ -190,7 +190,7 @@ Security Verification (SV) Scanning Service Release Notes
 =========================================================
 
 ---------------------------
-Version 0.0.23, 08 Jun 2019
+Version 0.0.24, 09 Jun 2019
 ---------------------------
 
 This release restores the ability to deploy the SV Scanning Service with
