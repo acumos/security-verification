@@ -30,7 +30,6 @@
 	<modules>
 		<!-- Child modules do NOT name this parent. -->
 		<module>security-verification-service</module>
-		<module>license-manager-client-library</module>
 		<module>security-verification-client-library</module>
 	</modules>
 	<properties>
