@@ -90,8 +90,9 @@ function get_artifacts() {
     name=$(jq -r ".[$i].name" cds/artifacts.json)
     uri=$(jq -r ".[$i].uri" cds/artifacts.json)
     type=$(jq -r ".[$i].artifactTypeCode" cds/artifacts.json)
-    if [[ "$name" == "license.json" ]]; then
-      log DEBUG "Downloading license.json ($uri)"
+    # LICENSE ARTIFACT - Support LI new artifact type supports SV
+    if [[ "$type" == "LI" && "$name" == "license.json" ]]; then
+      log DEBUG "Downloading license artifact ($uri)"
       curl -s -o license.json $nexusUri/repository/$nexusRepo/$uri
     elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
       log DEBUG "Downloading model.zip ($uri)"
