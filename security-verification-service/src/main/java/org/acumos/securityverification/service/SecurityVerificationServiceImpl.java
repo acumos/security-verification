@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -51,10 +51,20 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 	private void initialize() throws Exception {
 		ICommonDataServiceRestClient client = getCcdsClient();
 		if (client != null) {
-			MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
-			if (StringUtils.isEmpty(mlpSiteConfig)) {
-				logger.debug("initialize site_config");
-				createSiteConfig(client);
+      try {
+        MLPSiteConfig mlpSiteConfig = client.getSiteConfig(SVServiceConstants.SITE_VERIFICATION_KEY);
+        if (StringUtils.isEmpty(mlpSiteConfig)) {
+          logger.debug("initialize site_config");
+          createSiteConfig(client);
+        }
+      } catch (Exception e) {
+				logger.debug("initialize() : Connection to CDS failed");
+				logger.error("initialize() : Connection to CDS failed with exception ", e);
+				try {
+					Thread.sleep(20000);
+				} catch (InterruptedException ie) {
+					logger.error("initialize() : Connection to CDS failed");
+				}
 			}
 		}
 	}
@@ -105,5 +115,5 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_USER),
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_PWD), null);
 		return client;
-	}	
+	}
 }
