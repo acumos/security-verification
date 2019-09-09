@@ -25,14 +25,23 @@
 # https://stackoverflow.com/questions/3425754/calling-a-shell-script-from-java-hangs
 
 function fail() {
+  local error=$1
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  if [[ "$1" == "" ]]; then
-    logit $fname $fline ERROR "Unknown failure"
-  else
-    logit $fname $fline ERROR "$1"
+  if [[ "$error" == "" ]]; then
+    error="Unknown failure"
   fi
-  exit 1
+  logit $fname $fline ERROR "$error"
+  cd $WORK_DIR
+  cat <<EOF >$requestId/scanresult.json
+{"files":[]}
+EOF
+  sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $requestId/scanresult.json
+  sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $requestId/scanresult.json
+  sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $requestId/scanresult.json
+  sed -i -- "s~^{~{\"reason\":\"$error\",~" $requestId/scanresult.json
+  sed -i -- "s~^{~{\"verifiedLicense\":\"false\",~" $requestId/scanresult.json
+  sed -i -- "s~^{~{\"schema\":\"1.0\",~" $requestId/scanresult.json
 }
 
 function logit() {
@@ -295,24 +304,23 @@ requestId=$2
 solutionId=$(jq -r '.solutionId' $folder/cds/revision.json)
 revisionId=$(jq -r '.revisionId' $folder/cds/revision.json)
 log DEBUG "license_scan.sh solutionId($solutionId) revisionId($revisionId) folder($folder)"
+cat <<EOF >>jobs
+$requestId
+EOF
+until [[ "$(head -1 jobs)" == "$requestId" ]]; do
+  sleep 1
+done
 cd $folder
 log DEBUG "invoking scancode"
 ../scancode-toolkit-3.0.2/scancode --quiet --license --copyright \
   --ignore "cds" --ignore "scancode.json" \
   --ignore "scanresult.json" --ignore "metadata.json" --ignore "*.h5" \
+  --timeout 60 --processes 10 \
   --json=$WORK_DIR/$requestId/scancode.json .
 cd ..
+sed -i -- "/$requestId/d" jobs
 if [[ ! -e $requestId/scancode.json ]]; then
-  log ERROR "scancode failure"
-cat <<EOF >$requestId/scanresult.json
-{"files":[]}
-EOF
-  sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $requestId/scanresult.json
-  sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $requestId/scanresult.json
-  sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $requestId/scanresult.json
-  sed -i -- "s~^{~{\"reason\":\"unknown failure in scancode utility\",~" $requestId/scanresult.json
-  sed -i -- "s~^{~{\"verifiedLicense\":\"false\",~" $requestId/scanresult.json
-  sed -i -- "s~^{~{\"schema\":\"1.0\",~" $requestId/scanresult.json
+  fail "Unknown failure in scancode utility"
 else
   sed -i -- "s~$folder/~~g" $requestId/scancode.json
   initialize

@@ -42,14 +42,24 @@
 #
 
 function fail() {
+  local error=$1
   fname=$(caller 0 | awk '{print $2}')
   fline=$(caller 0 | awk '{print $1}')
-  if [[ "$1" == "" ]]; then
-    logit $fname $fline ERROR "Unknown failure"
-  else
-    logit $fname $fline ERROR "$1"
+  if [[ "$error" == "" ]]; then
+    error="Unknown failure"
   fi
-  exit 1
+  logit $fname $fline ERROR "$error"
+  cd $WORK_DIR
+  cat <<EOF >$folder/scanresult.json
+{"files":[]}
+EOF
+  sed -i -- "s~^{~{\"scanTime\":\"$(date +%y%m%d-%H%M%S)\",~" $folder/scanresult.json
+  sed -i -- "s~^{~{\"revisionId\":\"$revisionId\",~" $folder/scanresult.json
+  sed -i -- "s~^{~{\"solutionId\":\"$solutionId\",~" $folder/scanresult.json
+  sed -i -- "s~^{~{\"reason\":\"$error\",~" $folder/scanresult.json
+  sed -i -- "s~^{~{\"verifiedLicense\":\"false\",~" $folder/scanresult.json
+  sed -i -- "s~^{~{\"schema\":\"1.0\",~" $folder/scanresult.json
+  exit 0
 }
 
 function logit() {
@@ -67,23 +77,40 @@ function log() {
   fi
 }
 
+function get_cds() {
+  trap - ERR
+  local http_code=$(curl -s -w "%{http_code}" -o $1 -u $cdsCreds $cdsUri/ccds/$2)
+  trap 'fail' ERR
+  if [[ "$http_code" != "200" ]]; then
+    fail "Unable to retrieve $2 from CDS"
+  fi
+}
+
+function get_nexus() {
+  trap - ERR
+  local http_code=$(curl -s -w "%{http_code}" -o $1 $nexusUri/$nexusRepo/$2)
+  trap 'fail' ERR
+  if [[ "$http_code" != "200" ]]; then
+    fail "Unable to retrieve $nexusRepo/$2 from Nexus"
+  fi
+}
+
 function get_solution() {
   trap 'fail' ERR
   log DEBUG "Getting solution data from $cdsUri/ccds/solution/$solutionId"
-  curl -s -o cds/solution.json -u $cdsCreds $cdsUri/ccds/solution/$solutionId
+  get_cds cds/solution.json solution/$solutionId
 }
 
 function get_revision() {
   trap 'fail' ERR
   log DEBUG "Getting revision data from $cdsUri/ccds/solution/$solutionId/revision/$revisionId"
-  curl -s -o cds/revision.json -u $cdsCreds \
-    $cdsUri/ccds/solution/$solutionId/revision/$revisionId
+  get_cds cds/revision.json solution/$solutionId/revision/$revisionId
 }
 
 function get_artifacts() {
   trap 'fail' ERR
   log DEBUG "Getting artifacts from $cdsUri/ccds/revision/$revisionId/artifact"
-  curl -s -o cds/artifacts.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/artifact
+  get_cds cds/artifacts.json revision/$revisionId/artifact
   arts=$(jq -r '. | length' cds/artifacts.json)
   i=0
   while [[ $i -lt $arts ]] ; do
@@ -93,10 +120,12 @@ function get_artifacts() {
     # LICENSE ARTIFACT - Support LI new artifact type supports SV
     if [[ "$type" == "LI" && "$name" == "license.json" ]]; then
       log DEBUG "Downloading license artifact ($uri)"
-      curl -s -o license.json $nexusUri/repository/$nexusRepo/$uri
-    elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
+      get_nexus license.json $uri
+    elif [[ "$name" == "model.zip" ]]; then
+      # Ignore new document type "LI" vs "LG", as some models may already exist
+      # with license.json marked as type "LG"
       log DEBUG "Downloading model.zip ($uri)"
-      curl -s -o model.zip $nexusUri/repository/$nexusRepo/$uri
+      get_nexus model.zip $uri
       # Errors in zip files will cause the script to exit prematurely
       if [[ ! $(unzip -q -d model-zip model.zip) ]]; then
         log DEBUG "potential issues with model.zip being unpacked"
@@ -114,10 +143,10 @@ function get_artifacts() {
       fi
     elif [[ "$type" == "MI"  && "$name" == "model.proto" ]]; then
       log DEBUG "Downloading model.proto ($uri)"
-      curl -s -o model.proto $nexusUri/repository/$nexusRepo/$uri
+      get_nexus model.proto $uri
     elif [[ "$type" == "MD" ]]; then
       log DEBUG "Downloading metadata.json ($uri)"
-      curl -s -o metadata.json $nexusUri/repository/$nexusRepo/$uri
+      get_nexus metadata.json $uri
     fi
     i=$((i+1))
   done
@@ -126,20 +155,20 @@ function get_artifacts() {
 function get_metadata() {
   trap 'fail' ERR
   log DEBUG "Getting catalogs from $cdsUri/ccds/catalog"
-  curl -s -o cds/catalog.json -u $cdsCreds $cdsUri/ccds/catalog
+  get_cds cds/catalog.json catalog
   cats=$(jq -r '.content | length' cds/catalog.json)
   log DEBUG "$cats catalogs found"
   j=0
   while [[ $j -lt $cats ]] ; do
     cid=$(jq -r ".content[$j].catalogId" cds/catalog.json)
     cname=$(jq -r ".content[$j].name" cds/catalog.json | sed 's/ /-/g')
-    curl -s -o description-$cname.txt -u $cdsCreds $cdsUri/ccds/revision/$revisionId/catalog/$cid/descr
+    get_cds description-$cname.txt revision/$revisionId/catalog/$cid/descr
     if [[ "$(cat description-$cname.txt)" == "" ]];
       then rm description-$cname.txt;
     else
       log DEBUG "Saved revision description for catalog=$cname"
     fi
-    curl -s -o cds/document-$cname.json -u $cdsCreds $cdsUri/ccds/revision/$revisionId/catalog/$cid/document
+    get_cds cds/document-$cname.json revision/$revisionId/catalog/$cid/document
     docs=$(jq -r '. | length' cds/document-$cname.json)
     if [[ $docs -gt 0 ]]; then
       log DEBUG "Getting documents in catalog=$cname from $cdsUri/ccds/revision/$revisionId/catalog/$cid/document"
@@ -149,7 +178,7 @@ function get_metadata() {
         name=$(jq -r ".[$i].name" cds/document-$cname.json | sed 's/ /_/g')
         uri=$(jq -r ".[$i].uri" cds/document-$cname.json | sed 's/ /%20/g')
         log DEBUG "Getting document $name"
-        curl -s -o $cname/$name $nexusUri/repository/$nexusRepo/$uri
+        get_nexus $cname/$name $uri
         extension="${name##*.}"
         if [[ "$extension" == "zip" ]]; then
           filename="${name%.*}"
@@ -183,14 +212,16 @@ mkdir $requestId
 log INFO "Starting model download for scanning solutionId=$solutionId revisionId=$revisionId folder=$folder"
 cdsCreds="$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD"
 cdsUri="http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT"
-nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT"
+nexusUri="http://$ACUMOS_NEXUS_HOST:$ACUMOS_NEXUS_API_PORT/$ACUMOS_NEXUS_MAVEN_REPO_PATH"
 nexusRepo=$ACUMOS_NEXUS_MAVEN_REPO
 
 if [[ ! -d $folder ]]; then mkdir $folder; fi
 cd $folder
 if [[ ! -d cds ]]; then mkdir cds; fi
 log DEBUG "Getting siteConfig.verification from $cdsUri/ccds/site/config/verification"
-curl -s -u $cdsCreds $cdsUri/ccds/site/config/verification | jq -r ".configValue" >cds/siteconfig.json
+get_cds cds/siteconfig-tmp.json site/config/verification
+jq -r ".configValue" cds/siteconfig-tmp.json >cds/siteconfig.json
+rm cds/siteconfig-tmp.json
 get_solution
 get_revision
 get_artifacts
@@ -198,7 +229,7 @@ get_metadata
 cd ..
 bash /maven/scan/license_scan.sh $folder $requestId
 if [[ $? -ne 0 ]]; then
-    log ERROR "license_scan.sh failed"
+  fail "Unknown license scan failure"
 fi
 if [[ -e /maven/logs/security-verification/security-verification-server/security-verification-server.log ]]; then
   cat $requestId/dump_model.log >>/maven/logs/security-verification/security-verification-server/security-verification-server.log
