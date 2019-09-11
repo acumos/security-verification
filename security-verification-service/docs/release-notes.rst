@@ -20,6 +20,16 @@
 Security Verification (SV) Library Release Notes
 ================================================
 
+
+----------------------------
+Version 1.0.1, 18 Sept 2019
+----------------------------
+
+* `ACUMOS-3436: Security Verification update to Java 11 <https://jira.acumos.org/browse/ACUMOS-3436>`_
+* `ACUMOS-3428: Implement scan job queuing
+  * Add wait for CDS to be ready for creating site-config.
+* CDS 3.0.0 update
+
 ---------------------------
 Version 0.0.24, 09 Jun 2019
 ---------------------------
