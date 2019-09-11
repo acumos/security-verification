@@ -19,6 +19,7 @@ import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.securityverification.utils.SVServiceConstants;
 import org.acumos.securityverification.utils.SecurityVerificationServiceUtils;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -59,6 +60,7 @@ public class SecurityVerificationScanTest {
 	}
 
 	@Test
+	@Ignore
 	public void testRun() throws Exception {
 		String solutionId = "bf0478bc-0d3f-4433-80b6-d7a0f6db2df2";
 		String revisionId = "ba742c3b-039c-4a8e-b0fc-1aee7d5a9d67";
