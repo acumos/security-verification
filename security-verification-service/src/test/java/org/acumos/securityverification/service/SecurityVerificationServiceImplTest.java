@@ -38,8 +38,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +48,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-@RunWith(MockitoJUnitRunner.class)
+// @RunWith(MockitoJUnitRunner.class)
+@RunWith(MockitoJUnitRunner.Silent.class)
+@PowerMockIgnore({"com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "javax.management.*"})
 @PrepareForTest({ SecurityVerificationServiceImpl.class })
 public class SecurityVerificationServiceImplTest extends CommonDataServiceRestClientMockImpl {
 
@@ -102,6 +105,7 @@ public class SecurityVerificationServiceImplTest extends CommonDataServiceRestCl
 		String revisionId = "ba742c3b-039c-4a8e-b0fc-1aee7d5a9d67";
 		ICommonDataServiceRestClient client = mock(CommonDataServiceRestClientImpl.class);
 		SecurityVerificationScan securityVerificationRunner = mock(SecurityVerificationScan.class);
+		
 		PowerMockito.whenNew(SecurityVerificationScan.class).withAnyArguments().thenReturn(securityVerificationRunner);
 		Thread t = mock(Thread.class);
 		PowerMockito.whenNew(Thread.class).withAnyArguments().thenReturn(t);

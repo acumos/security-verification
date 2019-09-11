@@ -20,6 +20,14 @@
 Security Verification (SV) Library Release Notes
 ================================================
 
+
+----------------------------
+Version 0.0.25, 11 Sept 2019
+----------------------------
+
+- * `ACUMOS-3436: Security Verification update to Java 11 <https://jira.acumos.org/browse/ACUMOS-3436>`_
+
+
 ---------------------------
 Version 0.0.24, 09 Jun 2019
 ---------------------------
