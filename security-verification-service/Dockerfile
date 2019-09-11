@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ===============LICENSE_END=========================================================
-FROM openjdk:8-jre-slim
+FROM adoptopenjdk/openjdk11-openj9:jre
 RUN apt-get update && apt-get install -y wget curl git jq zip python-dev xz-utils zlib1g libxml2-dev libxslt1-dev bzip2
 COPY maven/ /maven/
 RUN chmod -R 777 /maven

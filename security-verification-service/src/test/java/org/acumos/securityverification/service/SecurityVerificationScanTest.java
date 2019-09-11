@@ -34,7 +34,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-//@RunWith(MockitoJUnitRunner.class)
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ SecurityVerificationScan.class, SecurityVerificationServiceUtils.class })
 public class SecurityVerificationScanTest {
