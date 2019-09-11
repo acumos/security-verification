@@ -117,13 +117,12 @@ function get_artifacts() {
     name=$(jq -r ".[$i].name" cds/artifacts.json)
     uri=$(jq -r ".[$i].uri" cds/artifacts.json)
     type=$(jq -r ".[$i].artifactTypeCode" cds/artifacts.json)
-    # LICENSE ARTIFACT - Support LI new artifact type supports SV
-    if [[ "$type" == "LI" && "$name" == "license.json" ]]; then
+    # Ignore new document type "LI" vs "LG", as some models may already exist
+    # with license.json marked as type "LG"
+    if [[ "$name" == "license.json" ]]; then
       log DEBUG "Downloading license artifact ($uri)"
       get_nexus license.json $uri
-    elif [[ "$name" == "model.zip" ]]; then
-      # Ignore new document type "LI" vs "LG", as some models may already exist
-      # with license.json marked as type "LG"
+    elif [[ "$type" == "MI" && "$name" == "model.zip" ]]; then
       log DEBUG "Downloading model.zip ($uri)"
       get_nexus model.zip $uri
       # Errors in zip files will cause the script to exit prematurely
