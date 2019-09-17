@@ -3,23 +3,28 @@
   "allowedLicense":[
     {
       "type":"SPDX",
-      "name":"Apache-2.0"
+      "name":"Apache-2.0",
+      "rtuRequired": false
     },
     {
       "type":"SPDX",
-      "name":"CC-BY-4.0"
+      "name":"CC-BY-4.0",
+      "rtuRequired": false
     },
     {
       "type":"SPDX",
-      "name":"BSD-3-Clause"
+      "name":"BSD-3-Clause",
+      "rtuRequired": false
     },
     {
       "type":"Vendor-A",
-      "name":"Vendor-A-OSS"
+      "name":"Vendor-A-OSS",
+      "rtuRequired": false
     },
     {
       "type":"Company-B",
-      "name":"Company-B-Proprietary"
+      "name":"Company-B-Proprietary",
+      "rtuRequired": true
     }
   ],
   "compatibleLicenses":[
