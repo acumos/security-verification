@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7b19ac9_04e1868b",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-09-18T14:05:16Z",
+      "side": 1,
+      "message": "Update to 1.0.1-SNAPSHOT",
+      "range": {
+        "startLine": 8,
+        "startChar": 10,
+        "endLine": 8,
+        "endChar": 24
+      },
+      "revId": "949f467537cfd7d87f8f0b64f6e2a6bfdfbe9ab2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
