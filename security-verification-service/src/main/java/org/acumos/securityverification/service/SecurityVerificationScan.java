@@ -30,7 +30,6 @@ import java.util.UUID;
 
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
-import org.acumos.cds.domain.MLPCatalog;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.securityverification.exception.AcumosServiceException;
@@ -41,17 +40,17 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.util.StringUtils;
 
 public class SecurityVerificationScan implements Runnable {
 
-	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+	private static final Logger logger =
+			LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
 	private String solutionId;
 	private String revisionId;
 	private Environment env;
 	private ICommonDataServiceRestClient client;
-	
+
 	SecurityVerificationScan(String solutionId, String revisionId, Environment env1,
 			ICommonDataServiceRestClient client) {
 		this.solutionId = solutionId;
@@ -67,11 +66,13 @@ public class SecurityVerificationScan implements Runnable {
 		String folder = uidNumber.toString();
 		try {
 			updateVerifiedLicenseStatus(solutionId, "IP");
-			SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_DUMP_MODEL, solutionId,
-					revisionId, folder, env);
+			SecurityVerificationServiceUtils.executeScript(SVServiceConstants.SCRIPTFILE_DUMP_MODEL,
+					solutionId, revisionId, folder, env);
 			// Upload scanresult.json
-			String scanResultJsonFilePath = scanOutJsonLocation(folder, SVServiceConstants.SCAN_RESULT_JSON);
-			File scanResultJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanResultJsonFilePath);
+			String scanResultJsonFilePath =
+					scanOutJsonLocation(folder, SVServiceConstants.SCAN_RESULT_JSON);
+			File scanResultJsonFile =
+					SecurityVerificationServiceUtils.readScanOutput(scanResultJsonFilePath);
 			logger.debug("scanResultJsonFile: {}", scanResultJsonFile);
 			uploadToArtifact(solutionId, revisionId, scanResultJsonFile);
 			// Upload scancode.json
@@ -79,17 +80,15 @@ public class SecurityVerificationScan implements Runnable {
 			File scanCodeJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanCodeJsonFilePath);
 			logger.debug("scanCodeJsonFile: {}", scanCodeJsonFile);
 			uploadToArtifact(solutionId, revisionId, scanCodeJsonFile);
-			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("true")) {
+			if (scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("true")) {
 				updateVerifiedLicenseStatus(solutionId, "SU");
 			}
-			if(scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("false")) {
+			if (scanResultVerifiedLicensStatus(scanResultJsonFilePath).equalsIgnoreCase("false")) {
 				updateVerifiedLicenseStatus(solutionId, "FA");
 			}
-
 		} catch (Exception e) {
 			logger.debug("Exception: ", e);
 		}
-
 	}
 
 	private void uploadToArtifact(String solutionId, String revisionId, File file)
@@ -101,7 +100,7 @@ public class SecurityVerificationScan implements Runnable {
 				logger.debug("In side if conditoin fileSizeByKB  {}", fileSizeByKB);
 				MLPSolution mlpSolution = client.getSolution(solutionId);
 				String userId = mlpSolution.getUserId();
-				List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);//solutionIdIgnored
+				List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);// solutionIdIgnored
 				String version = null;
 				List<Integer> mlpArtifactVersionList = new ArrayList<>();
 				for (MLPArtifact mlpArtifact : mlpArtifactList) {
@@ -128,9 +127,10 @@ public class SecurityVerificationScan implements Runnable {
 		int version = sortedlist.get(sortedlist.size() - 1);
 		return version;
 	}
-	
+
 	private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
-		logger.debug("Inside updateVerifiedLicenseStatus, solutionId: {} Status: {}",solutionId, verifiedLicense);
+		logger.debug("Inside updateVerifiedLicenseStatus, solutionId: {} Status: {}", solutionId,
+				verifiedLicense);
 		List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
 		for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
 			mlpSolutionRevision.setVerifiedLicense(verifiedLicense);
@@ -139,7 +139,7 @@ public class SecurityVerificationScan implements Runnable {
 
 	}
 
-	private String scanOutJsonLocation(String folder,String jsonFlieName) {
+	private String scanOutJsonLocation(String folder, String jsonFlieName) {
 		logger.debug("Inside scanOutJsonLocation");
 		StringBuilder scanJsonOutFliePath = new StringBuilder();
 		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
@@ -154,17 +154,17 @@ public class SecurityVerificationScan implements Runnable {
 
 	private String scanResultVerifiedLicensStatus(String jsonFilePath) throws Exception {
 		logger.debug("Inside scanResultVerifiedLicensStatus");
-		String verifiedLicenseStatus =null;
+		String verifiedLicenseStatus = null;
 		try {
-		    JSONParser parser = new JSONParser();
-	        JSONObject data = (JSONObject) parser.parse(new FileReader(jsonFilePath));
-	        String json = data.toJSONString();
-	    	logger.trace("scanresult.Json: {}",json);
-			 verifiedLicenseStatus = (String) data.get("verifiedLicense");
-			logger.debug("scanresult.Json: verifiedLicenseStatus: {}",verifiedLicenseStatus);
+			JSONParser parser = new JSONParser();
+			JSONObject data = (JSONObject) parser.parse(new FileReader(jsonFilePath));
+			String json = data.toJSONString();
+			logger.trace("scanresult.Json: {}", json);
+			verifiedLicenseStatus = (String) data.get("verifiedLicense");
+			logger.debug("scanresult.Json: verifiedLicenseStatus: {}", verifiedLicenseStatus);
 		} catch (Exception e) {
-			 logger.debug("Exception: {}",e);
-			 throw e;
+			logger.debug("Exception: {}", e);
+			throw e;
 		}
 		return verifiedLicenseStatus;
 	}

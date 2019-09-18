@@ -21,6 +21,12 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ----------------------------
+Version 1.0.2, 20 Sept 2019
+----------------------------
+
+* SV Client library update to LMCL 1.0.0 `ACUMOS-3125 <https://jira.acumos.org/browse/ACUMOS-3125>
+
+----------------------------
 Version 1.0.1, 19 Sept 2019
 ----------------------------
 

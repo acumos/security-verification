@@ -23,18 +23,20 @@ import java.io.ByteArrayOutputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.licensemanager.client.LicenseVerifier;
-import org.acumos.licensemanager.client.model.ILicenseVerification;
-import org.acumos.licensemanager.client.model.ILicenseVerifier;
 import org.acumos.licensemanager.client.model.LicenseAction;
+import org.acumos.licensemanager.client.model.LicenseRtuVerification;
 import org.acumos.licensemanager.client.model.VerifyLicenseRequest;
+import org.acumos.licensemanager.client.rtu.LicenseRtuVerifier;
+import org.acumos.licensemanager.exceptions.RightToUseException;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
@@ -65,6 +67,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 	private String nexusClientUrl;
 	private String nexusClientUsername;
 	private String nexusClientPwd;
+	private String lumServiceUrl;
+
 
 	private Map<String, String> licenseScan;
 	private Map<String, String> securityScan;
@@ -75,7 +79,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 
 	public SecurityVerificationClientServiceImpl(final String securityVerificationApiUrl, final String cdmsClientUrl,
 			final String cdmsClientUsername, final String cdmsClientPwd, final String nexusClientUrl,
-			final String nexusClientUsername, final String nexusClientPwd) {
+			final String nexusClientUsername, final String nexusClientPwd, final String lumServiceUrl) {
 
 		this.securityVerificationApiUrl = securityVerificationApiUrl;
 		this.cdmsClientUrl = cdmsClientUrl;
@@ -84,6 +88,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		this.nexusClientUrl = nexusClientUrl;
 		this.nexusClientUsername = nexusClientUsername;
 		this.nexusClientPwd = nexusClientPwd;
+		this.lumServiceUrl = lumServiceUrl;
 
 	}
 
@@ -222,7 +227,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		logger.info(
 				"Inside workflowPermissionDeterminationCompositeSolution method call. workflowId: {} userId: {} revisionId: {}",
 				workflowId, loggedInUserId, revisionId);
-		ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
+		LicenseRtuVerifier licenseVerifier = new LicenseRtuVerifier(lumServiceUrl);
 		ResponseEntity<SVResponse> svResponse = null;
 		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
@@ -261,33 +266,20 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 				String scanResultRootLicenseType = SecurityVerificationJsonParser
 						.scanResultRootLicenseType(byteArrayOutputStream.toString());
 				logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
-				// Proprietary models have a recognized licenseType, not null, "", or SPDX
-				if (!StringUtils.isEmpty(scanResultRootLicenseType) && !scanResultRootLicenseType.equals("SPDX")) {
-					// if owner skip
-					if (ownerUserId.equals(loggedInUserId)) {
-						logger.info("skipping RTU check since userId=ownerId");
-					}
-					else {
+						// create a random UUID for the asset usage (from LUM instance of usage)
+						// ideally this should be for deployment id or artifact download id (no download id)
+						// MLPSolutionDownload#getDownloadId the issue is this is created after download not during RTU check
+						// MLPSolutionDeployment.html#getDeploymentId() SV doesn't get this information
+						String assetUsageId = UUID.randomUUID().toString();
 						if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
-							VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
-									securityVerificationCdumpNode.getNodeSolutionId(), loggedInUserId);
-							licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
-							ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
-							// returns true or false if rtu exists
-							rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
-							logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+							rtuFlag = getRtu(loggedInUserId, securityVerificationCdumpNode,
+									mlpCdumpSolutionRevision, licenseVerifier, assetUsageId, 
+									LicenseAction.DOWNLOAD);
+						}else if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
+							rtuFlag = getRtu(loggedInUserId, securityVerificationCdumpNode,
+							mlpCdumpSolutionRevision, licenseVerifier, assetUsageId, 
+							LicenseAction.DEPLOY);
 						}
-						if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
-							VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
-									securityVerificationCdumpNode.getNodeSolutionId(), loggedInUserId);
-							licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
-							ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
-							// returns true or false if rtu exists
-							rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
-							logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
-						}
-					}
-				}
 			}
 		}
 
@@ -356,13 +348,34 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		logger.info("WorkflowAllowed: {} Reason: {}", workFlowAllowed, reason.toString());
 	}
 
+	private boolean getRtu(String loggedInUserId,
+			SecurityVerificationCdumpNode securityVerificationCdumpNode,
+			MLPSolutionRevision mlpCdumpSolutionRevision, LicenseRtuVerifier licenseVerifier,
+			String assetUsageId,
+			LicenseAction licenseAction) throws RightToUseException, InterruptedException, ExecutionException {
+		boolean rtuFlag;
+		VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(licenseAction,
+				securityVerificationCdumpNode.getNodeSolutionId(), 
+				mlpCdumpSolutionRevision.getRevisionId(),
+				 loggedInUserId,
+				 assetUsageId);
+		licenseDownloadRequest.setAction(licenseAction);
+		CompletableFuture<LicenseRtuVerification> verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+		LicenseRtuVerification verification = verifyUserRTU.get();
+		// returns true or false if rtu exists
+		rtuFlag = verification.isAllowed(licenseAction);
+		logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
+		return rtuFlag;
+	}
+
 	private void workflowPermissionDeterminationSimpleSolution(String workflowId, Workflow workflow,
 			ICommonDataServiceRestClient client, String loggedInUserId, String ownerUserId, String solutionId, String revisionId) throws Exception {
 		logger.info(
 				"Inside workflowPermissionDeterminationSimpleSolution method call. workflowId: {} userId: {} solutionId: {} revisionId: {}",
 				workflowId, loggedInUserId, solutionId, revisionId);
-		ILicenseVerifier licenseVerifier = new LicenseVerifier(client);
+				LicenseRtuVerifier licenseVerifier = new LicenseRtuVerifier(lumServiceUrl);
 		ResponseEntity<SVResponse> svResponse = null;
+		// TODO all actions checks go through lum -- no auto true
 		boolean rtuFlag = true;
 		boolean workFlowAllowed = true;
 		StringBuilder reason = new StringBuilder();
@@ -410,22 +423,24 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 						logger.info("skipping RTU check since userId=ownerId");
 					}
 					else {
+						String assetUsageId = UUID.randomUUID().toString();
+						// TODO the artifact that is being downloaded
 						if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
+							
 							VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DOWNLOAD,
-									solutionId, loggedInUserId);
-							licenseDownloadRequest.addAction(LicenseAction.DOWNLOAD);
-							ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+									solutionId, revisionId, loggedInUserId, assetUsageId);
+							CompletableFuture<LicenseRtuVerification> verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 							// returns true or false if rtu exists
-							rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DOWNLOAD);
+							rtuFlag = verifyUserRTU.get().isAllowed(LicenseAction.DOWNLOAD);
 							logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
 						}
+						// TODO the solution being deployed could be used for asset usage id?
 						if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
 							VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(LicenseAction.DEPLOY,
-									solutionId, loggedInUserId);
-							licenseDownloadRequest.addAction(LicenseAction.DEPLOY);
-							ILicenseVerification verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
+									solutionId, revisionId, loggedInUserId, assetUsageId);
+							CompletableFuture<LicenseRtuVerification> verifyUserRTU = licenseVerifier.verifyRtu(licenseDownloadRequest);
 							// returns true or false if rtu exists
-							rtuFlag = verifyUserRTU.isAllowed(LicenseAction.DEPLOY);
+							rtuFlag = verifyUserRTU.get().isAllowed(LicenseAction.DEPLOY);
 							logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
 						}
 					}
