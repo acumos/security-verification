@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00717c51_542c513d",
+        "filename": "security-verification-service/scan/siteconfig-verification.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-09-18T04:13:03Z",
+      "side": 1,
+      "message": "Michelle and I had more discussion on this and we have decided to move this property to the license profile on the model to avoid any ambiguity especially during federation where this allowed license array may be different across two Acumos peers.",
+      "revId": "11d0cfa0d1828f54909d4b8cd95a6c7bd33b21aa",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
