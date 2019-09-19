@@ -189,15 +189,25 @@ various approaches above, and how successful the SV team is in resourcing and
 addressing technical challenges of the design below, various of these
 hybrid/manual approach elements may be implemented in the Athena release.
 
+........................
+Current Release Features
+........................
+
+The Clio release will include these features for SV:
+
+* separation of the license scanning process from the sv-scanning component,
+  which will be refocused on providing the Acumos platform integration with
+  external scanning tools/processes, and recording the results of scans
+* implementation of the current scanning scripts as Jenkins jobs, that will
+  be invoked by the sv-scanning component when needed
+
 ............................
 Previously Released Features
 ............................
 
-This is the first release of SV.
-
-........................
-Current Release Features
-........................
+++++++++++++++
+Boreas Release
+++++++++++++++
 
 The features planned for delivery in the current release ("Boreas") are:
 

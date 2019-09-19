@@ -26,9 +26,20 @@ Version 1.0.1, 18 Sept 2019
 ----------------------------
 
 * `ACUMOS-3436: Security Verification update to Java 11 <https://jira.acumos.org/browse/ACUMOS-3436>`_
-* `ACUMOS-3428: Implement scan job queuing
-  * Add wait for CDS to be ready for creating site-config.
-* CDS 3.0.0 update
+
+  * `5246: Security Verification - Java 11 <https://gerrit.acumos.org/r/#/c/security-verification/+/5246/>`_
+
+* `ACUMOS-3428: Implement scan job queuing <https://jira.acumos.org/browse/ACUMOS-3428>`_
+
+  * `: Release 1.0.1 <https://gerrit.acumos.org/r/#/c/security-verification/+//>`_
+  * `5271: Update to CDS 3.0.0 <https://gerrit.acumos.org/r/#/c/security-verification/+/5271/>`_
+  * `5241: Ignore license type field for now <https://gerrit.acumos.org/r/#/c/security-verification/+/5241/>`_
+  * `5210: Implement scan job queueing <https://gerrit.acumos.org/r/#/c/security-verification/+/5210/>`_
+
+* `4965: Fix SV build on master <https://gerrit.acumos.org/r/#/c/security-verification/+/4965/>`_
+* `ACUMOS-3031: A scan must occur to verify License Profile metadata <https://jira.acumos.org/browse/ACUMOS-3031>`_
+
+  * `4888: Support License ArtifactType <https://gerrit.acumos.org/r/#/c/security-verification/+/4888/>`_
 
 ---------------------------
 Version 0.0.24, 09 Jun 2019
