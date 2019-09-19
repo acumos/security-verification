@@ -226,7 +226,7 @@ get_revision
 get_artifacts
 get_metadata
 cd ..
-bash /maven/scan/license_scan.sh $folder $requestId
+bash $WORK_DIR/license_scan.sh $folder $requestId
 if [[ $? -ne 0 ]]; then
   fail "Unknown license scan failure"
 fi
