@@ -394,24 +394,64 @@ In response, the SV library will provide the following result parameters:
 Security Verification Scanning Service
 ++++++++++++++++++++++++++++++++++++++
 
-This API initiates a SV scan process as needed, based upon the current status
-of the model and any earlier scans in-progress or completed.
+****
+Scan
+****
+
+This API initiates an SV scan process.
 
 The base URL for this API is: http://<scanning-service-host>:<port>, where
 'scanning-service-host' is the routable address of the scanning service in the
 Acumos platform deployment, and port is the assigned port where the service is
 listening for API requests.
 
-* URL resource: /scan/solutionId/{solutionId}/revisionId/{revisionId}/workflowId/{workflowId}
+* URL resource: /scan/solutionId/{solutionId}/revisionId/{revisionId}/userId/{userId}
 
   * {solutionId}: ID of a solution present in the CDS
   * {revisionId}: ID of a version for a solution present in the CDS
-  * {workflowId}: name of a workflow, one of "created", "updated", "deploy",
-    "download", "share", "publishCompany", "publishPublic"
+  * {userId}: ID of the user requesting the workflow that triggered the scan
 
 * Supported HTTP operations
 
   * POST
+
+    * Body
+
+      * None
+
+    * Response
+
+      * 200 OK
+
+        * meaning: request accepted
+
+      * 400 BAD REQUEST
+
+        * meaning: solution/revision not found, or other error
+
+***********
+Scan Result
+***********
+
+This API delivers the result of an SV scan.
+
+The base URL for this API is: http://<scanning-service-host>:<port>, where
+'scanning-service-host' is the routable address of the scanning service in the
+Acumos platform deployment, and port is the assigned port where the service is
+listening for API requests.
+
+* URL resource: /scanresult/solutionId/{solutionId}/revisionId/{revisionId}
+
+  * {solutionId}: ID of a solution present in the CDS
+  * {revisionId}: ID of a version for a solution present in the CDS
+
+* Supported HTTP operations
+
+  * POST
+
+    * Body
+
+      * JSON content to be saved as scanresult.json
 
     * Response
 
