@@ -3,6 +3,7 @@
  * Acumos
  * ===================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * Modifications Copyright (C) 2019 Nordix Foundation.
  * ===================================================================================
  * This Acumos software file is distributed by AT&T and Tech Mahindra
  * under the Apache License, Version 2.0 (the "License");
@@ -27,7 +28,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
 import org.acumos.securityverification.domain.SecurityVerificationCdumpNode;
 import org.json.simple.JSONArray;
@@ -39,161 +39,176 @@ import org.slf4j.LoggerFactory;
 
 public class SecurityVerificationJsonParser {
 
-	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+  private static final Logger logger =
+      LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-	public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) throws Exception {
+  public SecurityVerificationCdump parseCdumpJsonFile(String jsonString) throws Exception {
 
-		logger.debug(" parseCdumpJsonFile in ParseJSON Start");
-		SecurityVerificationCdump securityVerificationCdump = new SecurityVerificationCdump();
-		try {
-			Object obj = new JSONParser().parse(new StringReader(jsonString));
-			JSONObject jo = (JSONObject) obj;
-			String version = (String) jo.get("version");
-			logger.debug("\n Revision version::-- {}", version);
+    logger.debug(" parseCdumpJsonFile in ParseJSON Start");
+    SecurityVerificationCdump securityVerificationCdump = new SecurityVerificationCdump();
+    try {
+      Object obj = new JSONParser().parse(new StringReader(jsonString));
+      JSONObject jo = (JSONObject) obj;
+      String version = (String) jo.get("version");
+      logger.debug("\n Revision version::-- {}", version);
 
-			securityVerificationCdump.setCname(jo.get("cname").toString());
-			securityVerificationCdump.setVersion(jo.get("version").toString());
-			securityVerificationCdump.setCid(jo.get("cid").toString());
-			securityVerificationCdump.setSolutionId(jo.get("solutionId").toString());
-			List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = new ArrayList<>();
+      securityVerificationCdump.setCname(jo.get("cname").toString());
+      securityVerificationCdump.setVersion(jo.get("version").toString());
+      securityVerificationCdump.setCid(jo.get("cid").toString());
+      securityVerificationCdump.setSolutionId(jo.get("solutionId").toString());
+      List<SecurityVerificationCdumpNode> securityVerificationCdumpNodes = new ArrayList<>();
 
-			JSONArray nodes = (JSONArray) jo.get(SVConstants.NODES);
-			if (nodes != null && !nodes.isEmpty()) {
-				Iterator node = nodes.iterator();
-				int nodeCount = 0;
-				while (node.hasNext()) {
-					Iterator<Map.Entry> itr4 = ((Map) node.next()).entrySet().iterator();
-					logger.debug("Nodes {}", nodeCount);
+      JSONArray nodes = (JSONArray) jo.get(SVConstants.NODES);
+      if (nodes != null && !nodes.isEmpty()) {
+        Iterator node = nodes.iterator();
+        int nodeCount = 0;
+        while (node.hasNext()) {
+          Iterator<Map.Entry> itr4 = ((Map) node.next()).entrySet().iterator();
+          logger.debug("Nodes {}", nodeCount);
 
-					SecurityVerificationCdumpNode securityVerificationCdumpNode = new SecurityVerificationCdumpNode();
-					while (itr4.hasNext()) {
-						Map.Entry pair = itr4.next();
-						String key = (String) pair.getKey();
-						String val = (String) pair.getValue().toString();
-						if (pair.getKey().toString().equals("name")) {
-							logger.debug("name::-- {}", pair.getValue());
-							securityVerificationCdumpNode.setName(pair.getValue().toString());
-						}
-						if (pair.getKey().toString().equals("nodeId")) {
-							logger.debug("nodeId::-- {}", pair.getValue());
-							securityVerificationCdumpNode.setNodeId(pair.getValue().toString());
-						}
-						if (pair.getKey().toString().equals("nodeSolutionId")) {
-							logger.debug("nodeSolutionId::-- {}", pair.getValue());
-							securityVerificationCdumpNode.setNodeSolutionId(pair.getValue().toString());
-						}
-						if (pair.getKey().toString().equals("nodeVersion")) {
-							logger.debug("NodeVersion::-- {}", pair.getValue());
-							securityVerificationCdumpNode.setNodeVersion(pair.getValue().toString());
-						}
-					}
-					securityVerificationCdumpNodes.add(securityVerificationCdumpNode);
-				}
-				securityVerificationCdump.setNodes(securityVerificationCdumpNodes);
-			}
+          SecurityVerificationCdumpNode securityVerificationCdumpNode =
+              new SecurityVerificationCdumpNode();
+          while (itr4.hasNext()) {
+            Map.Entry pair = itr4.next();
+            String key = (String) pair.getKey();
+            String val = (String) pair.getValue().toString();
+            if (pair.getKey().toString().equals("name")) {
+              logger.debug("name::-- {}", pair.getValue());
+              securityVerificationCdumpNode.setName(pair.getValue().toString());
+            }
+            if (pair.getKey().toString().equals("nodeId")) {
+              logger.debug("nodeId::-- {}", pair.getValue());
+              securityVerificationCdumpNode.setNodeId(pair.getValue().toString());
+            }
+            if (pair.getKey().toString().equals("nodeSolutionId")) {
+              logger.debug("nodeSolutionId::-- {}", pair.getValue());
+              securityVerificationCdumpNode.setNodeSolutionId(pair.getValue().toString());
+            }
+            if (pair.getKey().toString().equals("nodeVersion")) {
+              logger.debug("NodeVersion::-- {}", pair.getValue());
+              securityVerificationCdumpNode.setNodeVersion(pair.getValue().toString());
+            }
+          }
+          securityVerificationCdumpNodes.add(securityVerificationCdumpNode);
+        }
+        securityVerificationCdump.setNodes(securityVerificationCdumpNodes);
+      }
 
-		} catch (Exception e) {
-			logger.error("parseJsonFile failed {}", e);
-			throw e;
-		}
-		logger.debug("parseJsonFile in ParseJSON End");
-		return securityVerificationCdump;
-	}
+    } catch (Exception e) {
+      logger.error("parseJsonFile failed {}", e);
+      throw e;
+    }
+    logger.debug("parseJsonFile in ParseJSON End");
+    return securityVerificationCdump;
+  }
 
-	public String externalScanValue(JSONObject verificationObject) {
-		logger.debug("EXTERNALSCAN");
-		String externalScanObject = null;
-		if (verificationObject.get(SVConstants.EXTERNALSCAN) != null) {
-			externalScanObject = (String) verificationObject.get(SVConstants.EXTERNALSCAN);
-			logger.debug("externalScanObject {} ", externalScanObject);
-		}
-		return externalScanObject;
-	}
+  public String rtuCheckValue(JSONObject verificationObject) {
+    logger.debug("RTUCHECK");
+    String rtuCheck = null;
+    if (verificationObject.get(SVConstants.RTUCHECK) != null) {
+      rtuCheck = (String) verificationObject.get(SVConstants.RTUCHECK);
+      logger.debug("rtuCheck {} ", rtuCheck);
+    }
+    return rtuCheck;
+  }
 
-	public Map<String, String> allowedLicenseMap(JSONObject verificationObject) {
-		logger.debug("ALLOWEDLICENSE");
-		Map<String, String> allowedLicenseObjectMap = new HashMap<>();
-		if (verificationObject.get(SVConstants.ALLOWEDLICENSE) != null) {
-			JSONArray allowedLicenseJsonList = (JSONArray) verificationObject.get(SVConstants.ALLOWEDLICENSE);
-			for (Object object : allowedLicenseJsonList) {
-				JSONObject jj = (JSONObject) object;
-				String typeKeyStr = (String) jj.get(SVConstants.TYPE);
-				String typeKeyvalue = (String) jj.get(SVConstants.VALUE);
-				logger.debug("type: {}  Value:{}", typeKeyStr, typeKeyvalue);
-				allowedLicenseObjectMap.put(typeKeyStr, typeKeyvalue);
-			}
-		}
-		return allowedLicenseObjectMap;
-	}
+  public String externalScanValue(JSONObject verificationObject) {
+    logger.debug("EXTERNALSCAN");
+    String externalScanObject = null;
+    if (verificationObject.get(SVConstants.EXTERNALSCAN) != null) {
+      externalScanObject = (String) verificationObject.get(SVConstants.EXTERNALSCAN);
+      logger.debug("externalScanObject {} ", externalScanObject);
+    }
+    return externalScanObject;
+  }
 
-	public Map<String, String> siteConfigMap(JSONObject verificationObject, String verificationObjectKey) {
-		logger.debug("Creating {} Map", verificationObjectKey);
-		Map<String, String> verificationObjectMap = new HashMap<>();
-		if (verificationObject.get(verificationObjectKey) != null) {
-			JSONObject siteConfigObject = (JSONObject) verificationObject.get(verificationObjectKey);
-			for (Object key : siteConfigObject.keySet()) {
-				String keyStr = (String) key;
-				String keyvalue = (String) siteConfigObject.get(keyStr);
-				logger.debug("key: {} value {}", keyStr, keyvalue);
-				verificationObjectMap.put(keyStr, keyvalue);
-			}
-		}
-		return verificationObjectMap;
-	}
+  public Map<String, String> allowedLicenseMap(JSONObject verificationObject) {
+    logger.debug("ALLOWEDLICENSE");
+    Map<String, String> allowedLicenseObjectMap = new HashMap<>();
+    if (verificationObject.get(SVConstants.ALLOWEDLICENSE) != null) {
+      JSONArray allowedLicenseJsonList =
+          (JSONArray) verificationObject.get(SVConstants.ALLOWEDLICENSE);
+      for (Object object : allowedLicenseJsonList) {
+        JSONObject jj = (JSONObject) object;
+        String typeKeyStr = (String) jj.get(SVConstants.TYPE);
+        String typeKeyvalue = (String) jj.get(SVConstants.VALUE);
+        logger.debug("type: {}  Value:{}", typeKeyStr, typeKeyvalue);
+        allowedLicenseObjectMap.put(typeKeyStr, typeKeyvalue);
+      }
+    }
+    return allowedLicenseObjectMap;
+  }
 
-	/**
-	 * @param jsonString
-	 * @return
-	 * @throws Exception
-	 */
-	public JSONObject stringToJsonObject(String jsonString) throws Exception {
-		try {
-			logger.debug("Inside stringToJsonObject. jsonString: {} jsonString.length: {}", jsonString,
-					jsonString.length());
-			JSONParser parser = new JSONParser();
-			JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
-			return jsonObject;
-		} catch (ParseException e) {
-			logger.error("ParseException:", e);
-			throw e;
-		}
-	}
+  public Map<String, String> siteConfigMap(
+      JSONObject verificationObject, String verificationObjectKey) {
+    logger.debug("Creating {} Map", verificationObjectKey);
+    Map<String, String> verificationObjectMap = new HashMap<>();
+    if (verificationObject.get(verificationObjectKey) != null) {
+      JSONObject siteConfigObject = (JSONObject) verificationObject.get(verificationObjectKey);
+      for (Object key : siteConfigObject.keySet()) {
+        String keyStr = (String) key;
+        String keyvalue = (String) siteConfigObject.get(keyStr);
+        logger.debug("key: {} value {}", keyStr, keyvalue);
+        verificationObjectMap.put(keyStr, keyvalue);
+      }
+    }
+    return verificationObjectMap;
+  }
 
-	public static String scanResultRootLicenseType(String scanResultJson) throws Exception {
-		logger.debug("Inside scanResultRootLicenseType");
-		JSONObject rootLicense = null;
-		String type = null;
-		try {
-			Object obj = new JSONParser().parse(new StringReader(scanResultJson));
-			JSONObject jo = (JSONObject) obj;
-			rootLicense = (JSONObject) jo.get("root_license");
-			logger.debug("verifiedLicenseStatus: {}", rootLicense);
-			if(rootLicense != null && rootLicense.get("type")!= null) {
-				type = (String) rootLicense.get("type");
-				logger.debug("type: {}", type);
-			}
+  /**
+   * @param jsonString
+   * @return
+   * @throws Exception
+   */
+  public JSONObject stringToJsonObject(String jsonString) throws Exception {
+    try {
+      logger.debug(
+          "Inside stringToJsonObject. jsonString: {} jsonString.length: {}",
+          jsonString,
+          jsonString.length());
+      JSONParser parser = new JSONParser();
+      JSONObject jsonObject = (JSONObject) parser.parse(jsonString);
+      return jsonObject;
+    } catch (ParseException e) {
+      logger.error("ParseException:", e);
+      throw e;
+    }
+  }
 
-		} catch (Exception e) {
-			logger.debug("Exception: {}", e);
-			throw e;
-		}
-		return type;
-	}
+  public static String scanResultRootLicenseType(String scanResultJson) throws Exception {
+    logger.debug("Inside scanResultRootLicenseType");
+    JSONObject rootLicense = null;
+    String type = null;
+    try {
+      Object obj = new JSONParser().parse(new StringReader(scanResultJson));
+      JSONObject jo = (JSONObject) obj;
+      rootLicense = (JSONObject) jo.get("root_license");
+      logger.debug("verifiedLicenseStatus: {}", rootLicense);
+      if (rootLicense != null && rootLicense.get("type") != null) {
+        type = (String) rootLicense.get("type");
+        logger.debug("type: {}", type);
+      }
 
-	public static String scanResultReason(String scanResultJson) throws Exception {
-		logger.debug("Inside scanResultReason");
-		String reason = null;
-		try {
-			Object obj = new JSONParser().parse(new StringReader(scanResultJson));
-			JSONObject jo = (JSONObject) obj;
-			reason = (String) jo.get("reason");
-			logger.debug("reason: {}", reason);
+    } catch (Exception e) {
+      logger.debug("Exception: {}", e);
+      throw e;
+    }
+    return type;
+  }
 
-		} catch (Exception e) {
-			logger.debug("Exception: {}", e);
-			throw e;
-		}
-		return reason;
-	}
+  public static String scanResultReason(String scanResultJson) throws Exception {
+    logger.debug("Inside scanResultReason");
+    String reason = null;
+    try {
+      Object obj = new JSONParser().parse(new StringReader(scanResultJson));
+      JSONObject jo = (JSONObject) obj;
+      reason = (String) jo.get("reason");
+      logger.debug("reason: {}", reason);
 
+    } catch (Exception e) {
+      logger.debug("Exception: {}", e);
+      throw e;
+    }
+    return reason;
+  }
 }
