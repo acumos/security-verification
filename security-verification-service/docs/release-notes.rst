@@ -20,25 +20,23 @@
 Security Verification (SV) Library Release Notes
 ================================================
 
+--------------------------
+Version 1.1.0, 01 Oct 2019
+--------------------------
+
+* `5317: Security Verification 1.1.0 - jenkins and rtu <https://gerrit.acumos.org/r/#/c/security-verification/+/5317/>`_
+
+  * `ACUMOS-3125: As a model User, when LUM provides denial of action to Acumos, Security Verification will not allow user action and Portal will display notification to user. <https://jira.acumos.org/browse/ACUMOS-3125>`_
+
 ----------------------------
 Version 1.0.1, 19 Sept 2019
 ----------------------------
 
-* `ACUMOS-3436: Security Verification update to Java 11 <https://jira.acumos.org/browse/ACUMOS-3436>`_
-
-  * `5246: Security Verification - Java 11 <https://gerrit.acumos.org/r/#/c/security-verification/+/5246/>`_
-
-* `ACUMOS-3428: Implement scan job queuing <https://jira.acumos.org/browse/ACUMOS-3428>`_
-
-  * `5292: Release 1.0.1 <https://gerrit.acumos.org/r/#/c/security-verification/+/5292/>`_
-  * `5271: Update to CDS 3.0.0 <https://gerrit.acumos.org/r/#/c/security-verification/+/5271/>`_
-  * `5241: Ignore license type field for now <https://gerrit.acumos.org/r/#/c/security-verification/+/5241/>`_
-  * `5210: Implement scan job queueing <https://gerrit.acumos.org/r/#/c/security-verification/+/5210/>`_
-
-* `4965: Fix SV build on master <https://gerrit.acumos.org/r/#/c/security-verification/+/4965/>`_
 * `ACUMOS-3031: A scan must occur to verify License Profile metadata <https://jira.acumos.org/browse/ACUMOS-3031>`_
 
   * `4888: Support License ArtifactType <https://gerrit.acumos.org/r/#/c/security-verification/+/4888/>`_
+
+* `4965: Fix SV build on master <https://gerrit.acumos.org/r/#/c/security-verification/+/4965/>`_
 
 ---------------------------
 Version 0.0.24, 09 Jun 2019
@@ -208,6 +206,36 @@ Version 0.0.1, 04 April 2019
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
+
+--------------------------
+Version 1.1.0, 01 Oct 2019
+--------------------------
+
+* `5317: Security Verification 1.1.0 - jenkins and rtu <https://gerrit.acumos.org/r/#/c/security-verification/+/5317/>`_
+
+  * `ACUMOS-3428: Security Verification License Scan migration to Jenkins <https://jira.acumos.org/browse/ACUMOS-3428>`_
+  * `ACUMOS-3125: As a model User, when LUM provides denial of action to Acumos, Security Verification will not allow user action and Portal will display notification to user. <https://jira.acumos.org/browse/ACUMOS-3125>`_
+  * Add LUM URL env parameter for LMCL
+  * Code formatting clean up
+  * Licensing RTU check updates
+  * Relocate/update scripts for Jenkins.
+  * Scan invokes Jenkins job.
+  * ScanResult handling from Jenkins.
+
+----------------------------
+Version 1.0.1, 19 Sept 2019
+----------------------------
+
+* `ACUMOS-3436: Security Verification update to Java 11 <https://jira.acumos.org/browse/ACUMOS-3436>`_
+
+  * `5246: Security Verification - Java 11 <https://gerrit.acumos.org/r/#/c/security-verification/+/5246/>`_
+
+* `ACUMOS-3428: Implement scan job queuing <https://jira.acumos.org/browse/ACUMOS-3428>`_
+
+  * `5292: Release 1.0.1 <https://gerrit.acumos.org/r/#/c/security-verification/+/5292/>`_
+  * `5271: Update to CDS 3.0.0 <https://gerrit.acumos.org/r/#/c/security-verification/+/5271/>`_
+  * `5241: Ignore license type field for now <https://gerrit.acumos.org/r/#/c/security-verification/+/5241/>`_
+  * `5210: Implement scan job queueing <https://gerrit.acumos.org/r/#/c/security-verification/+/5210/>`_
 
 ---------------------------
 Version 0.0.24, 09 Jun 2019
