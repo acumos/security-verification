@@ -5,8 +5,8 @@
         { "type":"SPDX", "value":"Apache-2.0" },
       { "type":"SPDX", "value":"CC-BY-4.0" },
       { "type":"SPDX", "value":"BSD-3-Clause" },
-      { "type":"VendorA", "value":"VendorA-OSS" },
-      { "type":"CompanyB", "value":"CompanyB-Proprietary" }
+      { "type":"VendorA", "value":"VendorA-OSS", "rtuRequired": true },
+      { "type":"CompanyB", "value":"CompanyB-Proprietary", "rtuRequired": true }
       ],
       "licenseScan":{  
          "created":"true",
