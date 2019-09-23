@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -34,18 +34,18 @@ public class SVServiceConstants {
 	public static final String SCAN_RESULT_JSON = "/scanresult.json";
 	public static final String SCAN_OUTPUT_LOCATION = "scanOutput";
 	public static final String SCAN_RESULT_CODE = "SR";
-	
+
 	public static final String CDMS_CLIENT_URL = "cdms.client.url";
 	public static final String CDMS_CLIENT_USER = "cdms.client.username";
 	public static final String CDMS_CLIENT_PWD = "cdms.client.password";
-	
+
 	public static final String NEXUS_GROUPID= "nexus.client.groupId";
 	public static final String NEXUS_CLIENT_URL = "nexus.client.url";
 	public static final String NEXUS_CLIENT_USER = "nexus.client.username";
 	public static final String NEXUS_CLIENT_PWD = "nexus.client.password";
 	public static final String NEXUS_CLIENT_PROXY = "nexus.proxy";
-	
-	
+
+
 	// Site config Json tag
 	public static final String SITE_VERIFICATION_KEY = "verification";
 }
