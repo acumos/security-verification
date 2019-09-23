@@ -8,34 +8,41 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.securityverification.service;
+package org.acumos.securityverification.transport;
 
-import org.acumos.cds.client.ICommonDataServiceRestClient;
+import java.util.ArrayList;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public interface ISecurityVerificationService {
 
-	/**This method makes call to license_scan and dump_model shell for security verification.
-	 * @param solutionId
-	 * @param revisionId
-	 * @param client 
-	 * @throws Exception
-	 */
-	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client)  throws Exception;
-	
-	/**This method call CCDS site-config to add the site-cinfig json in database.  
-	 * @param client 
-	 * @return site-config json string.
-	 * @throws Exception 
-	 */
-	public String createSiteConfig(ICommonDataServiceRestClient client) throws Exception;
-	
+public class ScanJob extends AbstractResponseObject {
+    static class JenkinsParameter {
+      private String name;
+      private String value;
+    }
+
+    private ArrayList<JenkinsParameter> parameter;
 }
+
+//    ScanJob scanJob = new ScanJob();
+//    JenkinsParameter param = new JenkinsParameter();
+//    param.name = SVServiceConstants.SOLUTIONID;
+//    param.value = solutionId;
+//    scanJob.parameter.add(param);
+//    param.name = SVServiceConstants.REVISIONID;
+//    param.value = solutionId;
+//    scanJob.parameter.add(param);
+//    param.name = SVServiceConstants.USERID;
+//    param.value = solutionId;
+//    scanJob.parameter.add(param);
