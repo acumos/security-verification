@@ -33,6 +33,7 @@
 #  - ACUMOS_NEXUS_HOST
 #  - ACUMOS_NEXUS_API_PORT
 #  - ACUMOS_NEXUS_MAVEN_REPO
+#  - ACUMOS_NEXUS_MAVEN_REPO_PATH
 #
 # Usage:
 # $ bash dump_model.sh <solutionId> <revisionId> <folder>

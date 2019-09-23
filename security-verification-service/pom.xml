@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
+<project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.acumos.security-verification</groupId>
 	<artifactId>security-verification-service</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<name>Security Verification Service</name>
 	<description>Acumos Security Verification Service for artifacts uploaded with a model</description>
 
@@ -171,8 +171,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
-		
-
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.9.6</version>
+    </dependency>
 	</dependencies>
 
 	<build>
@@ -191,6 +194,7 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
 				<configuration>
+          <forceJavacCompilerUse>true</forceJavacCompilerUse>
 					<release>11</release>
 				</configuration>
 			</plugin>
@@ -245,22 +249,18 @@
 							<!-- Specify a tag to avoid default tag "latest" -->
 							<name>security-verification:${project.version}</name>
 							<build>
-								<!-- <from>frolvlad/alpine-oraclejdk8:slim</from> -->
-								<!-- <from>openjdk:8-jre-slim</from> -->
-								<dockerFileDir>${project.basedir}</dockerFileDir>
-								<tags>
-									<!-- Add tag with build number -->
+                <from>openjdk:11-jre-slim</from>
+                <tags>
 									<tag>${project.version}-b${build.number}</tag>
 								</tags>
-								<assembly>
+                <assembly>
 									<inline>
-										<fileSets>
-											<fileSet>
-												<directory>scan</directory>
-												<outputDirectory>scan</outputDirectory>
-											</fileSet>
-										</fileSets>
 										<files>
+											<file>
+												<source>src/main/resources/application.properties</source>
+												<outputDirectory />
+												<destName>application.properties</destName>
+											</file>
 											<file>
 												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
 												<outputDirectory />
@@ -268,6 +268,19 @@
 										</files>
 									</inline>
 								</assembly>
+								<runCmds>
+									<!-- Ensure logs and scan dir exists and is world writable -->
+									<runCmd>mkdir /maven/logs</runCmd>
+									<runCmd>chmod -R 777 /maven</runCmd>
+                  <runCmd>mkdir /maven/scan</runCmd>
+									<runCmd>chmod -R 777 /maven/scan</runCmd>
+								</runCmds>
+								<env>
+									<JAVA_OPTS>-Xms128m -Xmx256m</JAVA_OPTS>
+								</env>
+								<cmd>
+									<shell><![CDATA[cd /maven; java $JAVA_OPTS  -Djava.security.egd=file:/dev/./urandom -jar ${project.artifactId}-${project.version}.${project.packaging}]]></shell>
+								</cmd>
 							</build>
 						</image>
 					</images>
