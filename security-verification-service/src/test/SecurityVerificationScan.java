@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -51,7 +51,7 @@ public class SecurityVerificationScan implements Runnable {
 	private String revisionId;
 	private Environment env;
 	private ICommonDataServiceRestClient client;
-	
+
 	SecurityVerificationScan(String solutionId, String revisionId, Environment env1,
 			ICommonDataServiceRestClient client) {
 		this.solutionId = solutionId;
@@ -128,7 +128,7 @@ public class SecurityVerificationScan implements Runnable {
 		int version = sortedlist.get(sortedlist.size() - 1);
 		return version;
 	}
-	
+
 	private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
 		logger.debug("Inside updateVerifiedLicenseStatus, solutionId: {} Status: {}",solutionId, verifiedLicense);
 		List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
@@ -139,17 +139,17 @@ public class SecurityVerificationScan implements Runnable {
 
 	}
 
-	private String scanOutJsonLocation(String folder,String jsonFlieName) {
+	private String scanOutJsonLocation(String folder,String jsonFileName) {
 		logger.debug("Inside scanOutJsonLocation");
-		StringBuilder scanJsonOutFliePath = new StringBuilder();
-		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
-		scanJsonOutFliePath.append(SVServiceConstants.MAVEN);
-		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
-		scanJsonOutFliePath.append(SVServiceConstants.SECURITY_SCAN);
-		scanJsonOutFliePath.append(SVServiceConstants.FORWARD_SLASH);
-		scanJsonOutFliePath.append(folder);
-		scanJsonOutFliePath.append(jsonFlieName);
-		return scanJsonOutFliePath.toString();
+		StringBuilder scanJsonOutFilePath = new StringBuilder();
+		scanJsonOutFilePath.append(SVServiceConstants.FORWARD_SLASH);
+		scanJsonOutFilePath.append(SVServiceConstants.MAVEN);
+		scanJsonOutFilePath.append(SVServiceConstants.FORWARD_SLASH);
+		scanJsonOutFilePath.append(SVServiceConstants.SECURITY_SCAN);
+		scanJsonOutFilePath.append(SVServiceConstants.FORWARD_SLASH);
+		scanJsonOutFilePath.append(folder);
+		scanJsonOutFilePath.append(jsonFileName);
+		return scanJsonOutFilePath.toString();
 	}
 
 	private String scanResultVerifiedLicensStatus(String jsonFilePath) throws Exception {
