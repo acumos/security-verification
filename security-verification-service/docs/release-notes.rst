@@ -21,6 +21,18 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 ----------------------------
+Version 1.1.0, 19 Sept 2019
+----------------------------
+
+* `ACUMOS-3428: Implement scan job queuing <https://jira.acumos.org/browse/ACUMOS-3428>`_
+* Internal - code formatting improvements ensure following check style guidelines
+* `ACUMOS-3125: Licensing RTU check updates <https://jira.acumos.org/browse/ACUMOS-3125`_
+  - New Verifier updates using LUM
+  - Passing revision id
+  - Created method getRtu - reduced duplicate code
+* Use OpenJ9 JRE  related to- `5246: Security Verification - Java 11 <https://gerrit.acumos.org/r/#/c/security-verification/+/5246/>`_
+
+----------------------------
 Version 1.0.1, 19 Sept 2019
 ----------------------------
 
