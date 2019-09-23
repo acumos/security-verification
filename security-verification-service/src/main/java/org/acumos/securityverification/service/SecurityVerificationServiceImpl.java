@@ -20,13 +20,26 @@
 package org.acumos.securityverification.service;
 
 import java.lang.invoke.MethodHandles;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
+import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPCatalog;
+import org.acumos.cds.domain.MLPSolution;
+import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.cds.domain.MLPSiteConfig;
+import org.acumos.securityverification.exception.AcumosServiceException;
 import org.acumos.securityverification.utils.SVServiceConstants;
+import org.acumos.securityverification.utils.SecurityVerificationServiceUtils;
+import org.acumos.securityverification.controller.ScanResult;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,9 +85,93 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 	@Override
 	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client) throws Exception {
 		logger.debug("Inside securityVerification");
-		SecurityVerificationScan securityVerificationRunner = new SecurityVerificationScan(solutionId, revisionId, env, client);
-		Thread t = new Thread(securityVerificationRunner);
-		t.start();
+    try {
+      MLPSolutionRevision mlpSolutionRevision = client.getSolutionRevision(solutionId, revisionId);
+  		mlpSolutionRevision.setVerifiedLicense("IP");
+  		client.updateSolutionRevision(mlpSolutionRevision);
+      // Start Jenkins job
+		} catch (Exception e) {
+			logger.debug("Exception: ", e);
+		}
+	}
+
+  @Override
+	public void scanResult(String solutionId, String revisionId, @RequestBody ScanResult scanResult, ICommonDataServiceRestClient client) throws Exception {
+		logger.debug("Inside scanResult");
+
+    UUID uidNumber = UUID.randomUUID();
+		String folder = uidNumber.toString();
+		try {
+			// Upload scanresult.json
+      JSONObject result = scanResult.getBody();
+      String verifiedLicense = result.getString("verifiedLicense");
+      String reason = result.getString("reason");
+			logger.debug("scanResult verifiedLicense: {}, reason: {}", verifiedLicense, reason);
+      String scanResultJsonFilePath = scanOutJsonLocation(folder, SVServiceConstants.SCAN_RESULT_JSON);
+      BufferedWriter writer = new BufferedWriter(new FileWriter(scanResultJsonFilePath));
+      writer.write(result.toString());
+      writer.close();
+      File scanResultJsonFile = SecurityVerificationServiceUtils.readScanOutput(scanResultJsonFilePath);
+      logger.debug("scanResultJsonFile: {}", scanResultJsonFile);
+			uploadToArtifact(solutionId, revisionId, scanResultJsonFile);
+			if(verifiedLicense.equalsIgnoreCase("true")) {
+				updateVerifiedLicenseStatus(solutionId, "SU");
+			}
+			if(verifiedLicense.equalsIgnoreCase("false")) {
+				updateVerifiedLicenseStatus(solutionId, "FA");
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception: ", e);
+		}
+
+	}
+
+  private void uploadToArtifact(String solutionId, String revisionId, File file)
+			throws AcumosServiceException, FileNotFoundException {
+		logger.debug("Inside uploadToArtifact");
+		if (file != null) {
+			long fileSizeByKB = file.length();
+			if (fileSizeByKB > 0) {
+				logger.debug("In side if conditoin fileSizeByKB  {}", fileSizeByKB);
+				MLPSolution mlpSolution = client.getSolution(solutionId);
+				String userId = mlpSolution.getUserId();
+				List<MLPArtifact> mlpArtifactList = client.getSolutionRevisionArtifacts(null, revisionId);//solutionIdIgnored
+				String version = null;
+				List<Integer> mlpArtifactVersionList = new ArrayList<>();
+				for (MLPArtifact mlpArtifact : mlpArtifactList) {
+					mlpArtifactVersionList.add(Integer.parseInt(mlpArtifact.getVersion()));
+				}
+				version = String.valueOf(findMaxVersion(mlpArtifactVersionList));
+				UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
+				uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, version, userId, file);
+			}
+		}
+	}
+
+	private Integer findMaxVersion(List<Integer> list) {
+		logger.debug("Inside findMaxVersion");
+		// check list is empty or not
+		if (list == null || list.size() == 0) {
+			return Integer.MIN_VALUE;
+		}
+		// create a new list to avoid modification in the original list
+		List<Integer> sortedlist = new ArrayList<>(list);
+		// sort list in natural order
+		Collections.sort(sortedlist);
+		// last element in the sorted list would be maximum
+		int version = sortedlist.get(sortedlist.size() - 1);
+		return version;
+	}
+
+	private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
+		logger.debug("Inside updateVerifiedLicenseStatus, solutionId: {} Status: {}",solutionId, verifiedLicense);
+		List<MLPSolutionRevision> mlpSolutionRevisions = client.getSolutionRevisions(solutionId);
+		for (MLPSolutionRevision mlpSolutionRevision : mlpSolutionRevisions) {
+			mlpSolutionRevision.setVerifiedLicense(verifiedLicense);
+			client.updateSolutionRevision(mlpSolutionRevision);
+		}
+
 	}
 
 	@Override
@@ -105,7 +202,7 @@ public class SecurityVerificationServiceImpl implements ISecurityVerificationSer
 			}
 		}
 		return mlpSiteConfigFromDB != null ? mlpSiteConfigFromDB.getConfigValue()
-				: "site_config verification already exist";
+				: "site_config verification already exists";
 	}
 
 	private ICommonDataServiceRestClient getCcdsClient() {

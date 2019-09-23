@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -31,6 +31,7 @@ import org.acumos.securityverification.transport.ErrorTransport;
 import org.acumos.securityverification.transport.SVResponse;
 import org.acumos.securityverification.transport.SuccessTransport;
 import org.acumos.securityverification.utils.SVServiceConstants;
+import org.acumos.securityverification.controller.ScanResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,19 +48,19 @@ import io.swagger.annotations.ApiOperation;
 public class SecurityVerificationServiceController extends AbstractController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-	
+
 	@Autowired
 	private Environment env;
 
 	public void setEnvironment(Environment env1) {
 		env = env1;
 	}
-	
+
 	@Autowired
 	ISecurityVerificationService securityVerificationService;
 
 	@ApiOperation(value = "Security Verification Service Scan.", response = SuccessTransport.class)
-	@RequestMapping(value = "/" + SVServiceConstants.SOLUTIONID + "/{solutionId}/" + SVServiceConstants.REVISIONID
+	@RequestMapping(value = "/scan/" + SVServiceConstants.SOLUTIONID + "/{solutionId}/" + SVServiceConstants.REVISIONID
 			+ "/{revisionId}/" + SVServiceConstants.WORKFLOWID
 			+ "/{workflowId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public SVResponse securityVerification(@PathVariable("solutionId") String solutionId,
@@ -73,7 +74,27 @@ public class SecurityVerificationServiceController extends AbstractController {
 			return new SuccessTransport(HttpServletResponse.SC_OK, null);
 		} catch (Exception ex) {
 			logger.warn("securityVerification failed: {}", ex.toString());
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "securityVerification failed", ex);
+			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "securityVerification failed", ex);
+		}
+
+	}
+
+  @ApiOperation(value = "Security Verification Service ScanResult.", response = SuccessTransport.class)
+	@RequestMapping(value = "/scanresult/" + SVServiceConstants.SOLUTIONID + "/{solutionId}/" + SVServiceConstants.REVISIONID
+			+ "/{revisionId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public SVResponse scanResult(@PathVariable("solutionId") String solutionId,
+			@PathVariable("revisionId") String revisionId, @RequestBody ScanResult scanResult) {
+    String result = scanResult.getBody();
+		logger.debug("Inside scanResult for solutionId {} revisionId {} scanResult {}", solutionId, revisionId, result);
+		try {
+			LogConfig.setEnteringMDCs("security-verification-client-library","securityVerificationScanResult");
+			ICommonDataServiceRestClient client = getCcdsClient();
+			securityVerificationService.scanResult(solutionId, revisionId, scanResult, client);
+			LogConfig.clearMDCDetails();
+			return new SuccessTransport(HttpServletResponse.SC_OK, null);
+		} catch (Exception ex) {
+			logger.warn("scanResult failed: {}", ex.toString());
+			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "saving ScanResult failed", ex);
 		}
 
 	}
@@ -92,11 +113,11 @@ public class SecurityVerificationServiceController extends AbstractController {
 			return new SuccessTransport(HttpServletResponse.SC_OK, siteConfigJson);
 		} catch (Exception ex) {
 			logger.warn("createSiteConfig failed: {}", ex.toString());
-			return new ErrorTransport(HttpServletResponse.SC_BAD_REQUEST, "createSiteConfig failed", ex);
+			return new ErrorTransport(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "createSiteConfig failed", ex);
 		}
 
 	}
-	
+
 	private ICommonDataServiceRestClient getCcdsClient() {
 		ICommonDataServiceRestClient client = new CommonDataServiceRestClientImpl(
 				env.getProperty(SVServiceConstants.CDMS_CLIENT_URL),

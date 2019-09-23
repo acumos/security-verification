@@ -8,9 +8,9 @@
  * under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *  
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * This file is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -20,22 +20,31 @@
 package org.acumos.securityverification.service;
 
 import org.acumos.cds.client.ICommonDataServiceRestClient;
+import org.acumos.securityverification.controller.ScanResult;
 
 public interface ISecurityVerificationService {
 
-	/**This method makes call to license_scan and dump_model shell for security verification.
+	/**This method starts a Jenkins job for security verification.
 	 * @param solutionId
 	 * @param revisionId
-	 * @param client 
+	 * @param client
 	 * @throws Exception
 	 */
 	public void securityVerification(String solutionId, String revisionId, ICommonDataServiceRestClient client)  throws Exception;
-	
-	/**This method call CCDS site-config to add the site-cinfig json in database.  
-	 * @param client 
+
+  /**This method saves an external ScanResult for security verification.
+	 * @param solutionId
+	 * @param revisionId
+	 * @param client
+	 * @throws Exception
+	 */
+	public void scanResult(String solutionId, String revisionId, @RequestBody ScanResult scanResult, ICommonDataServiceRestClient client)  throws Exception;
+
+	/**This method call CCDS site-config to add the site-config json in database.
+	 * @param client
 	 * @return site-config json string.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public String createSiteConfig(ICommonDataServiceRestClient client) throws Exception;
-	
+
 }
