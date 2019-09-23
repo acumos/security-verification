@@ -297,8 +297,8 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		}
 
 		if (isValidInvokeScan(licenseScan, workflowId) || isValidInvokeScan(securityScan, workflowId)) {
-			svResponse = invokesScan(securityVerificationCdumpNode.getNodeSolutionId(),
-					mlpCdumpSolutionRevision.getRevisionId(), workflowId);
+			svResponse = invokeScan(securityVerificationCdumpNode.getNodeSolutionId(),
+					mlpCdumpSolutionRevision.getRevisionId(), loggedInUserId);
 			logger.info(" InvokesScan result StatusCode: {} StatusCodeValue: {}", svResponse.getStatusCode(),
 					svResponse.getStatusCodeValue());
 		}
@@ -439,7 +439,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		}
 
 		if (isValidInvokeScan(licenseScan, workflowId) || isValidInvokeScan(securityScan, workflowId)) {
-			svResponse = invokesScan(solutionId, revisionId, workflowId);
+			svResponse = invokeScan(solutionId, revisionId, loggedInUserId);
 			logger.info(" InvokesScan result StatusCode: {} StatusCodeValue: {}", svResponse.getStatusCode(),
 					svResponse.getStatusCodeValue());
 		}
@@ -576,19 +576,19 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		return artifactClient;
 	}
 
-	private ResponseEntity<SVResponse> invokesScan(String nodeSolutionId, String revisionId, String workflowId) {
-		logger.info("Inside isValidInvokeScan. securityVerificationApiUrl {}", securityVerificationApiUrl);
+	private ResponseEntity<SVResponse> invokeScan(String solutionId, String revisionId, String userId) {
+		logger.info("invokeScan: solutionId {} revisionId {} userId {}", solutionId, revisionId, userId);
 		HttpHeaders headers = new HttpHeaders();
 		RestTemplate restTemplate = new RestTemplate();
 		HttpEntity<String> entity = new HttpEntity<String>(headers);
-		String svApiUrl = svApiUrlBuilder(nodeSolutionId, revisionId, workflowId, securityVerificationApiUrl);
-		logger.info("Security verification Api Url {}" + svApiUrl);
+		String svApiUrl = svApiUrlBuilder(solutionId, revisionId, workflowId, securityVerificationApiUrl);
+		logger.debug("invokeScan: Url {}" + svApiUrl);
 		ResponseEntity<SVResponse> svResponse = restTemplate.exchange(svApiUrl, HttpMethod.POST, entity, SVResponse.class);
-		logger.info("Security verification Api result {}", svResponse.getBody());
+		logger.debug("invokeScan: result {}", svResponse.getBody());
 		return svResponse;
 	}
 
-	private String svApiUrlBuilder(String nodeSolutionId, String revisionId, String workflowId,
+	private String svApiUrlBuilder(String nodeSolutionId, String revisionId, String userId,
 			String securityVerificationApiUrl) {
 		StringBuilder url = new StringBuilder();
 		url.append(securityVerificationApiUrl);
@@ -601,9 +601,9 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
 		url.append(SVConstants.FORWARD_SLASH);
 		url.append(revisionId);
 		url.append(SVConstants.FORWARD_SLASH);
-		url.append(SVConstants.WORKFLOWID);
+    url.append(SVConstants.USERID);
 		url.append(SVConstants.FORWARD_SLASH);
-		url.append(workflowId);
+		url.append(userId);
 		return url.toString();
 	}
 
