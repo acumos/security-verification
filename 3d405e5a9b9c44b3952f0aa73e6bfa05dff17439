@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ea6437e2_e89ae389",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-09-26T17:31:47Z",
+      "side": 1,
+      "message": "Can you please provide more detail?",
+      "revId": "3d405e5a9b9c44b3952f0aa73e6bfa05dff17439",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a1bf4087_12a39232",
+        "filename": "security-verification-service/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 290
+      },
+      "writtenOn": "2019-09-26T17:31:47Z",
+      "side": 1,
+      "message": "mixing tabs and spaces.",
+      "revId": "3d405e5a9b9c44b3952f0aa73e6bfa05dff17439",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
