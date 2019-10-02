@@ -33,6 +33,24 @@
       "revId": "65347df772b26093e8d5cada6a8ebc66e7b547c4",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2484085_4e2d9e3f",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/utils/SecurityVerificationJsonParser.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 93
+      },
+      "writtenOn": "2019-10-02T00:28:39Z",
+      "side": 1,
+      "message": "Removed in final patch. This was for testing purposes only.",
+      "parentUuid": "75cca193_58e8f20b",
+      "revId": "65347df772b26093e8d5cada6a8ebc66e7b547c4",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
     }
   ]
 }
