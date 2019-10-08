@@ -23,20 +23,12 @@ import java.io.ByteArrayOutputStream;
 import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPSiteConfig;
 import org.acumos.cds.domain.MLPSolution;
 import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.licensemanager.client.model.LicenseAction;
-import org.acumos.licensemanager.client.model.LicenseRtuVerification;
-import org.acumos.licensemanager.client.model.VerifyLicenseRequest;
-import org.acumos.licensemanager.client.rtu.LicenseRtuVerifier;
-import org.acumos.licensemanager.exceptions.RightToUseException;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.acumos.securityverification.domain.SecurityVerificationCdump;
@@ -68,19 +60,16 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
   private String nexusClientUrl;
   private String nexusClientUsername;
   private String nexusClientPwd;
-  private String lumServiceUrl;
 
   private Map<String, String> licenseScan;
   private Map<String, String> securityScan;
   private Map<String, String> licenseVerify;
   private Map<String, String> securityVerify;
   private Map<String, String> allowedLicenseObjectMap;
-  private String externalScanObject;
 
   public SecurityVerificationClientServiceImpl(final String securityVerificationApiUrl,
       final String cdmsClientUrl, final String cdmsClientUsername, final String cdmsClientPwd,
-      final String nexusClientUrl, final String nexusClientUsername, final String nexusClientPwd,
-      final String lumServiceUrl) {
+      final String nexusClientUrl, final String nexusClientUsername, final String nexusClientPwd) {
 
     this.securityVerificationApiUrl = securityVerificationApiUrl;
     this.cdmsClientUrl = cdmsClientUrl;
@@ -89,7 +78,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
     this.nexusClientUrl = nexusClientUrl;
     this.nexusClientUsername = nexusClientUsername;
     this.nexusClientPwd = nexusClientPwd;
-    this.lumServiceUrl = lumServiceUrl;
   }
 
   public Workflow securityVerificationScan(String solutionId, String revisionId, String workflowId,
@@ -278,29 +266,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
             .scanResultRootLicenseType(byteArrayOutputStream.toString());
         logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
 
-        boolean rtuFlag = true;
-        LicenseRtuVerifier licenseVerifier = new LicenseRtuVerifier(lumServiceUrl);
-        // create a random UUID for the asset usage (from LUM instance of usage)
-        // ideally this should be for deployment id or artifact download id (no download id)
-        // MLPSolutionDownload#getDownloadId the issue is this is created after download not during
-        // RTU check
-        // MLPSolutionDeployment.html#getDeploymentId() SV doesn't get this information
-        String assetUsageId = UUID.randomUUID().toString();
-        if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
-          rtuFlag = getRtu(loggedInUserId,
-              securityVerificationCdumpNode.getNodeSolutionId(),
-              mlpCdumpSolutionRevision.getRevisionId(),
-              licenseVerifier, assetUsageId, LicenseAction.DOWNLOAD);
-        } else if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
-          rtuFlag = getRtu(loggedInUserId,
-              securityVerificationCdumpNode.getNodeSolutionId(),
-              mlpCdumpSolutionRevision.getRevisionId(),
-              licenseVerifier, assetUsageId, LicenseAction.DEPLOY);
-        }
-        workFlowAllowed = rtuFlag;
-        if (!rtuFlag) {
-          reason.append("No Right to use");
-        }
       }
     }
 
@@ -363,23 +328,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
     logger.info("WorkflowAllowed: {} Reason: {}", workFlowAllowed, reason.toString());
   }
 
-  private boolean getRtu(String loggedInUserId, String solutionId,
-      String revisionId, LicenseRtuVerifier licenseVerifier,
-      String assetUsageId, LicenseAction licenseAction)
-      throws RightToUseException, InterruptedException, ExecutionException {
-    boolean rtuFlag;
-    VerifyLicenseRequest licenseDownloadRequest =
-        new VerifyLicenseRequest(licenseAction, solutionId, revisionId,
-            loggedInUserId, assetUsageId);
-    licenseDownloadRequest.setAction(licenseAction);
-    CompletableFuture<LicenseRtuVerification> verifyUserRTU =
-        licenseVerifier.verifyRtu(licenseDownloadRequest);
-    LicenseRtuVerification verification = verifyUserRTU.get();
-    // returns true or false if rtu exists
-    rtuFlag = verification.isAllowed(licenseAction);
-    logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
-    return rtuFlag;
-  }
 
   private void workflowPermissionDeterminationSimpleSolution(String workflowId, Workflow workflow,
       ICommonDataServiceRestClient client, String loggedInUserId, String ownerUserId,
@@ -425,41 +373,11 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
         logger.info("get scanresult from Nexus: byteArrayOutputStream length: {}",
             byteArrayOutputStream.size());
         logger.info("byteArrayOutputStream.toString(): {}", byteArrayOutputStream.toString());
-
-        SecurityVerificationJsonParser parseJSON = new SecurityVerificationJsonParser();
         String scanResultRootLicenseType =
-            parseJSON.scanResultRootLicenseType(byteArrayOutputStream.toString());
-
+            SecurityVerificationJsonParser.scanResultRootLicenseType(byteArrayOutputStream.toString());
         logger.info("scanResultRootLicenseType: ({}) ", scanResultRootLicenseType);
         // Proprietary models have a recognized licenseType, not null, "", or SPDX
 
-        boolean rtuFlag = true;
-        LicenseRtuVerifier licenseVerifier = new LicenseRtuVerifier(lumServiceUrl);
-        // create a random UUID for the asset usage (from LUM instance of usage)
-        // ideally this should be for deployment id or artifact download id (no download id)
-        // MLPSolutionDownload#getDownloadId the issue is this is created after download not during
-        // RTU check
-        // MLPSolutionDeployment.html#getDeploymentId() SV doesn't get this information
-        String assetUsageId = UUID.randomUUID().toString();
-        // TODO the solution being deployed could be used for asset usage id?
-        if (workflowId.equalsIgnoreCase(SVConstants.DOWNLOAD)) {
-          rtuFlag = getRtu(loggedInUserId, solutionId, revisionId,
-              licenseVerifier, assetUsageId, LicenseAction.DOWNLOAD);
-        } else if (workflowId.equalsIgnoreCase(SVConstants.DEPLOY)) {
-          rtuFlag = getRtu(loggedInUserId, solutionId, revisionId,
-            licenseVerifier, assetUsageId, LicenseAction.DEPLOY);
-        }
-        VerifyLicenseRequest licenseDownloadRequest = new VerifyLicenseRequest(
-            LicenseAction.DOWNLOAD, solutionId, revisionId, loggedInUserId, assetUsageId);
-        CompletableFuture<LicenseRtuVerification> verifyUserRTU =
-            licenseVerifier.verifyRtu(licenseDownloadRequest);
-        // returns true or false if rtu exists
-        rtuFlag = verifyUserRTU.get().isAllowed(LicenseAction.DOWNLOAD);
-        logger.info("verifyUserRTU.isAllowed: {} ", rtuFlag);
-        workFlowAllowed = rtuFlag;
-        if (!rtuFlag) {
-          reason.append("No Right to use");
-        }
       }
     }
 
@@ -545,7 +463,6 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
     licenseVerify = parseJSON.siteConfigMap(siteConfigDataJsonObj, SVConstants.LICENSEVERIFY);
     securityVerify = parseJSON.siteConfigMap(siteConfigDataJsonObj, SVConstants.SECURITYVERIFY);
     allowedLicenseObjectMap = parseJSON.allowedLicenseMap(siteConfigDataJsonObj);
-    externalScanObject = parseJSON.externalScanValue(siteConfigDataJsonObj);
     logger.info(
         "licenseScan: {} securityScan: {} licenseVerify: {} securityVerify: {} allowedLicenseObjectMap: {} ",
         licenseScan.size(), securityScan.size(), licenseVerify.size(), securityVerify.size(),

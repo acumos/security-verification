@@ -21,6 +21,13 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 --------------------------
+Version 1.2.0, 10 Oct 2019
+--------------------------
+
+* Removal of LMCL dependency - `ACUMOS-3505 <https://jira.acumos.org/browse/ACUMOS-3505>`_
+* Changed docker image for SV to follow acumos/ prefix
+
+--------------------------
 Version 1.1.0, 01 Oct 2019
 --------------------------
 
