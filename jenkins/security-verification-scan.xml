@@ -1,0 +1,222 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<!--
+# Copyright 2019 AT&T Intellectual Property, Inc. All rights reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# What this is: Jenkins job for SV-Scanning
+-->
+<project>
+  <actions/>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>solutionId</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>revisionId</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>userId</name>
+          <description></description>
+          <defaultValue></defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+  </properties>
+  <scm class="hudson.scm.NullSCM"/>
+  <canRoam>true</canRoam>
+  <disabled>false</disabled>
+  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
+  <triggers/>
+  <concurrentBuild>false</concurrentBuild>
+  <builders>
+    <hudson.tasks.Shell>
+      <command>#!/bin/bash
+set -x -e
+
+function fail() {
+  echo &quot;$1&quot;
+  exit 1
+}
+
+function create_task() {
+  trap &apos;fail&apos; ERR
+  cat &lt;&lt;EOF &gt;/tmp/$requestId-task.json
+{ &quot;name&quot;: &quot;Security Verification Scan&quot;,
+  &quot;revisionId&quot;: &quot;$revisionId&quot;,
+  &quot;solutionId&quot;: &quot;$solutionId&quot;,
+  &quot;statusCode&quot;: &quot;ST&quot;,
+  &quot;taskCode&quot;: &quot;SV&quot;,
+  &quot;trackingId&quot;: &quot;$(uuidgen)&quot;,
+  &quot;userId&quot;: &quot;$userId&quot; }
+EOF
+  response_code=$(curl -s -o /tmp/$requestId-task.json -X POST -w &quot;%{response_code}&quot; -u $cdsCreds -H &quot;Content-Type: application/json&quot; $cdsUri/task -d @/tmp/$requestId-task.json)
+  if [[ $response_code != 201 ]]; then
+    cat /tmp/$requestId-task.json
+    fail &quot;Task creation failed with response_code=$response_code&quot;
+  fi
+
+  export TASK_ID=$(jq -r &quot;.taskId&quot; /tmp/$requestId-task.json)
+}
+
+function update_task_status() {
+  trap &apos;fail&apos; ERR
+  local status=$1
+  sed -i -- &quot;s/statusCode\&quot;: \&quot;ST\&quot;/statusCode\&quot;: \&quot;$status\&quot;/&quot; /tmp/$requestId-task.json
+  response_code=$(curl -s -o /tmp/$requestId-task.json -X PUT -w &quot;%{response_code}&quot; -u $cdsCreds -H &quot;Content-Type: application/json&quot; $cdsUri/task/$TASK_ID -d @/tmp/$requestId-task.json)
+  if [[ $response_code != 200 ]]; then
+    cat /tmp/$requestId-task.json
+    fail &quot;Task status update failed with response_code=$response_code&quot;
+  fi
+}
+
+function setup() {
+  # Download scancode toolkit if not present (and presumably customized)
+  if [[ ! -e /home/jenkins/sv ]]; then
+    cp -r /acumos/sv .
+  fi
+  cd sv
+  if [[ ! -e scancode-toolkit-3.0.2 ]]; then
+    wget https://github.com/nexB/scancode-toolkit/releases/download/v3.0.2/scancode-toolkit-3.0.2.zip
+    unzip scancode-toolkit-3.0.2.zip
+  fi
+
+  cp licenses/* scancode-toolkit-3.0.2/src/licensedcode/data/licenses/.
+  cp rules/* scancode-toolkit-3.0.2/src/licensedcode/data/rules/.
+
+  # Initialize scancode toolkit
+  cat &lt;&lt;EOF &gt;init.txt
+dummy file for scancode setup
+EOF
+  scancode-toolkit-3.0.2/scancode --license init.txt --json=/tmp/scancode.json
+}
+
+if [[ ! -e sv ]]; then
+  setup
+  exit 0
+fi
+
+export revisionId=$revisionId
+export solutionId=$solutionId
+export userId=$userId
+export ACUMOS_SV_UNDER_JENKINS=true
+
+source /acumos/acumos_env.sh
+cdsCreds=&quot;$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD&quot;
+cdsUri=&quot;http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT/ccds&quot;
+cd sv
+requestId=$revisionId-$(date +%H%M%S%N)
+mkdir $requestId
+create_task
+bash dump_model.sh $solutionId $revisionId $requestId
+
+echo
+echo &quot;************************&quot;
+echo &quot;***** SCAN SUMMARY *****&quot;
+echo &quot;************************&quot;
+echo
+echo &quot;***************************&quot;
+echo &quot;***** SCANRESULT.JSON *****&quot;
+echo &quot;***************************&quot;
+echo
+jq . $requestId/scanresult.json
+
+if [[ -e $requestId/scancode.json ]]; then
+  echo
+  echo &quot;*************************&quot;
+  echo &quot;***** SCANCODE.JSON *****&quot;
+  echo &quot;*************************&quot;
+  echo
+  jq . $requestId/scancode.json
+fi
+
+echo
+echo &quot;*********************&quot;
+echo &quot;***** SCAN LOGS *****&quot;
+echo &quot;*********************&quot;
+echo
+echo &quot;**************************&quot;
+echo &quot;***** DUMP_MODEL.LOG *****&quot;
+echo &quot;**************************&quot;
+echo
+cat $requestId/dump_model.log
+
+if [[ -e $requestId/license_scan.log ]]; then
+  echo
+  echo &quot;****************************&quot;
+  echo &quot;***** LICENSE_SCAN.LOG *****&quot;
+  echo &quot;****************************&quot;
+  echo
+  cat $requestId/license_scan.log
+fi
+
+echo
+echo &quot;*******************************&quot;
+echo &quot;***** ALL PROCESSED FILES *****&quot;
+echo &quot;*******************************&quot;
+echo
+ls -Rlat $requestId
+
+echo
+echo &quot;*********************************&quot;
+echo &quot;***** ALL JSON FILES/OUTPUT *****&quot;
+echo &quot;*********************************&quot;
+echo
+
+fs=$(find $requestId/. -name &apos;*.json&apos;)
+for f in $fs; do
+  echo
+  echo &quot;***** $f *****&quot;
+  echo
+  cat $f
+done
+
+status=$(jq -r &quot;.verifiedLicense&quot; $requestId/scanresult.json)
+if [[ &quot;$status&quot; == &quot;true&quot; ]]; then
+  echo
+  echo &quot;************************&quot;
+  echo &quot;***** SCAN SUCCESS *****&quot;
+  echo &quot;************************&quot;
+  echo
+  update_task_status SU
+else
+  echo
+  echo &quot;***********************&quot;
+  echo &quot;***** SCAN FAILED *****&quot;
+  echo &quot;***********************&quot;
+  echo
+  update_task_status FA
+fi
+
+curl -X POST -H &quot;Content-Type: application/json&quot; http://sv-scanning-service:$ACUMOS_SECURITY_VERIFICATION_PORT/scanresult/solutionId/$solutionId/revisionId/$revisionId -d @$requestId/scanresult.json
+rm /tmp/$requestId-task.json
+if [[ &quot;$status&quot; != &quot;true&quot; ]]; then
+  exit 1
+fi
+</command>
+    </hudson.tasks.Shell>
+  </builders>
+  <publishers/>
+  <buildWrappers/>
+</project>

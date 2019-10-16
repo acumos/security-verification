@@ -290,6 +290,7 @@ EOF
   sed -i -- "s~^{~{\"schema\":\"1.0\",~" $requestId/scanresult.json
 }
 
+set -x
 trap 'fail' ERR
 cd $(dirname "$0")
 WORK_DIR=$(pwd)
@@ -304,12 +305,6 @@ requestId=$2
 solutionId=$(jq -r '.solutionId' $folder/cds/revision.json)
 revisionId=$(jq -r '.revisionId' $folder/cds/revision.json)
 log DEBUG "license_scan.sh solutionId($solutionId) revisionId($revisionId) folder($folder)"
-cat <<EOF >>jobs
-$requestId
-EOF
-until [[ "$(head -1 jobs)" == "$requestId" ]]; do
-  sleep 1
-done
 cd $folder
 log DEBUG "invoking scancode"
 ../scancode-toolkit-3.0.2/scancode --quiet --license --copyright \
@@ -318,7 +313,6 @@ log DEBUG "invoking scancode"
   --timeout 60 --processes 10 \
   --json=$WORK_DIR/$requestId/scancode.json .
 cd ..
-sed -i -- "/$requestId/d" jobs
 if [[ ! -e $requestId/scancode.json ]]; then
   fail "Unknown failure in scancode utility"
 else
