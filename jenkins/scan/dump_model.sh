@@ -192,6 +192,7 @@ function get_metadata() {
   done
 }
 
+set -x
 trap 'fail' ERR
 cd $(dirname "$0")
 WORK_DIR=$(pwd)

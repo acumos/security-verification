@@ -249,33 +249,13 @@ public class SecurityVerificationServiceController extends AbstractController {
 
         MLPSolution mlpSolution = client.getSolution(solutionId);
         String userId = mlpSolution.getUserId();
-        List<MLPArtifact> mlpArtifactList =
-            client.getSolutionRevisionArtifacts(null, revisionId); // solutionIdIgnored
-        String version = null;
-        List<Integer> mlpArtifactVersionList = new ArrayList<>();
-        for (MLPArtifact mlpArtifact : mlpArtifactList) {
-          mlpArtifactVersionList.add(Integer.parseInt(mlpArtifact.getVersion()));
-        }
-        version = String.valueOf(findMaxVersion(mlpArtifactVersionList));
+        MLPSolutionRevision mlpSolutionRevision =
+            client.getSolutionRevision(solutionId, revisionId);
         UploadArtifactSVOutput uploadArtifactSVOutput = new UploadArtifactSVOutput(env);
-        uploadArtifactSVOutput.addCreateArtifact(solutionId, revisionId, version, userId, file);
+        uploadArtifactSVOutput.addCreateArtifact(
+            solutionId, revisionId, mlpSolutionRevision.getVersion(), userId, file);
       }
     }
-  }
-
-  private Integer findMaxVersion(List<Integer> list) {
-    logger.debug("Inside findMaxVersion");
-    // check list is empty or not
-    if (list == null || list.size() == 0) {
-      return Integer.MIN_VALUE;
-    }
-    // create a new list to avoid modification in the original list
-    List<Integer> sortedlist = new ArrayList<>(list);
-    // sort list in natural order
-    Collections.sort(sortedlist);
-    // last element in the sorted list would be maximum
-    int version = sortedlist.get(sortedlist.size() - 1);
-    return version;
   }
 
   private void updateVerifiedLicenseStatus(String solutionId, String verifiedLicense) {
