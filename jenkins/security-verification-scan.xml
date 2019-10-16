@@ -199,6 +199,7 @@ if [[ &quot;$status&quot; == &quot;true&quot; ]]; then
   echo &quot;***** SCAN SUCCESS *****&quot;
   echo &quot;************************&quot;
   echo
+  status=true
   update_task_status SU
 else
   echo
