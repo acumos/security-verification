@@ -215,6 +215,18 @@ Security Verification (SV) Scanning Service Release Notes
 =========================================================
 
 --------------------------
+Version 1.2.0, 16 Oct 2019
+--------------------------
+
+* `ACUMOS-3428: Security Verification License Scan migration to Jenkins <https://jira.acumos.org/browse/ACUMOS-3428>`_
+
+  * `5607: Revision version format change <https://gerrit.acumos.org/r/#/c/security-verification/+/5607/>`_
+
+    * Fix Sv-Scanning service for new revision version format.
+    * Add verbose output to scan scripts.
+    * Remove unused scripts.
+
+--------------------------
 Version 1.1.0, 01 Oct 2019
 --------------------------
 
