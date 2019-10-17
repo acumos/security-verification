@@ -1,0 +1,5 @@
+---
+distribution_type: maven
+version: 1.2.0
+project: security-verification
+log_dir: security-verification-maven-dl-stage-master/506/
