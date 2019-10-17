@@ -1,0 +1,10 @@
+---
+distribution_type: container
+container_release_tag: 1.2.0
+container_pull_registry: nexus3.acumos.org:10004
+container_push_registry: nexus3.acumos.org:10002
+project: security-verification
+ref: ed9a3f8023860c5272e7552ac4ec8644feba4b3f
+containers:
+    - name: security-verification
+      version: 1.2.0
