@@ -21,6 +21,14 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 --------------------------
+Version 1.2.1, 31 Oct 2019
+--------------------------
+
+* `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660?filter=10669>`_
+
+  * `Correct SV endpoint mapping<>`_
+
+--------------------------
 Version 1.2.0, 10 Oct 2019
 --------------------------
 
