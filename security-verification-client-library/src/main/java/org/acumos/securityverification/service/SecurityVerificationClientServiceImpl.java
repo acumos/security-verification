@@ -539,7 +539,7 @@ public class SecurityVerificationClientServiceImpl implements ISecurityVerificat
       String securityVerificationApiUrl) {
     StringBuilder url = new StringBuilder();
     url.append(securityVerificationApiUrl);
-    url.append(SVConstants.FORWARD_SLASH);
+    url.append("/scan/");
     url.append(SVConstants.SOLUTIONID);
     url.append(SVConstants.FORWARD_SLASH);
     url.append(nodeSolutionId);
