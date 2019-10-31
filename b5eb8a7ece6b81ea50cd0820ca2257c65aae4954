@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43d2ebcc_5484c2c5",
+        "filename": "security-verification-client-library/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 291
+      },
+      "writtenOn": "2019-10-31T19:51:03Z",
+      "side": 1,
+      "message": "Does it require to update security-verification-service/pom.xml version as well?",
+      "revId": "b5eb8a7ece6b81ea50cd0820ca2257c65aae4954",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cf416b8c_0ce8b463",
+        "filename": "security-verification-client-library/src/main/java/org/acumos/securityverification/service/SecurityVerificationClientServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 291
+      },
+      "writtenOn": "2019-10-31T19:51:03Z",
+      "side": 1,
+      "message": "update SVConstants.SECURITY_SCAN \u003d \"scan\"; and refer it here",
+      "revId": "b5eb8a7ece6b81ea50cd0820ca2257c65aae4954",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": true
+    }
+  ]
+}
