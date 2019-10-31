@@ -24,9 +24,19 @@ Security Verification (SV) Library Release Notes
 Version 1.2.1, 31 Oct 2019
 --------------------------
 
-* `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660?filter=10669>`_
+This version corrects an issue with SV Scanning Service API endpoints. One
+configuration change is necessary, for the Portal-BE component, in the Spring
+environment under "portal.feature.sv" (remove the path element in the URL):
 
-  * `Correct SV endpoint mapping<>`_
+.. code-block:: json
+
+  "api": "http://sv-scanning-service:9082"
+
+..
+
+* `5773: Correct SV endpoint mapping <https://gerrit.acumos.org/r/#/c/security-verification/+/5773/>`_
+
+  * `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660>`_
 
 --------------------------
 Version 1.2.0, 10 Oct 2019
@@ -221,6 +231,14 @@ Version 0.0.1, 04 April 2019
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
+
+--------------------------
+Version 1.2.1, 31 Oct 2019
+--------------------------
+
+* `5774: Correct SV endpoint mapping, part 2 <https://gerrit.acumos.org/r/#/c/security-verification/+/5774/>`_
+
+  * `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660>`_
 
 --------------------------
 Version 1.2.0, 16 Oct 2019
