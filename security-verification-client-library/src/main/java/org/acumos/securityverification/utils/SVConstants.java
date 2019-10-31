@@ -25,7 +25,7 @@ public class SVConstants {
 
   // Path components
   public static final String APPLICATION_JSON = "application/json";
-  public static final String SECURITY_SCAN = "/scan/solution/{solutionId}/revision/{revisionId}";
+  public static final String SECURITY_SCAN = "scan";
   public static final String SITE_CONFIG_UPDATE = "/update/siteConfig/verification";
 
   // Site config Json tag
