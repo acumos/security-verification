@@ -24,7 +24,7 @@ public class SVServiceConstants {
   // Path components
   public static final String FORWARD_SLASH = "/";
   public static final String SECURITY_SCAN = "scan";
-  public static final String UPDATE_SITE_CONFIG = "/update/siteConfig/verification";
+  public static final String UPDATE_SITE_CONFIG = "/scan/update/siteConfig/verification";
   public static final String SOLUTIONID = "solutionId";
   public static final String REVISIONID = "revisionId";
   public static final String USERID = "userId";
