@@ -92,18 +92,17 @@ function update_task_status() {
 }
 
 function setup() {
+  mkdir -p $ACUMOS_SV_HOME/sv
+  cd $ACUMOS_SV_HOME/sv
   # Download scancode toolkit if not present (and presumably customized)
-  if [[ ! -e /home/jenkins/sv ]]; then
-    cp -r /acumos/sv .
-  fi
-  cd sv
   if [[ ! -e scancode-toolkit-3.0.2 ]]; then
     wget https://github.com/nexB/scancode-toolkit/releases/download/v3.0.2/scancode-toolkit-3.0.2.zip
     unzip scancode-toolkit-3.0.2.zip
   fi
 
-  cp licenses/* scancode-toolkit-3.0.2/src/licensedcode/data/licenses/.
-  cp rules/* scancode-toolkit-3.0.2/src/licensedcode/data/rules/.
+  cp $ACUMOS_SV_HOME/*.sh .
+  cp $ACUMOS_SV_HOME/licenses/* scancode-toolkit-3.0.2/src/licensedcode/data/licenses/.
+  cp $ACUMOS_SV_HOME/rules/* scancode-toolkit-3.0.2/src/licensedcode/data/rules/.
 
   # Initialize scancode toolkit
   cat &lt;&lt;EOF &gt;init.txt
@@ -112,17 +111,19 @@ EOF
   scancode-toolkit-3.0.2/scancode --license init.txt --json=/tmp/scancode.json
 }
 
-if [[ ! -e sv ]]; then
+export ACUMOS_SV_HOME=/var/jenkins_home/workspace/security-verification-scan
+if [[ ! -e $ACUMOS_SV_HOME/sv/init.txt ]]; then
   setup
   exit 0
 fi
 
+cd $ACUMOS_SV_HOME
 export revisionId=$revisionId
 export solutionId=$solutionId
 export userId=$userId
 export ACUMOS_SV_UNDER_JENKINS=true
 
-source /acumos/acumos_env.sh
+source acumos_env.sh
 cdsCreds=&quot;$ACUMOS_CDS_USER:$ACUMOS_CDS_PASSWORD&quot;
 cdsUri=&quot;http://$ACUMOS_CDS_HOST:$ACUMOS_CDS_PORT/ccds&quot;
 cd sv
@@ -131,6 +132,7 @@ mkdir $requestId
 create_task
 bash dump_model.sh $solutionId $revisionId $requestId
 
+set +x
 echo
 echo &quot;************************&quot;
 echo &quot;***** SCAN SUMMARY *****&quot;
@@ -140,17 +142,21 @@ echo &quot;***************************&quot;
 echo &quot;***** SCANRESULT.JSON *****&quot;
 echo &quot;***************************&quot;
 echo
+set -x
 jq . $requestId/scanresult.json
 
 if [[ -e $requestId/scancode.json ]]; then
+  set +x
   echo
   echo &quot;*************************&quot;
   echo &quot;***** SCANCODE.JSON *****&quot;
   echo &quot;*************************&quot;
   echo
+  set -x
   jq . $requestId/scancode.json
 fi
 
+set +x
 echo
 echo &quot;*********************&quot;
 echo &quot;***** SCAN LOGS *****&quot;
@@ -160,29 +166,36 @@ echo &quot;**************************&quot;
 echo &quot;***** DUMP_MODEL.LOG *****&quot;
 echo &quot;**************************&quot;
 echo
+set -x
 cat $requestId/dump_model.log
 
 if [[ -e $requestId/license_scan.log ]]; then
+  set +x
   echo
   echo &quot;****************************&quot;
   echo &quot;***** LICENSE_SCAN.LOG *****&quot;
   echo &quot;****************************&quot;
   echo
+  set -x
   cat $requestId/license_scan.log
 fi
 
+set +x
 echo
 echo &quot;*******************************&quot;
 echo &quot;***** ALL PROCESSED FILES *****&quot;
 echo &quot;*******************************&quot;
 echo
+set -x
 ls -Rlat $requestId
 
+set +x
 echo
 echo &quot;*********************************&quot;
 echo &quot;***** ALL JSON FILES/OUTPUT *****&quot;
 echo &quot;*********************************&quot;
 echo
+set -x
 
 fs=$(find $requestId/. -name &apos;*.json&apos;)
 for f in $fs; do
@@ -194,18 +207,22 @@ done
 
 status=$(jq -r &quot;.verifiedLicense&quot; $requestId/scanresult.json)
 if [[ &quot;$status&quot; == &quot;true&quot; ]]; then
+  set +x
   echo
   echo &quot;************************&quot;
   echo &quot;***** SCAN SUCCESS *****&quot;
   echo &quot;************************&quot;
   echo
+  set -x
   update_task_status SU
 else
+  set +x
   echo
   echo &quot;***********************&quot;
   echo &quot;***** SCAN FAILED *****&quot;
   echo &quot;***********************&quot;
   echo
+  set -x
   update_task_status FA
 fi
 
