@@ -89,7 +89,7 @@ function get_cds() {
 
 function get_nexus() {
   trap - ERR
-  local http_code=$(curl -s -w "%{http_code}" -o $1 $nexusUri/$nexusRepo/$2)
+  local http_code=$(curl -s -w "%{http_code}" -o $1 -u $ACUMOS_NEXUS_RW_USER:$ACUMOS_NEXUS_RW_USER_PASSWORD $nexusUri/$nexusRepo/$2)
   trap 'fail' ERR
   if [[ "$http_code" != "200" ]]; then
     fail "Unable to retrieve $nexusRepo/$2 from Nexus"
