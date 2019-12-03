@@ -21,22 +21,41 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 --------------------------
-Version 1.2.1, 31 Oct 2019
+Version 1.2.1, 03 Dec 2019
 --------------------------
 
 This version corrects an issue with SV Scanning Service API endpoints. One
-configuration change is necessary, for the Portal-BE component, in the Spring
-environment under "portal.feature.sv" (remove the path element in the URL):
+configuration change is necessary:
 
-.. code-block:: json
+* for the Portal-BE, Onboarding, and Federation components, remove the path
+  element in the SV API URL:
 
-  "api": "http://sv-scanning-service:9082"
+  * for Portal-BE, in the Spring environment under "portal.feature.sv"
 
-..
+    .. code-block:: json
 
-* `5773: Correct SV endpoint mapping <https://gerrit.acumos.org/r/#/c/security-verification/+/5773/>`_
+      "api": "http://sv-scanning-service:9082"
+    ..
 
-  * `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660>`_
+  * for Onboarding, in the Spring environment under "security.verificationApiUrl"
+
+    .. code-block:: json
+
+      "verificationApiUrl": "http://sv-scanning-service:9082"
+    ..
+
+  * for Federation, in the Spring environment under "verification.url"
+
+    .. code-block:: json
+
+      "url": "http://sv-scanning-service:9082"
+    ..
+
+* `ACUMOS-3660: Security Verification endpoint mapping <https://jira.acumos.org/browse/ACUMOS-3660>`_
+
+  * `5999: update release notes <https://gerrit.acumos.org/r/#/c/security-verification/+/5999/>`_
+  * `5777: Release SV 1.2.1 Client Library <https://gerrit.acumos.org/r/#/c/security-verification/+/5777/>`_
+  * `5773: Correct SV endpoint mapping <https://gerrit.acumos.org/r/#/c/security-verification/+/5773/>`_
 
 --------------------------
 Version 1.2.0, 10 Oct 2019
@@ -233,12 +252,18 @@ Security Verification (SV) Scanning Service Release Notes
 =========================================================
 
 --------------------------
-Version 1.2.1, 31 Oct 2019
+Version 1.2.1, 03 Dec 2019
 --------------------------
 
-* `5774: Correct SV endpoint mapping, part 2 <https://gerrit.acumos.org/r/#/c/security-verification/+/5774/>`_
+* `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660>`_
 
-  * `ACUMOS-3660 <https://jira.acumos.org/browse/ACUMOS-3660>`_
+  * `5774: Correct SV endpoint mapping, part 2 <https://gerrit.acumos.org/r/#/c/security-verification/+/5774/>`_
+  * `5982: SV-Scanning-Service release 1.2.1 <https://gerrit.acumos.org/r/#/c/security-verification/+/5982/>`_
+
+* `ACUMOS-3428: Security Verification License Scan migration to Jenkins <https://jira.acumos.org/browse/ACUMOS-3428>`_
+
+  * `5985: Include nexus auth for artifact retrieval <https://gerrit.acumos.org/r/#/c/security-verification/+/5985/>`_
+  * `5927: Updates to SV jenkins job setup <https://gerrit.acumos.org/r/#/c/security-verification/+/5927/>`_
 
 --------------------------
 Version 1.2.0, 16 Oct 2019
