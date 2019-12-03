@@ -4,7 +4,7 @@ container_release_tag: 1.2.1
 container_pull_registry: nexus3.acumos.org:10004
 container_push_registry: nexus3.acumos.org:10002
 project: security-verification
-ref: faa813c5368d703748c22e67d1c0d729e24085cb
+ref: 0fd5d4407132cbd2ca54234e7c60b61718ca740c
 containers:
     - name: security-verification
       version: 1.2.1
