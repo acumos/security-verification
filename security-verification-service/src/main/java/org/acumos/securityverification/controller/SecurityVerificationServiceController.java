@@ -93,7 +93,7 @@ public class SecurityVerificationServiceController extends AbstractController {
       @PathVariable("userId") String userId) {
     try {
       LogConfig.setEnteringMDCs("security-verification-service", "securityVerification");
-      logger.warn("securityVerification: solutionId {} revisionId {}", solutionId, revisionId);
+      logger.info("securityVerification: solutionId {} revisionId {}", solutionId, revisionId);
       ICommonDataServiceRestClient client = getCcdsClient();
       MLPSolutionRevision mlpSolutionRevision = client.getSolutionRevision(solutionId, revisionId);
       mlpSolutionRevision.setVerifiedLicense("IP");
@@ -102,7 +102,7 @@ public class SecurityVerificationServiceController extends AbstractController {
       LogConfig.clearMDCDetails();
       return new SuccessTransport(HttpServletResponse.SC_OK, null);
     } catch (Exception ex) {
-      logger.warn("securityVerification failed: {}", ex.toString());
+      logger.error("securityVerification failed: {}", ex.toString());
       return new ErrorTransport(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "securityVerification failed", ex);
     }
@@ -110,7 +110,7 @@ public class SecurityVerificationServiceController extends AbstractController {
 
   private ResponseEntity<SVResponse> startScanJob(
       String solutionId, String revisionId, String userId) {
-    logger.warn("startScanJob: ");
+    logger.debug("startScanJob: ");
     //    HttpHeaders headers =
     //        createAuthHeader(
     //            env.getProperty("jenkins.client.user"),
@@ -129,10 +129,10 @@ public class SecurityVerificationServiceController extends AbstractController {
     url.append(revisionId);
     url.append("&userId=");
     url.append(userId);
-    logger.warn("startScanJob: jenkinsJobUrl {}", url.toString());
+    logger.debug("startScanJob: jenkinsJobUrl {}", url.toString());
     ResponseEntity<SVResponse> svResponse =
         restTemplate.exchange(url.toString(), HttpMethod.POST, entity, SVResponse.class);
-    logger.warn("startScanJob: API result {}", svResponse.getBody());
+    logger.debug("startScanJob: API result {}", svResponse.getBody());
     return svResponse;
   }
 
@@ -165,11 +165,6 @@ public class SecurityVerificationServiceController extends AbstractController {
       @RequestBody String result) {
     try {
       LogConfig.setEnteringMDCs("security-verification-service", "scanResult");
-      logger.debug(
-          "scanResult: solutionId {} revisionId {}, valid request body {}",
-          solutionId,
-          revisionId,
-          result);
       try {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -177,8 +172,8 @@ public class SecurityVerificationServiceController extends AbstractController {
         String verifiedLicense = scanResultObject.getVerifiedLicense();
         updateVerifiedLicenseStatus(solutionId, verifiedLicense);
         String reason = scanResultObject.getReason();
-        logger.debug(
-            "scanResult: solutionId {} revisionId {}, valid request, verifiedLicense {}, reason {}",
+        logger.info(
+            "scanResult: solutionId {} revisionId {}, verifiedLicense {}, reason {}",
             solutionId,
             revisionId,
             verifiedLicense,
@@ -206,7 +201,7 @@ public class SecurityVerificationServiceController extends AbstractController {
           LogConfig.clearMDCDetails();
           return new SuccessTransport(HttpServletResponse.SC_OK, null);
         } catch (Exception ex) {
-          logger.warn(", failed to upload artifact: {}", ex.toString());
+          logger.error(", failed to upload artifact: {}", ex.toString());
           LogConfig.clearMDCDetails();
           return new ErrorTransport(
               HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -214,7 +209,7 @@ public class SecurityVerificationServiceController extends AbstractController {
               ex);
         }
       } catch (Exception ex) {
-        logger.warn("unable to process request body: {}", ex.toString());
+        logger.error("unable to process request body: {}", ex.toString());
         LogConfig.clearMDCDetails();
         return new ErrorTransport(
             HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
@@ -222,7 +217,7 @@ public class SecurityVerificationServiceController extends AbstractController {
             ex);
       }
     } catch (Exception ex) {
-      logger.warn("saving scanresult failed: {}", ex.toString());
+      logger.error("saving scanresult failed: {}", ex.toString());
       LogConfig.clearMDCDetails();
       return new ErrorTransport(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "saving scanresult failed", ex);
@@ -296,7 +291,7 @@ public class SecurityVerificationServiceController extends AbstractController {
       LogConfig.clearMDCDetails();
       return new SuccessTransport(HttpServletResponse.SC_OK, siteConfigJson);
     } catch (Exception ex) {
-      logger.warn("createSiteConfig failed: {}", ex.toString());
+      logger.error("createSiteConfig failed: {}", ex.toString());
       return new ErrorTransport(
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "createSiteConfig failed", ex);
     }
@@ -319,9 +314,9 @@ public class SecurityVerificationServiceController extends AbstractController {
       config.setConfigKey(SVServiceConstants.SITE_VERIFICATION_KEY);
       config.setConfigValue(siteConfigJsonFromConfiguration);
       try {
-        logger.debug("createSiteConfig: setting value {}", config.getConfigValue());
+        logger.info("createSiteConfig: setting value {}", config.getConfigValue());
         mlpSiteConfig = client.createSiteConfig(config);
-        logger.debug("createSiteConfig: result {}", mlpSiteConfig.getConfigValue());
+        logger.info("createSiteConfig: result {}", mlpSiteConfig.getConfigValue());
         return mlpSiteConfig.getConfigValue();
       } catch (RestClientResponseException ex) {
         logger.error("createSiteConfig failed, server reports: {}", ex.getResponseBodyAsString());
