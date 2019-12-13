@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- ===============LICENSE_START======================================================= 
-	Acumos =================================================================================== 
-	Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights 
-	reserved. =================================================================================== 
-	This Acumos software file is distributed by AT&T and Tech Mahindra under 
-	the Apache License, Version 2.0 (the "License"); you may not use this file 
-	except in compliance with the License. You may obtain a copy of the License 
-	at http://www.apache.org/licenses/LICENSE-2.0 This file is distributed on 
-	an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express 
-	or implied. See the License for the specific language governing permissions 
+<!-- ===============LICENSE_START=======================================================
+	Acumos ===================================================================================
+	Copyright (C) 2019 AT&T Intellectual Property & Tech Mahindra. All rights
+	reserved. ===================================================================================
+	This Acumos software file is distributed by AT&T and Tech Mahindra under
+	the Apache License, Version 2.0 (the "License"); you may not use this file
+	except in compliance with the License. You may obtain a copy of the License
+	at http://www.apache.org/licenses/LICENSE-2.0 This file is distributed on
+	an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+	or implied. See the License for the specific language governing permissions
 	and limitations under the License. ===============LICENSE_END========================================================= -->
 <configuration scan="true" scanPeriod="3 seconds" debug="false">
 
 	<!-- gather files in a subdirectory - usually a volume in docker -->
-	<property name="logDirPrefix" value="maven/logs/security-verification" />
+	<property name="logDirPrefix" value="logs" />
 	<!-- component name is log file basename -->
-	<property name="componentName" value="security-verification-server"></property>
+	<property name="componentName" value="security-verification-scanning"></property>
 	<!-- The directories where logs are written -->
 	<property name="logDirectory" value="${logDirPrefix}/${componentName}" />
-	
+
 	<!-- Based on https://wiki.acumos.org/display/OAM/Log+Standards -->
 	<property name="p_tim" value="%d{&quot;yyyy-MM-dd'T'HH:mm:ss.SSSXXX&quot;, UTC}" />
 	<property name="p_thr" value="%thread" />
@@ -34,10 +34,10 @@
   <!-- <property name="multiLineBoreasPattern"
 		value="${p_tim}|%X{RequestID}|${p_thr}|%X{StatusCode}|%X{ResponseCode}|%X{ResponseDescription}|${p_lvl}|%X{Severity}|%X{ServerFQDN}|%X{ClientIPAddress}|%X{TargetEntity}|%X{ClassName}|%X{User}|${p_log}|${p_mdc}|%msg|${p_mrk}%n" />
     -->
-    
+
     <property name="singleLineBoreasPattern" value="%nopexception${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t${p_mrk}\t${p_mdc}\t${p_msg}\t${p_exc}%n" />
 	<property name="multiLineBoreasPattern" value="${p_tim}\t${p_thr}\t${p_lvl}\t${p_log}\t${p_mrk}\t${p_mdc}\t%msg\t%ex%n" />
-    
+
 	<!-- Show events with level WARN or above on the console (docker log) -->
 	<appender name="console-warn" class="ch.qos.logback.core.ConsoleAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -74,5 +74,5 @@
 		<appender-ref ref="file-async" />
 		<appender-ref ref="console-warn" />
 	</root>
-	
+
 </configuration>
