@@ -21,6 +21,18 @@ Security Verification (SV) Library Release Notes
 ================================================
 
 --------------------------
+Version 1.2.2, 13 Dec 2019
+--------------------------
+
+* `ACUMOS-3428: Security Verification License Scan migration to Jenkins <https://jira.acumos.org/browse/ACUMOS-3428>`_
+
+  * `: Release notes 1.2.2 <>`_
+
+* `ACUMOS-3840: Update to CDS 3.1.0 <https://jira.acumos.org/browse/ACUMOS-3840>`_
+
+  * `6093: Update to CDS 3.1.0 <https://gerrit.acumos.org/r/#/c/security-verification/+/6093/>`_
+
+--------------------------
 Version 1.2.1, 03 Dec 2019
 --------------------------
 
@@ -37,7 +49,8 @@ configuration change is necessary:
       "api": "http://sv-scanning-service:9082"
     ..
 
-  * for Onboarding, in the Spring environment under "security.verificationApiUrl"
+  * for Onboarding amd Microservice Generation, in the Spring environment under
+    "security.verificationApiUrl"
 
     .. code-block:: json
 
@@ -250,6 +263,18 @@ Version 0.0.1, 04 April 2019
 =========================================================
 Security Verification (SV) Scanning Service Release Notes
 =========================================================
+
+--------------------------
+Version 1.2.2, 13 Dec 2019
+--------------------------
+
+* `ACUMOS-3428: Security Verification License Scan migration to Jenkins <https://jira.acumos.org/browse/ACUMOS-3428>`_
+
+  * `6113: Fix location of logs: <https://gerrit.acumos.org/r/#/c/security-verification/+/6113/>`_
+
+* `ACUMOS-3840: Update to CDS 3.1.0 <https://jira.acumos.org/browse/ACUMOS-3840>`_
+
+  * `6093: Update to CDS 3.1.0 <https://gerrit.acumos.org/r/#/c/security-verification/+/6093/>`_
 
 --------------------------
 Version 1.2.1, 03 Dec 2019
