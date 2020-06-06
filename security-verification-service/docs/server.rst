@@ -83,7 +83,7 @@ Acumos deployment toolset in the system-integration repository.
 .. code:: bash
 
    # Get the system-integration repository
-   git clone "https://gerrit.acumos.org/r/system-integration"
+   git clone --depth 1 "https://gerrit.acumos.org/r/system-integration"
    # Select the Boreas branch
    cd system-integration
    git checkout boreas
