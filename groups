@@ -1,4 +1,5 @@
 # UUID                                                                                  	Group Name
 #
+309017920189094fe9e86071ee8e47ab601e39ed                                                	saml/acumos-gerrit-security-verification-committers
 42f0c83244389e408b42fa668348002012ecba46                                                	GitHub Replication
 ldap:cn=acumos-gerrit-security-verification-committers,ou=Groups,dc=freestandards,dc=org	ldap/acumos-gerrit-security-verification-committers
